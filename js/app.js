@@ -112,6 +112,7 @@ let currentLeaderData = null;
 ========================================= */
 
 const API_BASE = "https://zoro-s8oa.onrender.com/api";
+const BACKEND_URL = "https://zoro-s8oa.onrender.com";
 /* =========================================
    NEWS DJANGO API
 ========================================= */
@@ -229,13 +230,12 @@ async function getEnquiries() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/enquiries/"
+            `${API_BASE}/enquiries/`
         );
 
         if (!response.ok) {
             throw new Error("Failed to load enquiries");
         }
-
         const enquiries = await response.json();
 
         renderEnquiriesAdmin(enquiries);
@@ -1467,7 +1467,7 @@ async function renderNewsFeed() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/news/"
+            `${API_BASE}/news/`
         );
 
         if (!response.ok) {
@@ -1475,7 +1475,6 @@ async function renderNewsFeed() {
                 "Could not load news"
             );
         }
-
         const news = await response.json();
 
         const count = news.length;
@@ -1561,10 +1560,10 @@ async function renderNewsFeed() {
                         item.image
 
                             ? `
-                            <img
-                                class="news-article-img"
-                                src="http://127.0.0.1:8000${item.image}"
-                                alt=""
+                            <img 
+                                class="news-article-img" 
+                                src="${BACKEND_URL}${item.image}" 
+                                alt="" 
                             >
                             `
 
@@ -1592,7 +1591,7 @@ async function renderNewsFeed() {
                                 <a
                                     href="${item.pdf.startsWith("http")
                                         ? item.pdf
-                                        : "http://127.0.0.1:8000" + item.pdf}"
+                                        : BACKEND_URL + item.pdf}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="news-pdf-button" 
@@ -2915,7 +2914,7 @@ contactForm.addEventListener("submit", async (event) => {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/enquiries/",
+            `${API_BASE}/enquiries/`,
             {
                 method: "POST",
 
@@ -2926,7 +2925,6 @@ contactForm.addEventListener("submit", async (event) => {
                 body: JSON.stringify(enquiryData)
             }
         );
-
         if (!response.ok) {
             throw new Error("Failed to send enquiry");
         }
