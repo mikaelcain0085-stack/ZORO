@@ -1990,9 +1990,7 @@ footer {
     padding-right: 1.5rem;
   }
 
-  .nav-links a:not(.admin-btn) {
-    display: none;
-  }
+  
 
   .admin-grid {
     grid-template-columns: 1fr;
@@ -2952,6 +2950,19 @@ html {
     /* Hide EST text on mobile */
     .established-text {
         display: none;
+    }
+
+}
+/* FINAL MOBILE FIXES */
+@media (max-width: 768px) {
+
+    .zoro-affil {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem;
+        text-align: center;
+        box-sizing: border-box;
     }
 
 }
