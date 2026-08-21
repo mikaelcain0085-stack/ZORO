@@ -2876,79 +2876,82 @@ html {
 ========================= */
 
 .menu-toggle {
-  display: none;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* MOBILE */
-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 1rem 1.25rem;
-}
-  /* Hide navigation completely by default */
-  .nav-links {
-    display: none !important;
-
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    gap: 18px;
-    padding: 20px;
-
-    background: #10101a;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-    box-sizing: border-box;
-    z-index: 1000;
-  }
-
-  /* Show menu when hamburger is clicked */
-  .nav-links.active {
-    display: flex !important;
-  }
-
-  /* Show hamburger */
-  .menu-toggle {
-    display: block;
-    margin-left: auto;
-    flex-shrink: 0;
-    z-index: 1001;
-  }
-
-  /* Make mobile links centered */
-  .nav-links a {
-    width: 100%;
-    text-align: center;
-  }
-
-  /* Admin Login stays inside dropdown */
-  .nav-links .admin-btn {
-    width: 100%;
-    max-width: 220px;
-    margin: 0;
-  }
-
-  /* Hide EST text on mobile */
-  .established-text {
     display: none;
-  }
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 1rem 1.25rem;
+    }
+
+    /* Show hamburger button */
+    .menu-toggle {
+        display: block;
+        margin-left: auto;
+        flex-shrink: 0;
+        z-index: 1001;
+    }
+
+    /* Hide navigation by default */
+    .nav-links {
+        display: none !important;
+
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 18px;
+        padding: 20px;
+
+        background: #10101a;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        box-sizing: border-box;
+        z-index: 1000;
+    }
+
+    /* Show menu when hamburger is clicked */
+    .nav-links.active {
+        display: flex !important;
+    }
+
+    /* Center mobile links */
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Admin Login inside dropdown */
+    .nav-links .admin-btn {
+        width: 100%;
+        max-width: 220px;
+        margin: 0;
+    }
+
+    /* Hide EST text on mobile */
+    .established-text {
+        display: none;
+    }
+
 }
