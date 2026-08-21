@@ -2947,10 +2947,7 @@ html {
         margin: 0;
     }
 
-    /* Hide EST text on mobile */
-    .established-text {
-        display: none;
-    }
+  
 
 }
 /* FINAL MOBILE FIXES */
@@ -2963,6 +2960,53 @@ html {
         padding: 0 1rem;
         text-align: center;
         box-sizing: border-box;
+    }
+
+}
+/* =========================================
+   FINAL MOBILE NAVBAR & HERO FIX
+========================================= */
+
+@media (max-width: 768px) {
+
+    /* Keep navbar fixed */
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 2000;
+    }
+
+    /* Show EST text on mobile */
+    .established-text {
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-left: 0;
+
+        font-size: 0.55rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    /* Move the page content below the fixed navbar */
+    .hero {
+        padding-top: 8rem;
+    }
+
+    /* Keep affiliation text fully visible */
+    .zoro-affil {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+
+        padding: 1rem 1.5rem 0;
+
+        box-sizing: border-box;
+        text-align: center;
     }
 
 }
