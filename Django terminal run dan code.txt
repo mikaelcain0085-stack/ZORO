@@ -1,0 +1,1 @@
+(venv) PS C:\MSP\ZOROWEB\ZORO-Website\backend> python manage.py runserver
