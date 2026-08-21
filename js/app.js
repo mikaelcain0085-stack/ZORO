@@ -111,7 +111,7 @@ let currentLeaderData = null;
    DJANGO API
 ========================================= */
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = "https://zoro-s8oa.onrender.com/api";
 /* =========================================
    NEWS DJANGO API
 ========================================= */
