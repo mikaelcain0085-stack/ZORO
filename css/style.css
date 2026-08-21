@@ -2885,16 +2885,19 @@ html {
 }
 
 /* MOBILE */
-@media (max-width: 768px) {
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 
-  nav {
-    position: relative;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
 
+    padding: 1rem 1.25rem;
+}
   /* Hide navigation completely by default */
   .nav-links {
     display: none !important;
