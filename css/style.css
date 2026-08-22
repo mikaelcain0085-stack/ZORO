@@ -3016,24 +3016,21 @@ html {
 
 @media (max-width: 768px) {
 
-    /* Move the whole hero content slightly upward */
     .hero {
-        padding-top: 6.8rem;
+        padding-top: 6.3rem;
     }
 
-    /* Move affiliation text upward */
+    /* Move affiliation further upward */
     .zoro-affil {
-        transform: translateY(-12px);
+        transform: translateY(-35px);
     }
 
-    /* Reduce vertical space occupied by animated ZORO area */
     .zoro-wrapper {
-        height: 110px;
-        margin-top: -10px;
+        height: 130px;
+        margin-top: -25px;
     }
 
-    /* Bring the glass card upward */
     .hero-card-wrap {
-        margin-top: -20px;
+        margin-top: -25px;
     }
 }
