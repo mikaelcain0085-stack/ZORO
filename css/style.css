@@ -3022,11 +3022,11 @@ html {
 
     /* Move affiliation further upward */
     .zoro-affil {
-        transform: translateY(-35px);
+        transform: translateY(-45px);
     }
 
     .zoro-wrapper {
-        height: 170px;
+        height: 150px;
         margin-top: -25px;
     }
 
