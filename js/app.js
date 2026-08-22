@@ -2390,31 +2390,74 @@ document.addEventListener(
 
 
 /* =========================================
-   ADMIN HAMBURGER MENU
+   LOGIN EVENTS
 ========================================= */
 
-const adminMenuToggle =
-    document.getElementById("adminMenuToggle");
-
-const adminDropdown =
-    document.getElementById("adminDropdown");
-
-adminMenuToggle.addEventListener(
+openBtn.addEventListener(
     "click",
-    () => {
-        adminDropdown.classList.toggle("show");
+    openModal
+);
+
+closeBtn.addEventListener(
+    "click",
+    closeModal
+);
+
+cancelBtn.addEventListener(
+    "click",
+    closeModal
+);
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        closeModal();
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (
+        e.key === "Escape" &&
+        modal.classList.contains("active")
+    ) {
+        closeModal();
+    }
+});
+
+
+loginForm.addEventListener(
+    "submit",
+    (e) => {
+        e.preventDefault();
+
+        const username =
+            document
+                .getElementById("username")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+        if (
+            username === ADMIN_USER &&
+            password === ADMIN_PASS
+        ) {
+            showAdmin();
+        } else {
+            loginError.classList.add("show");
+        }
     }
 );
 
-
-/* =========================================
-   LOGOUT
-========================================= */
 
 logoutBtn.addEventListener(
     "click",
     showLanding
 );
+
+
 /* =========================================
    ADD MEMBER
 ========================================= */
@@ -2913,29 +2956,3 @@ if (menuToggle && navLinks) {
         navLinks.classList.toggle("active");
     });
 }
-/* =========================================
-   ADMIN HAMBURGER MENU
-========================================= */
-
-const adminMenuToggle =
-    document.getElementById("adminMenuToggle");
-
-const adminDropdown =
-    document.getElementById("adminDropdown");
-
-adminMenuToggle.addEventListener(
-    "click",
-    () => {
-        adminDropdown.classList.toggle("show");
-    }
-);
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-logoutBtn.addEventListener(
-    "click",
-    showLanding
-);
