@@ -745,15 +745,35 @@
  <!-- =========================
      ADMIN
 ========================= -->
-<div id="admin">
+<div class="admin-menu-container">
 
- <header class="admin-header">
+  <!-- Hamburger button -->
+  <button
+    type="button"
+    class="admin-menu-toggle"
+    id="adminMenuToggle"
+    aria-label="Open admin menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+<div class="admin-menu-container">
 
-  <h1>
-    ZORO <span>Admin Console</span>
-  </h1>
+  <!-- Hamburger button -->
+  <button
+    type="button"
+    class="admin-menu-toggle"
+    id="adminMenuToggle"
+    aria-label="Open admin menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-  <div class="admin-nav">
+  <!-- Dropdown menu -->
+  <div class="admin-dropdown" id="adminDropdown">
 
     <button
       type="button"
@@ -786,6 +806,7 @@
     >
       Add Leaders
     </button>
+
     <button
       type="button"
       class="admin-nav-button"
@@ -794,18 +815,16 @@
       📩 Enquiries
     </button>
 
-  </div>
-
-  <div class="admin-actions">
-
+    <!-- Logout inside dropdown -->
     <button class="btn-logout" id="logoutBtn">
       Logout
     </button>
 
   </div>
 
-</header>
+</div>
 
+</header>
 
   <main class="admin-main">
 
