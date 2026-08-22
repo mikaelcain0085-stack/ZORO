@@ -19,6 +19,26 @@
 
 <body>
 
+<!-- Icon sprite: reusable icons for admin glass buttons and search boxes -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="8" y1="6" x2="21" y2="6"></line>
+    <line x1="8" y1="12" x2="21" y2="12"></line>
+    <line x1="8" y1="18" x2="21" y2="18"></line>
+    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+  </symbol>
+  <symbol id="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </symbol>
+</svg>
+
   <!-- =========================
        LANDING PAGE
   ========================== -->
@@ -813,17 +833,29 @@
          MEMBERS MANAGEMENT
     ========================== -->
 
-    <div class="admin-section-title" id="membersSection">
+    <div class="admin-tab-panel active" id="membersSection">
+
+    <div class="admin-section-title">
       Members Management
     </div>
     <div class="admin-grid">
 
-      <!-- ADD MEMBER -->
+      <!-- ADD MEMBER (upload subview) -->
+      <div class="admin-subview active" id="membersUploadView">
       <div class="card">
 
         <h2>
           Add New Member
         </h2>
+
+        <button
+          type="button"
+          class="glass-btn admin-goto-list"
+          data-target="membersListView"
+        >
+          <svg class="btn-icon"><use href="#icon-list"></use></svg>
+          Go to Uploaded Members to edit, delete or view
+        </button>
 
         <div class="success-toast" id="successToast">
           Member added successfully!
@@ -901,10 +933,34 @@
         </form>
 
       </div>
+      </div>
 
 
-      <!-- MEMBERS LIST -->
+      <!-- MEMBERS LIST (list subview) -->
+      <div class="admin-subview" id="membersListView">
       <div class="card">
+
+        <div class="list-toolbar">
+
+          <button
+            type="button"
+            class="glass-btn admin-goto-upload"
+            data-target="membersUploadView"
+          >
+            <svg class="btn-icon"><use href="#icon-back"></use></svg>
+            Back to Add Member
+          </button>
+
+          <div class="search-box">
+            <svg class="btn-icon"><use href="#icon-search"></use></svg>
+            <input
+              type="text"
+              id="memberSearchInput"
+              placeholder="Search members by name, phone or address..."
+            >
+          </div>
+
+        </div>
 
         <h2>
           Members
@@ -921,26 +977,42 @@
         </div>
 
       </div>
+      </div>
 
     </div>
+
+    </div>
+
 
 
     <!-- =========================
      NEWS MANAGEMENT
 ========================== -->
 
-<div class="admin-section-title" id="newsSection">
+<div class="admin-tab-panel" id="newsSection">
+
+<div class="admin-section-title">
   News Management
 </div>
 
 <div class="admin-grid">
 
-  <!-- UPLOAD NEWS -->
+  <!-- UPLOAD NEWS (upload subview) -->
+  <div class="admin-subview active" id="newsUploadView">
   <div class="card">
 
     <h2 id="newsFormTitle">
       Upload News
     </h2>
+
+    <button
+      type="button"
+      class="glass-btn admin-goto-list"
+      data-target="newsListView"
+    >
+      <svg class="btn-icon"><use href="#icon-list"></use></svg>
+      Go to Uploaded News to edit, delete or view
+    </button>
 
     <div class="success-toast" id="newsSuccessToast">
       News published successfully!
@@ -1086,10 +1158,34 @@
     </form>
 
   </div>
+  </div>
 
 
-  <!-- PUBLISHED NEWS -->
+  <!-- PUBLISHED NEWS (list subview) -->
+  <div class="admin-subview" id="newsListView">
   <div class="card">
+
+    <div class="list-toolbar">
+
+      <button
+        type="button"
+        class="glass-btn admin-goto-upload"
+        data-target="newsUploadView"
+      >
+        <svg class="btn-icon"><use href="#icon-back"></use></svg>
+        Back to Upload News
+      </button>
+
+      <div class="search-box">
+        <svg class="btn-icon"><use href="#icon-search"></use></svg>
+        <input
+          type="text"
+          id="newsSearchInput"
+          placeholder="Search news by title or content..."
+        >
+      </div>
+
+    </div>
 
     <h2>
       Published News
@@ -1106,6 +1202,9 @@
     </div>
 
   </div>
+  </div>
+
+</div>
 
 </div>
 
@@ -1114,18 +1213,30 @@
          PHOTO MANAGEMENT
     ========================== -->
 
-    <div class="admin-section-title" id="photosSection">
+    <div class="admin-tab-panel" id="photosSection">
+
+    <div class="admin-section-title">
       Photo Gallery Management
     </div>
 
     <div class="admin-grid">
 
-      <!-- UPLOAD PHOTO -->
+      <!-- UPLOAD PHOTO (upload subview) -->
+      <div class="admin-subview active" id="photosUploadView">
       <div class="card">
 
         <h2 id="photoFormTitle">
           Upload Photo
         </h2>
+
+        <button
+          type="button"
+          class="glass-btn admin-goto-list"
+          data-target="photosListView"
+        >
+          <svg class="btn-icon"><use href="#icon-list"></use></svg>
+          Go to Uploaded Photos to edit, delete or view
+        </button>
 
         <div class="success-toast" id="photoSuccessToast">
           Photo uploaded successfully!
@@ -1214,10 +1325,34 @@
         </form>
 
       </div>
+      </div>
 
 
-      <!-- UPLOADED PHOTOS -->
+      <!-- UPLOADED PHOTOS (list subview) -->
+      <div class="admin-subview" id="photosListView">
       <div class="card">
+
+        <div class="list-toolbar">
+
+          <button
+            type="button"
+            class="glass-btn admin-goto-upload"
+            data-target="photosUploadView"
+          >
+            <svg class="btn-icon"><use href="#icon-back"></use></svg>
+            Back to Upload Photo
+          </button>
+
+          <div class="search-box">
+            <svg class="btn-icon"><use href="#icon-search"></use></svg>
+            <input
+              type="text"
+              id="photoSearchInput"
+              placeholder="Search photos by description..."
+            >
+          </div>
+
+        </div>
 
         <h2>
           Uploaded Photos
@@ -1234,6 +1369,9 @@
         </div>
 
       </div>
+      </div>
+
+    </div>
 
     </div>
 
@@ -1242,18 +1380,30 @@
          LEADERS MANAGEMENT
     ========================== -->
 
-    <div class="admin-section-title" id="leadersSection">
+    <div class="admin-tab-panel" id="leadersSection">
+
+    <div class="admin-section-title">
      Hruaitute (Leaders) Management
     </div>
 
     <div class="admin-grid">
 
-      <!-- ADD LEADER -->
+      <!-- ADD LEADER (upload subview) -->
+      <div class="admin-subview active" id="leadersUploadView">
       <div class="card">
 
         <h2 id="leaderFormTitle">
           Add Leader
         </h2>
+
+        <button
+          type="button"
+          class="glass-btn admin-goto-list"
+          data-target="leadersListView"
+        >
+          <svg class="btn-icon"><use href="#icon-list"></use></svg>
+          Go to Uploaded Leaders to edit, delete or view
+        </button>
 
         <div class="success-toast" id="leaderSuccessToast">
           Leader added successfully!
@@ -1389,10 +1539,34 @@
         </form>
 
       </div>
+      </div>
 
 
-      <!-- LEADERS LIST -->
+      <!-- LEADERS LIST (list subview) -->
+      <div class="admin-subview" id="leadersListView">
       <div class="card">
+
+        <div class="list-toolbar">
+
+          <button
+            type="button"
+            class="glass-btn admin-goto-upload"
+            data-target="leadersUploadView"
+          >
+            <svg class="btn-icon"><use href="#icon-back"></use></svg>
+            Back to Add Leader
+          </button>
+
+          <div class="search-box">
+            <svg class="btn-icon"><use href="#icon-search"></use></svg>
+            <input
+              type="text"
+              id="leaderSearchInput"
+              placeholder="Search leaders by name or designation..."
+            >
+          </div>
+
+        </div>
 
         <h2>
           Leaders
@@ -1409,15 +1583,18 @@
         </div>
 
       </div>
+      </div>
 
+    </div>
     </div>
     <!-- =========================
      ENQUIRIES MANAGEMENT
 ========================= -->
 
+<div class="admin-tab-panel" id="enquiriesSection">
+
 <div
   class="admin-section-title"
-  id="enquiriesSection"
 >
   Enquiries
 </div>
@@ -1449,6 +1626,8 @@
     </div>
 
   </div>
+
+</div>
 
 </div>
 

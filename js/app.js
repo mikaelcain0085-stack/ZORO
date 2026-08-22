@@ -1069,6 +1069,8 @@ async function startEditNews(id) {
         clearImageUpload();
     }
 
+    switchAdminSubview("newsUploadView");
+
     document
         .getElementById("newsTitle")
         .scrollIntoView({
@@ -1103,6 +1105,8 @@ async function startEditPhoto(id) {
     } else {
         clearPhotoUpload();
     }
+
+    switchAdminSubview("photosUploadView");
 
     document
         .getElementById("photoDescription")
@@ -1152,6 +1156,8 @@ async function startEditLeader(id) {
     } else {
         clearLeaderUpload();
     }
+
+    switchAdminSubview("leadersUploadView");
 
     document
         .getElementById("leaderName")
@@ -2902,7 +2908,7 @@ backFromContact.addEventListener("click", () => {
 
 });
 // ================================
-// ADMIN NAVIGATION SCROLL
+// ADMIN NAVIGATION TABS
 // ================================
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2915,25 +2921,125 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const targetId = button.getAttribute("data-target");
 
-            const targetSection = document.getElementById(targetId);
+            const targetPanel = document.getElementById(targetId);
 
-            if (targetSection) {
+            if (!targetPanel) {
+                console.error("Section not found:", targetId);
+                return;
+            }
 
-                targetSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
+            // Hide every tab panel, then show only the one that was clicked
+            document
+                .querySelectorAll(".admin-tab-panel")
+                .forEach(function (panel) {
+                    panel.classList.remove("active");
                 });
 
-            } else {
+            targetPanel.classList.add("active");
 
-                console.error("Section not found:", targetId);
+            // Highlight the clicked nav button, un-highlight the rest
+            navButtons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
 
-            }
+            button.classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
 
         });
 
     });
 
+    // Mark the first tab (Members) as the active button on initial load
+    if (navButtons.length > 0) {
+        navButtons[0].classList.add("active");
+    }
+
+});
+
+
+// ================================
+// ADMIN SUBVIEWS (Upload <-> List) via glass buttons
+// ================================
+
+function switchAdminSubview(targetId) {
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+        console.error("Subview not found:", targetId);
+        return;
+    }
+
+    const panel = target.closest(".admin-tab-panel");
+
+    if (!panel) return;
+
+    panel
+        .querySelectorAll(".admin-subview")
+        .forEach(function (subview) {
+            subview.classList.remove("active");
+        });
+
+    target.classList.add("active");
+
+    panel.scrollTo ? panel.scrollTo({ top: 0 }) : null;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    document
+        .querySelectorAll(".admin-goto-list, .admin-goto-upload")
+        .forEach(function (button) {
+            button.addEventListener("click", function () {
+                switchAdminSubview(button.getAttribute("data-target"));
+            });
+        });
+
+});
+
+
+// ================================
+// ADMIN SEARCH BOXES (client-side filter over rendered list cards)
+// ================================
+
+function wireAdminSearch(inputEl, listEl) {
+    if (!inputEl || !listEl) return;
+
+    inputEl.addEventListener("input", function () {
+        const term = inputEl.value.trim().toLowerCase();
+
+        listEl
+            .querySelectorAll(":scope > div:not(.empty-state)")
+            .forEach(function (card) {
+                const matches = card.textContent
+                    .toLowerCase()
+                    .includes(term);
+
+                card.style.display = matches ? "" : "none";
+            });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    wireAdminSearch(
+        document.getElementById("memberSearchInput"),
+        membersList
+    );
+
+    wireAdminSearch(
+        document.getElementById("newsSearchInput"),
+        newsList
+    );
+
+    wireAdminSearch(
+        document.getElementById("photoSearchInput"),
+        photoList
+    );
+
+    wireAdminSearch(
+        document.getElementById("leaderSearchInput"),
+        leaderList
+    );
 });
 // =========================
 // CONTACT ENQUIRY FORM
