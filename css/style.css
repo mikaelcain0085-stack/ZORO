@@ -3010,3 +3010,30 @@ html {
     }
 
 }
+/* =========================================
+   MOBILE HERO — MOVE CONTENT UP
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* Move the whole hero content slightly upward */
+    .hero {
+        padding-top: 6.8rem;
+    }
+
+    /* Move affiliation text upward */
+    .zoro-affil {
+        transform: translateY(-12px);
+    }
+
+    /* Reduce vertical space occupied by animated ZORO area */
+    .zoro-wrapper {
+        height: 250px;
+        margin-top: -10px;
+    }
+
+    /* Bring the glass card upward */
+    .hero-card-wrap {
+        margin-top: -20px;
+    }
+}
