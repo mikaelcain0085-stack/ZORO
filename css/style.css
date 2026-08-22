@@ -275,7 +275,7 @@ nav {
   }
 
   100% {
-    bottom: 68%;
+    bottom: 80%;
     transform: translateY(50%);
     opacity: 1;
   }
