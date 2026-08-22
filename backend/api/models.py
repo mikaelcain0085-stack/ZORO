@@ -27,12 +27,6 @@ class News(models.Model):
         null=True
     )
 
-    # PDF document attached to the news article
-    pdf = models.FileField(
-        upload_to="news/pdfs/",
-        blank=True,
-        null=True
-    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
