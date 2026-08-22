@@ -516,114 +516,126 @@ async function deleteNews(id) {
 
 
 /* =========================================
-   PHOTO LOCAL STORAGE
+   PHOTO DJANGO API
 ========================================= */
 
-function getPhotos() {
+async function getPhotos() {
     try {
-        return JSON.parse(localStorage.getItem(PHOTO_KEY)) || [];
-    } catch {
+        const response = await fetch(`${API_BASE}/photos/`);
+
+        if (!response.ok) {
+            throw new Error("Could not load photos.");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error loading photos:", error);
         return [];
     }
 }
 
-function savePhotos(photos) {
-    localStorage.setItem(PHOTO_KEY, JSON.stringify(photos));
-}
+async function addPhoto(formData) {
+    const response = await fetch(`${API_BASE}/photos/`, {
+        method: "POST",
+        body: formData,
+    });
 
-function addPhoto(item) {
-    const photos = getPhotos();
-
-    item.id = Date.now().toString();
-    item.createdAt = new Date().toISOString();
-
-    photos.unshift(item);
-
-    savePhotos(photos);
-
-    return photos;
-}
-
-function updatePhoto(id, data) {
-    const photos = getPhotos();
-
-    const index = photos.findIndex((item) => item.id === id);
-
-    if (index !== -1) {
-        photos[index] = {
-            ...photos[index],
-            ...data,
-            updatedAt: new Date().toISOString(),
-        };
-
-        savePhotos(photos);
+    if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
+        throw new Error("Could not upload photo");
     }
 
-    return photos;
+    return await response.json();
 }
 
-function deletePhoto(id) {
-    const photos = getPhotos().filter((item) => item.id !== id);
+async function updatePhoto(id, formData) {
+    const response = await fetch(`${API_BASE}/photos/${id}/`, {
+        method: "PATCH",
+        body: formData,
+    });
 
-    savePhotos(photos);
+    if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
+        throw new Error("Could not update photo");
+    }
 
-    return photos;
+    return await response.json();
+}
+
+async function deletePhoto(id) {
+    const response = await fetch(`${API_BASE}/photos/${id}/`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Could not delete photo.");
+    }
+
+    return true;
 }
 
 
 /* =========================================
-   LEADERS LOCAL STORAGE
+   LEADERS DJANGO API
 ========================================= */
 
-function getLeaders() {
+async function getLeaders() {
     try {
-        return JSON.parse(localStorage.getItem(LEADER_KEY)) || [];
-    } catch {
+        const response = await fetch(`${API_BASE}/leaders/`);
+
+        if (!response.ok) {
+            throw new Error("Could not load leaders.");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error loading leaders:", error);
         return [];
     }
 }
 
-function saveLeaders(leaders) {
-    localStorage.setItem(LEADER_KEY, JSON.stringify(leaders));
-}
+async function addLeader(formData) {
+    const response = await fetch(`${API_BASE}/leaders/`, {
+        method: "POST",
+        body: formData,
+    });
 
-function addLeader(item) {
-    const leaders = getLeaders();
-
-    item.id = Date.now().toString();
-    item.createdAt = new Date().toISOString();
-
-    leaders.unshift(item);
-
-    saveLeaders(leaders);
-
-    return leaders;
-}
-
-function updateLeader(id, data) {
-    const leaders = getLeaders();
-
-    const index = leaders.findIndex((item) => item.id === id);
-
-    if (index !== -1) {
-        leaders[index] = {
-            ...leaders[index],
-            ...data,
-            updatedAt: new Date().toISOString(),
-        };
-
-        saveLeaders(leaders);
+    if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
+        throw new Error("Could not add leader");
     }
 
-    return leaders;
+    return await response.json();
 }
 
-function deleteLeader(id) {
-    const leaders = getLeaders().filter((item) => item.id !== id);
+async function updateLeader(id, formData) {
+    const response = await fetch(`${API_BASE}/leaders/${id}/`, {
+        method: "PATCH",
+        body: formData,
+    });
 
-    saveLeaders(leaders);
+    if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
+        throw new Error("Could not update leader");
+    }
 
-    return leaders;
+    return await response.json();
+}
+
+async function deleteLeader(id) {
+    const response = await fetch(`${API_BASE}/leaders/${id}/`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Could not delete leader.");
+    }
+
+    return true;
 }
 
 
@@ -1033,8 +1045,9 @@ function resetLeaderForm() {
    EDIT FUNCTIONS
 ========================================= */
 
-function startEditNews(id) {
-    const item = getNews().find((news) => news.id === id);
+async function startEditNews(id) {
+    const news = await getNews();
+    const item = news.find((news) => news.id === id);
 
     if (!item) return;
 
@@ -1068,8 +1081,9 @@ function startEditNews(id) {
 cancelEditBtn.addEventListener("click", resetNewsForm);
 
 
-function startEditPhoto(id) {
-    const item = getPhotos().find((photo) => photo.id === id);
+async function startEditPhoto(id) {
+    const photos = await getPhotos();
+    const item = photos.find((photo) => photo.id === id);
 
     if (!item) return;
 
@@ -1105,8 +1119,9 @@ cancelPhotoEditBtn.addEventListener(
 );
 
 
-function startEditLeader(id) {
-    const item = getLeaders().find(
+async function startEditLeader(id) {
+    const leaders = await getLeaders();
+    const item = leaders.find(
         (leader) => leader.id === id
     );
 
@@ -1367,9 +1382,9 @@ async function renderNewsAdmin() {
 
             button.addEventListener(
                 "click",
-                () => {
+                async () => {
 
-                    startEditNews(
+                    await startEditNews(
                         button.dataset.id
                     );
 
@@ -1654,8 +1669,8 @@ async function renderNewsFeed() {
    RENDER PHOTOS ADMIN
 ========================================= */
 
-function renderPhotosAdmin() {
-    const photos = getPhotos();
+async function renderPhotosAdmin() {
+    const photos = await getPhotos();
 
     photoCount.textContent = photos.length;
 
@@ -1708,7 +1723,7 @@ function renderPhotosAdmin() {
 
                         <span class="news-date">
                             ${formatDate(
-                                photo.createdAt
+                                photo.created_at
                             )}
                         </span>
 
@@ -1742,25 +1757,30 @@ function renderPhotosAdmin() {
     photoList
         .querySelectorAll(".btn-edit")
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                startEditPhoto(button.dataset.id);
+            button.addEventListener("click", async () => {
+                await startEditPhoto(button.dataset.id);
             });
         });
 
     photoList
         .querySelectorAll(".btn-delete")
         .forEach((button) => {
-            button.addEventListener("click", () => {
+            button.addEventListener("click", async () => {
                 if (confirm("Delete this photo?")) {
-                    deletePhoto(button.dataset.id);
+                    try {
+                        await deletePhoto(button.dataset.id);
 
-                    renderPhotosAdmin();
+                        await renderPhotosAdmin();
 
-                    if (
-                        editingPhotoId.value ===
-                        button.dataset.id
-                    ) {
-                        resetPhotoForm();
+                        if (
+                            editingPhotoId.value ===
+                            button.dataset.id
+                        ) {
+                            resetPhotoForm();
+                        }
+                    } catch (error) {
+                        console.error("Error deleting photo:", error);
+                        alert("Could not delete photo. Please try again.");
                     }
                 }
             });
@@ -1780,8 +1800,8 @@ function renderPhotosAdmin() {
    RENDER GALLERY
 ========================================= */
 
-function renderGalleryFeed() {
-    const photos = getPhotos();
+async function renderGalleryFeed() {
+    const photos = await getPhotos();
 
     const count = photos.length;
 
@@ -1834,7 +1854,7 @@ function renderGalleryFeed() {
 
                     <span class="gallery-item-date">
                         ${formatDate(
-                            photo.createdAt
+                            photo.created_at
                         )}
                     </span>
 
@@ -1861,8 +1881,8 @@ function renderGalleryFeed() {
    RENDER LEADERS ADMIN
 ========================================= */
 
-function renderLeadersAdmin() {
-    const leaders = getLeaders();
+async function renderLeadersAdmin() {
+    const leaders = await getLeaders();
 
     leaderCount.textContent = leaders.length;
 
@@ -1922,7 +1942,7 @@ function renderLeadersAdmin() {
 
                         <span class="news-date">
                             ${formatDate(
-                                leader.createdAt
+                                leader.created_at
                             )}
                         </span>
 
@@ -1956,25 +1976,30 @@ function renderLeadersAdmin() {
     leaderList
         .querySelectorAll(".btn-edit")
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                startEditLeader(button.dataset.id);
+            button.addEventListener("click", async () => {
+                await startEditLeader(button.dataset.id);
             });
         });
 
     leaderList
         .querySelectorAll(".btn-delete")
         .forEach((button) => {
-            button.addEventListener("click", () => {
+            button.addEventListener("click", async () => {
                 if (confirm("Delete this leader?")) {
-                    deleteLeader(button.dataset.id);
+                    try {
+                        await deleteLeader(button.dataset.id);
 
-                    renderLeadersAdmin();
+                        await renderLeadersAdmin();
 
-                    if (
-                        editingLeaderId.value ===
-                        button.dataset.id
-                    ) {
-                        resetLeaderForm();
+                        if (
+                            editingLeaderId.value ===
+                            button.dataset.id
+                        ) {
+                            resetLeaderForm();
+                        }
+                    } catch (error) {
+                        console.error("Error deleting leader:", error);
+                        alert("Could not delete leader. Please try again.");
                     }
                 }
             });
@@ -1994,8 +2019,8 @@ function renderLeadersAdmin() {
    RENDER LEADERS PUBLIC
 ========================================= */
 
-function renderLeadersFeed() {
-    const leaders = getLeaders();
+async function renderLeadersFeed() {
+    const leaders = await getLeaders();
 
     const count = leaders.length;
 
@@ -2629,12 +2654,15 @@ backFromNews.addEventListener(
 
 photoForm.addEventListener(
     "submit",
-    (e) => {
+    async (e) => {
         e.preventDefault();
 
+        const editId =
+            editingPhotoId.value;
+
         if (
-            !currentPhotoData &&
-            !editingPhotoId.value
+            !photoImageInput.files[0] &&
+            !editId
         ) {
             alert(
                 "Please select a photo to upload."
@@ -2643,61 +2671,64 @@ photoForm.addEventListener(
             return;
         }
 
-        const data = {
-            description:
-                document
-                    .getElementById(
-                        "photoDescription"
-                    )
-                    .value
-                    .trim(),
+        const description =
+            document
+                .getElementById(
+                    "photoDescription"
+                )
+                .value
+                .trim();
 
-            image:
-                currentPhotoData || null,
-        };
+        const formData = new FormData();
 
-        const editId =
-            editingPhotoId.value;
+        formData.append("description", description);
 
-        if (editId) {
-            const existing =
-                getPhotos().find(
-                    (photo) =>
-                        photo.id === editId
-                );
-
-            if (
-                !data.image &&
-                existing
-            ) {
-                data.image =
-                    existing.image;
-            }
-
-            updatePhoto(editId, data);
-
-            photoSuccessToast.textContent =
-                "Photo updated successfully!";
-        } else {
-            addPhoto(data);
-
-            photoSuccessToast.textContent =
-                "Photo uploaded successfully!";
+        // Only append the image if a new file was chosen —
+        // otherwise leave it out so the existing Cloudinary
+        // image on the server is left untouched.
+        if (
+            photoImageInput.files &&
+            photoImageInput.files[0]
+        ) {
+            formData.append(
+                "image",
+                photoImageInput.files[0]
+            );
         }
 
-        renderPhotosAdmin();
+        try {
+            if (editId) {
+                await updatePhoto(editId, formData);
 
-        resetPhotoForm();
+                photoSuccessToast.textContent =
+                    "Photo updated successfully!";
+            } else {
+                await addPhoto(formData);
 
-        photoSuccessToast.classList.add(
-            "show"
-        );
+                photoSuccessToast.textContent =
+                    "Photo uploaded successfully!";
+            }
 
-        setTimeout(() => {
-            photoSuccessToast.classList.remove(
+            await renderPhotosAdmin();
+
+            resetPhotoForm();
+
+            photoSuccessToast.classList.add(
                 "show"
             );
-        }, 2500);
+
+            setTimeout(() => {
+                photoSuccessToast.classList.remove(
+                    "show"
+                );
+            }, 2500);
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                "Could not upload photo. Please make sure the Django server is running."
+            );
+        }
     }
 );
 
@@ -2719,84 +2750,93 @@ backFromGallery.addEventListener(
 
 leaderForm.addEventListener(
     "submit",
-    (e) => {
+    async (e) => {
         e.preventDefault();
-
-        const data = {
-            name:
-                document
-                    .getElementById("leaderName")
-                    .value
-                    .trim(),
-
-            designation:
-                document
-                    .getElementById(
-                        "leaderDesignation"
-                    )
-                    .value
-                    .trim(),
-
-            phone:
-                document
-                    .getElementById("leaderPhone")
-                    .value
-                    .trim(),
-
-            address:
-                document
-                    .getElementById(
-                        "leaderAddress"
-                    )
-                    .value
-                    .trim(),
-
-            image:
-                currentLeaderData || null,
-        };
 
         const editId =
             editingLeaderId.value;
 
-        if (editId) {
-            const existing =
-                getLeaders().find(
-                    (leader) =>
-                        leader.id === editId
-                );
+        const name =
+            document
+                .getElementById("leaderName")
+                .value
+                .trim();
 
-            if (
-                !data.image &&
-                existing
-            ) {
-                data.image =
-                    existing.image;
-            }
+        const designation =
+            document
+                .getElementById(
+                    "leaderDesignation"
+                )
+                .value
+                .trim();
 
-            updateLeader(editId, data);
+        const phone =
+            document
+                .getElementById("leaderPhone")
+                .value
+                .trim();
 
-            leaderSuccessToast.textContent =
-                "Leader updated successfully!";
-        } else {
-            addLeader(data);
+        const address =
+            document
+                .getElementById(
+                    "leaderAddress"
+                )
+                .value
+                .trim();
 
-            leaderSuccessToast.textContent =
-                "Leader added successfully!";
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("designation", designation);
+        formData.append("phone", phone);
+        formData.append("address", address);
+
+        // Only append the image if a new file was chosen —
+        // otherwise leave it out so the existing Cloudinary
+        // image on the server is left untouched.
+        if (
+            leaderImageInput.files &&
+            leaderImageInput.files[0]
+        ) {
+            formData.append(
+                "image",
+                leaderImageInput.files[0]
+            );
         }
 
-        renderLeadersAdmin();
+        try {
+            if (editId) {
+                await updateLeader(editId, formData);
 
-        resetLeaderForm();
+                leaderSuccessToast.textContent =
+                    "Leader updated successfully!";
+            } else {
+                await addLeader(formData);
 
-        leaderSuccessToast.classList.add(
-            "show"
-        );
+                leaderSuccessToast.textContent =
+                    "Leader added successfully!";
+            }
 
-        setTimeout(() => {
-            leaderSuccessToast.classList.remove(
+            await renderLeadersAdmin();
+
+            resetLeaderForm();
+
+            leaderSuccessToast.classList.add(
                 "show"
             );
-        }, 2500);
+
+            setTimeout(() => {
+                leaderSuccessToast.classList.remove(
+                    "show"
+                );
+            }, 2500);
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                "Could not save leader. Please make sure the Django server is running."
+            );
+        }
     }
 );
 
