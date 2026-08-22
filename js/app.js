@@ -1562,7 +1562,7 @@ async function renderNewsFeed() {
                             ? `
                             <img 
                                 class="news-article-img" 
-                                src="${BACKEND_URL}${item.image}" 
+                                src="${item.image}" 
                                 alt="" 
                             >
                             `

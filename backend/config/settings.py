@@ -12,9 +12,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Security
-SECRET_KEY = 'django-insecure-#!3j+kv0lb$#o$oo&_xt%zqr@c$x@)7!skk##9i2mkijx(g)$b'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-#!3j+kv0lb$#o$oo&_xt%zqr@c$x@)7!skk##9i2mkijx(g)$b'
+)
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -25,7 +28,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
 
     'corsheaders',
     'rest_framework',
@@ -128,9 +134,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files (uploaded images and PDFs)
+# Media files — now served from Cloudinary instead of local disk
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Default primary key
