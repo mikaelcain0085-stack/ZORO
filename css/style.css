@@ -3036,6 +3036,6 @@ html {
 }
 @media (max-width: 768px) {
     .zoro-text {
-        bottom: calc(-100% + 20px);
+        bottom: calc(-100% + 35px);
     }
 }
