@@ -2388,26 +2388,25 @@ document.addEventListener(
     }
 );
 
+
 /* =========================================
    ADMIN HAMBURGER MENU
 ========================================= */
 
-const adminHamburgerButton =
+const adminMenuToggle =
     document.getElementById("adminMenuToggle");
 
-const adminMenuDropdown =
+const adminDropdown =
     document.getElementById("adminDropdown");
 
-if (adminHamburgerButton && adminMenuDropdown) {
+adminMenuToggle.addEventListener(
+    "click",
+    () => {
+        adminDropdown.classList.toggle("show");
+    }
+);
 
-    adminHamburgerButton.addEventListener(
-        "click",
-        () => {
-            adminMenuDropdown.classList.toggle("show");
-        }
-    );
 
-}
 /* =========================================
    LOGOUT
 ========================================= */
