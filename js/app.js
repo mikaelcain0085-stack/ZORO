@@ -3120,3 +3120,130 @@ if (adminMenuToggle && adminNavWrapper) {
             });
         });
 }
+
+// =========================
+// ZORO CHAT ASSISTANT
+// =========================
+
+const chatFab = document.getElementById("chatFab");
+const chatPanel = document.getElementById("chatPanel");
+const chatCloseBtn = document.getElementById("chatCloseBtn");
+const chatMessages = document.getElementById("chatMessages");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+
+let chatHistory = [];
+
+function appendChatMessage(text, sender) {
+    const el = document.createElement("div");
+    el.className =
+        sender === "user" ? "chat-msg chat-msg-user" : "chat-msg chat-msg-bot";
+    el.textContent = text;
+
+    chatMessages.appendChild(el);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    return el;
+}
+
+function showChatTyping() {
+    const el = document.createElement("div");
+    el.className = "chat-msg-typing";
+    el.id = "chatTypingIndicator";
+    el.innerHTML = "<span></span><span></span><span></span>";
+
+    chatMessages.appendChild(el);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideChatTyping() {
+    const el = document.getElementById("chatTypingIndicator");
+    if (el) el.remove();
+}
+
+if (chatFab && chatPanel) {
+    chatFab.addEventListener("click", () => {
+        chatPanel.classList.toggle("active");
+        chatFab.classList.toggle("active");
+
+        if (chatPanel.classList.contains("active")) {
+            chatInput.focus();
+        }
+    });
+}
+
+if (chatCloseBtn && chatPanel) {
+    chatCloseBtn.addEventListener("click", () => {
+        chatPanel.classList.remove("active");
+        chatFab.classList.remove("active");
+    });
+}
+
+if (chatForm) {
+    chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const message = chatInput.value.trim();
+
+        if (!message) return;
+
+        appendChatMessage(message, "user");
+
+        chatInput.value = "";
+        chatInput.disabled = true;
+
+        showChatTyping();
+
+        try {
+            const response = await fetch(`${API_BASE}/chat/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    message: message,
+                    history: chatHistory,
+                }),
+            });
+
+            const data = await response.json();
+
+            hideChatTyping();
+
+            if (!response.ok) {
+                appendChatMessage(
+                    data.error ||
+                        "Sorry, something went wrong. Please try again.",
+                    "bot"
+                );
+
+                chatInput.disabled = false;
+                chatInput.focus();
+
+                return;
+            }
+
+            appendChatMessage(data.reply, "bot");
+
+            chatHistory.push({ role: "user", text: message });
+            chatHistory.push({ role: "model", text: data.reply });
+
+            // Keep the client-side history from growing unbounded
+            if (chatHistory.length > 20) {
+                chatHistory = chatHistory.slice(-20);
+            }
+        } catch (error) {
+            console.error("Chat error:", error);
+
+            hideChatTyping();
+
+            appendChatMessage(
+                "Sorry, I couldn't reach the chat service. Please check your connection and try again.",
+                "bot"
+            );
+        }
+
+        chatInput.disabled = false;
+        chatInput.focus();
+    });
+}
