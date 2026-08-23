@@ -3718,8 +3718,9 @@ html {
 .contact-map {
   position: relative;
 
-  height: 100%;
-  min-height: 340px;
+  height: 380px;
+
+  margin-top: 2rem;
 
   border-radius: 20px;
   border: 1px solid var(--border);
@@ -3769,6 +3770,7 @@ html {
 
 @media (max-width: 768px) {
   .contact-map {
-    min-height: 260px;
+    height: 280px;
+    margin-top: 1.5rem;
   }
 }
