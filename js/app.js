@@ -3102,3 +3102,21 @@ if (menuToggle && navLinks) {
         navLinks.classList.toggle("active");
     });
 }
+
+const adminMenuToggle = document.getElementById("adminMenuToggle");
+const adminNavWrapper = document.getElementById("adminNavWrapper");
+
+if (adminMenuToggle && adminNavWrapper) {
+    adminMenuToggle.addEventListener("click", () => {
+        adminNavWrapper.classList.toggle("active");
+    });
+
+    // Close the dropdown once a nav button or logout is tapped
+    adminNavWrapper
+        .querySelectorAll("button")
+        .forEach((button) => {
+            button.addEventListener("click", () => {
+                adminNavWrapper.classList.remove("active");
+            });
+        });
+}
