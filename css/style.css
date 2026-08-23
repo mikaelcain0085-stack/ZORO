@@ -1465,69 +1465,92 @@ footer {
 }
 
 /* Subtle formal background decoration for the admin console:
-   a faint drifting dot-grid plus two soft glowing blobs,
-   both grayscale and low-opacity so they never compete with content. */
+   faint vertical lines, each with a soft white light that
+   travels top-to-bottom, staggered so only one or two glow
+   at a time. */
 
-#admin::before,
-#admin::after {
-  content: "";
-
+.bg-lines {
   position: fixed;
   inset: 0;
 
   z-index: -1;
   pointer-events: none;
+
+  display: flex;
+  justify-content: space-evenly;
+
+  overflow: hidden;
 }
 
-#admin::before {
-  background-image: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.35) 1px,
-    transparent 1px
+.bg-line {
+  position: relative;
+
+  width: 1px;
+  height: 100%;
+
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.bg-line::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  top: -22%;
+
+  width: 2px;
+  height: 20%;
+
+  transform: translateX(-50%);
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    transparent
   );
 
-  background-size: 34px 34px;
+  box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.55);
 
-  opacity: 0.05;
+  opacity: 0;
 
-  filter: grayscale(1);
-
-  animation: adminDotDrift 70s linear infinite;
+  animation: bgLineTravel 5s linear infinite;
 }
 
-#admin::after {
-  background:
-    radial-gradient(
-      620px circle at 12% 18%,
-      rgba(255, 255, 255, 0.08),
-      transparent 60%
-    ),
-    radial-gradient(
-      720px circle at 88% 78%,
-      rgba(255, 255, 255, 0.06),
-      transparent 60%
-    );
-
-  filter: grayscale(1);
-
-  animation: adminGlowDrift 26s ease-in-out infinite alternate;
+.bg-line:nth-child(1)::after {
+  animation-delay: 0s;
 }
 
-@keyframes adminDotDrift {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 340px 340px;
-  }
+.bg-line:nth-child(2)::after {
+  animation-delay: 1.1s;
 }
 
-@keyframes adminGlowDrift {
+.bg-line:nth-child(3)::after {
+  animation-delay: 2.2s;
+}
+
+.bg-line:nth-child(4)::after {
+  animation-delay: 3.3s;
+}
+
+.bg-line:nth-child(5)::after {
+  animation-delay: 4.4s;
+}
+
+@keyframes bgLineTravel {
   0% {
-    transform: translate(0, 0) scale(1);
+    top: -22%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
   }
   100% {
-    transform: translate(-2%, 2%) scale(1.05);
+    top: 100%;
+    opacity: 0;
   }
 }
 
