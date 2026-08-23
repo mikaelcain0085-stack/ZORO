@@ -3710,3 +3710,65 @@ html {
     width: calc(100vw - 1.5rem);
   }
 }
+
+/* =========================
+   CONTACT MAP (modern styling)
+========================= */
+
+.contact-map {
+  position: relative;
+
+  height: 100%;
+  min-height: 340px;
+
+  border-radius: 20px;
+  border: 1px solid var(--border);
+
+  overflow: hidden;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.contact-map:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(99, 102, 241, 0.4);
+
+  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.25);
+}
+
+.contact-map iframe {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  filter: grayscale(45%) contrast(1.05) brightness(0.95);
+
+  transition: filter 0.35s ease;
+}
+
+.contact-map:hover iframe {
+  filter: grayscale(0%) contrast(1) brightness(1);
+}
+
+.contact-map::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: 20px;
+
+  pointer-events: none;
+
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .contact-map {
+    min-height: 260px;
+  }
+}
