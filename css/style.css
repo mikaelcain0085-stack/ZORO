@@ -3428,6 +3428,10 @@ html {
   gap: 1rem;
 }
 
+.enquiries-card {
+  grid-column: 1 / -1;
+}
+
 .enquiry-item {
   background: var(--bg);
 
