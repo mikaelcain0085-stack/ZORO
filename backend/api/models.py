@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 
 class Member(models.Model):
@@ -23,6 +24,7 @@ class News(models.Model):
     )
     pdf = models.FileField(
         upload_to="news_pdfs/",
+        storage=RawMediaCloudinaryStorage(),
         blank=True,
         null=True
     )
