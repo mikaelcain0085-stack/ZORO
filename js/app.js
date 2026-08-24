@@ -3009,7 +3009,9 @@ function wireAdminSearch(inputEl, listEl) {
         const term = inputEl.value.trim().toLowerCase();
 
         listEl
-            .querySelectorAll(":scope > div:not(.empty-state)")
+            .querySelectorAll(
+                ":scope > *:not(.empty-state):not(.news-empty-premium)"
+            )
             .forEach(function (card) {
                 const matches = card.textContent
                     .toLowerCase()
@@ -3039,6 +3041,27 @@ document.addEventListener("DOMContentLoaded", function () {
     wireAdminSearch(
         document.getElementById("leaderSearchInput"),
         leaderList
+    );
+
+    // Public-facing feed pages
+    wireAdminSearch(
+        document.getElementById("newsFeedSearchInput"),
+        newsFeed
+    );
+
+    wireAdminSearch(
+        document.getElementById("galleryFeedSearchInput"),
+        galleryFeed
+    );
+
+    wireAdminSearch(
+        document.getElementById("leadersFeedSearchInput"),
+        leadersFeed
+    );
+
+    wireAdminSearch(
+        document.getElementById("membersFeedSearchInput"),
+        membersFeed
     );
 });
 // =========================

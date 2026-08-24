@@ -1231,11 +1231,11 @@ footer {
 }
 
 .news-main {
-  max-width: 820px;
+  max-width: 1400px;
 
   margin: 0 auto;
 
-  padding: 3rem 2rem 5rem;
+  padding: 3rem 2.5rem 5rem;
 }
 
 .news-hero-title {
@@ -1286,8 +1286,9 @@ footer {
 }
 
 .news-feed {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 
   gap: 1.75rem;
 }
@@ -1832,6 +1833,12 @@ footer {
   transition: border-color 0.2s ease;
 }
 
+.public-search-box {
+  max-width: 420px;
+
+  margin: 1.5rem auto 0;
+}
+
 .search-box:focus-within {
   border-color: var(--accent);
 }
@@ -1966,9 +1973,9 @@ footer {
 
 .members-list,
 .news-list {
-  display: flex;
+  display: grid;
 
-  flex-direction: column;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 
   gap: 0.85rem;
 

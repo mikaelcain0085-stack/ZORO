@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=10">
 
   <title>ZORO Organisation</title>
 
@@ -474,6 +474,15 @@
           0 articles
         </div>
 
+        <div class="search-box public-search-box">
+          <svg class="btn-icon"><use href="#icon-search"></use></svg>
+          <input
+            type="text"
+            id="newsFeedSearchInput"
+            placeholder="Search news by title or content..."
+          >
+        </div>
+
       </div>
 
       <div class="news-feed" id="newsFeed"></div>
@@ -519,6 +528,15 @@
 
         <div class="news-count-badge" id="galleryFeedCount">
           0 photos
+        </div>
+
+        <div class="search-box public-search-box">
+          <svg class="btn-icon"><use href="#icon-search"></use></svg>
+          <input
+            type="text"
+            id="galleryFeedSearchInput"
+            placeholder="Search photos by description..."
+          >
         </div>
 
       </div>
@@ -568,6 +586,15 @@
           0 leaders
         </div>
 
+        <div class="search-box public-search-box">
+          <svg class="btn-icon"><use href="#icon-search"></use></svg>
+          <input
+            type="text"
+            id="leadersFeedSearchInput"
+            placeholder="Search leaders by name or designation..."
+          >
+        </div>
+
       </div>
 
       <div class="gallery-feed" id="leadersFeed"></div>
@@ -613,6 +640,15 @@
 
         <div class="news-count-badge" id="membersFeedCount">
           0 members
+        </div>
+
+        <div class="search-box public-search-box">
+          <svg class="btn-icon"><use href="#icon-search"></use></svg>
+          <input
+            type="text"
+            id="membersFeedSearchInput"
+            placeholder="Search members by name..."
+          >
         </div>
 
       </div>
@@ -1836,7 +1872,7 @@
 
 
 <!-- JAVASCRIPT -->
-<script src="js/app.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 
 </body>
 </html>
