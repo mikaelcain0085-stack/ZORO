@@ -117,6 +117,39 @@
     </g>
     <rect width="800" height="400" fill="url(#mapVignette)"/>
   </symbol>
+
+  <!-- Mizoram technology map used only for Photo Gallery and Members -->
+  <symbol id="mizoram-map-tech" viewBox="0 0 800 400">
+    <defs>
+      <linearGradient id="mizoramLandGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#1b2330"/>
+        <stop offset="100%" stop-color="#090d15"/>
+      </linearGradient>
+      <filter id="mizoramGlow" x="-30%" y="-20%" width="160%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <pattern id="mizoramTechGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <path d="M24 0H0V24" fill="none" stroke="rgba(129,140,248,0.10)" stroke-width="0.65"/>
+      </pattern>
+    </defs>
+    <rect class="mizoram-map-grid-bg" width="800" height="400" fill="url(#mizoramTechGrid)"/>
+    <g class="mizoram-map-major-grid">
+      <path d="M0 100H800M0 200H800M0 300H800M100 0V400M200 0V400M300 0V400M400 0V400M500 0V400M600 0V400M700 0V400"/>
+    </g>
+    <g class="mizoram-map-tech-lines">
+      <path d="M120 82H680M90 318H710M250 42V360M555 40V365"/>
+      <path d="M190 320L360 260L570 145M270 75L440 185L650 305"/>
+      <circle cx="190" cy="320" r="2"/><circle cx="360" cy="260" r="2"/><circle cx="570" cy="145" r="2"/><circle cx="440" cy="185" r="2"/>
+    </g>
+    <!-- Stylised Mizoram state outline -->
+    <path class="mizoram-map-outline" d="M404 24 L440 38 L454 68 L448 96 L466 120 L458 150 L476 180 L465 210 L480 242 L468 274 L482 306 L468 340 L446 374 L414 362 L398 334 L382 306 L390 278 L374 250 L384 222 L368 192 L380 164 L366 136 L382 108 L376 78 L392 52 Z"/>
+    <path class="mizoram-map-borders" d="M396 70L438 92M380 132L452 150M374 194L466 210M386 254L474 270M400 310L470 326"/>
+    <g class="mizoram-map-crosshairs">
+      <path d="M180 52h14M187 45v14M620 344h14M627 337v14M604 60h14M611 53v14"/>
+    </g>
+  </symbol>
+
 </svg>
 
   <!-- =========================
@@ -289,8 +322,8 @@
         <div class="explore-visual">
           <div class="explore-map">
             <div class="explore-map-inner">
-              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#mizoram-map-tech"></use></svg>
+              <div class="map-pulse" style="left: 52.5%; top: 54%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
@@ -361,8 +394,8 @@
         <div class="explore-visual">
           <div class="explore-map">
             <div class="explore-map-inner">
-              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#mizoram-map-tech"></use></svg>
+              <div class="map-pulse" style="left: 52.5%; top: 54%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
