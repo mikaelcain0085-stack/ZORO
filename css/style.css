@@ -538,7 +538,7 @@ nav {
   align-items: center;
   justify-content: center;
 
-  min-height: 280px;
+  min-height: 320px;
 }
 
 .explore-glow {
@@ -562,20 +562,7 @@ nav {
   animation: explorePulse 5s ease-in-out infinite;
 }
 
-.explore-icon {
-  position: relative;
-
-  z-index: 2;
-
-  font-size: 7rem;
-  line-height: 1;
-
-  filter: drop-shadow(0 15px 35px rgba(99, 102, 241, 0.4));
-
-  animation: exploreFloat 6s ease-in-out infinite;
-}
-
-/* Decorative world map behind each Explore ZORO visual */
+/* Decorative world map for each Explore ZORO visual */
 
 .explore-map {
   position: absolute;
@@ -594,11 +581,11 @@ nav {
   position: relative;
 
   width: 100%;
-  max-width: 440px;
+  max-width: 640px;
 
   aspect-ratio: 2 / 1;
 
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .world-map-svg {
@@ -695,15 +682,6 @@ nav {
   }
 }
 
-@keyframes exploreFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-18px);
-  }
-}
-
 .explore-text {
   flex: 1;
 
@@ -755,12 +733,8 @@ nav {
     padding: 3rem 1rem;
   }
 
-  .explore-icon {
-    font-size: 5rem;
-  }
-
   .explore-map-inner {
-    max-width: 320px;
+    max-width: 100%;
   }
 
   .map-pulse-label {
