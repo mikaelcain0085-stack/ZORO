@@ -142,9 +142,37 @@
       <path d="M190 320L360 260L570 145M270 75L440 185L650 305"/>
       <circle cx="190" cy="320" r="2"/><circle cx="360" cy="260" r="2"/><circle cx="570" cy="145" r="2"/><circle cx="440" cy="185" r="2"/>
     </g>
-    <!-- Stylised Mizoram state outline -->
-    <path class="mizoram-map-outline" d="M404 24 L440 38 L454 68 L448 96 L466 120 L458 150 L476 180 L465 210 L480 242 L468 274 L482 306 L468 340 L446 374 L414 362 L398 334 L382 306 L390 278 L374 250 L384 222 L368 192 L380 164 L366 136 L382 108 L376 78 L392 52 Z"/>
-    <path class="mizoram-map-borders" d="M396 70L438 92M380 132L452 150M374 194L466 210M386 254L474 270M400 310L470 326"/>
+    <!-- Mizoram state silhouette, shaped to match the supplied true-map reference -->
+    <path class="mizoram-map-outline" d="
+      M414 18
+      L432 23 L438 36 L453 42 L455 58
+      L470 66 L468 82 L479 94 L476 111
+      L488 124 L484 139 L494 153 L490 169
+      L501 183 L497 198 L506 212 L500 229
+      L510 245 L503 261 L511 277 L504 292
+      L510 309 L501 324 L505 340 L495 354
+      L497 370 L486 382 L470 376 L460 386
+      L446 378 L435 385 L421 373 L409 378
+      L397 366 L386 368 L379 352 L366 345
+      L369 329 L357 317 L363 301 L353 286
+      L361 271 L352 255 L360 239 L350 223
+      L358 207 L349 191 L357 176 L348 160
+      L357 145 L349 129 L359 113 L353 97
+      L365 84 L360 68 L374 57 L373 42
+      L389 33 L395 19 L404 24 Z"/>
+    <!-- District divisions styled as subtle technical borders -->
+    <path class="mizoram-map-borders" d="
+      M383 63 C407 70 440 72 468 83
+      M362 108 C395 118 445 118 484 133
+      M356 152 C396 160 454 163 492 179
+      M354 197 C394 205 455 210 501 224
+      M356 243 C398 251 458 257 505 269
+      M358 287 C397 296 455 304 506 316
+      M370 331 C406 338 456 346 499 354
+      M412 35 C404 92 409 151 402 206
+      M402 206 C412 260 413 315 421 371
+      M456 48 C450 105 459 158 450 217
+      M450 217 C458 272 458 321 469 374"/>
     <g class="mizoram-map-crosshairs">
       <path d="M180 52h14M187 45v14M620 344h14M627 337v14M604 60h14M611 53v14"/>
     </g>
@@ -323,7 +351,7 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#mizoram-map-tech"></use></svg>
-              <div class="map-pulse" style="left: 52.5%; top: 54%;">
+              <div class="map-pulse" style="left: 54.8%; top: 43.5%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
@@ -395,7 +423,7 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#mizoram-map-tech"></use></svg>
-              <div class="map-pulse" style="left: 52.5%; top: 54%;">
+              <div class="map-pulse" style="left: 54.8%; top: 43.5%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
