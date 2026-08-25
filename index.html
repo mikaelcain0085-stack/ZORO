@@ -49,73 +49,7 @@
     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
   </symbol>
   <symbol id="world-map-dots" viewBox="0 0 800 400">
-    <defs>
-      <linearGradient id="mapLandGradient" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#1b2330"/>
-        <stop offset="100%" stop-color="#0b0f17"/>
-      </linearGradient>
-      <filter id="mapGlow" x="-20%" y="-30%" width="140%" height="160%">
-        <feGaussianBlur stdDeviation="2.5" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <pattern id="techGrid" width="24" height="24" patternUnits="userSpaceOnUse">
-        <path d="M24 0H0V24" fill="none" stroke="rgba(129,140,248,0.10)" stroke-width="0.65"/>
-      </pattern>
-      <radialGradient id="mapVignette">
-        <stop offset="55%" stop-color="rgba(0,0,0,0)"/>
-        <stop offset="100%" stop-color="rgba(3,5,10,0.82)"/>
-      </radialGradient>
-    </defs>
-
-    <rect class="world-map-grid-bg" width="800" height="400" fill="url(#techGrid)"/>
-    <g class="world-map-major-grid">
-      <path d="M0 100H800M0 200H800M0 300H800M100 0V400M200 0V400M300 0V400M400 0V400M500 0V400M600 0V400M700 0V400"/>
-    </g>
-
-    <g class="world-map-continents" fill="url(#mapLandGradient)">
-      <!-- North America -->
-      <path d="M42 70 L74 55 L115 48 L150 53 L176 67 L190 82 L179 94 L163 98 L151 112 L135 116 L125 132 L110 142 L96 137 L83 124 L67 118 L58 104 L40 98 L24 88 Z"/>
-      <path d="M129 145 L147 154 L155 176 L149 198 L137 210 L124 198 L120 175 Z"/>
-      <!-- South America -->
-      <path d="M175 202 L194 210 L208 231 L207 251 L218 273 L212 296 L198 329 L185 350 L176 333 L178 306 L167 283 L163 257 L166 229 Z"/>
-      <!-- Greenland -->
-      <path d="M210 30 L235 22 L262 30 L255 50 L235 58 L218 50 Z"/>
-      <!-- Europe -->
-      <path d="M374 96 L392 84 L415 88 L430 100 L424 112 L407 114 L397 126 L382 119 Z"/>
-      <!-- Africa -->
-      <path d="M390 133 L418 132 L441 149 L448 181 L438 220 L418 258 L399 242 L386 208 L377 174 Z"/>
-      <!-- Asia -->
-      <path d="M432 98 L465 76 L520 73 L556 87 L600 82 L646 97 L686 111 L719 137 L704 156 L676 159 L658 178 L628 174 L610 193 L581 185 L562 167 L540 171 L518 154 L489 157 L470 143 L445 132 Z"/>
-      <!-- India / SE Asia -->
-      <path d="M520 165 L540 172 L551 195 L547 222 L531 235 L523 212 L512 194 Z"/>
-      <path d="M559 181 L578 192 L590 216 L609 230 L602 244 L581 233 L568 214 Z"/>
-      <!-- Japan / islands -->
-      <path d="M688 149 L696 158 L691 169 L684 163 Z"/>
-      <path d="M706 176 L713 184 L707 192 L700 185 Z"/>
-      <!-- Australia -->
-      <path d="M638 264 L674 255 L710 269 L726 295 L713 319 L679 326 L650 311 L631 288 Z"/>
-      <!-- Madagascar -->
-      <path d="M462 247 L469 256 L466 274 L458 281 L454 268 Z"/>
-      <!-- UK / Iceland -->
-      <path d="M361 81 L368 84 L368 94 L362 98 Z"/>
-      <path d="M334 62 L346 58 L352 65 L344 72 Z"/>
-    </g>
-
-    <g class="world-map-borders">
-      <path d="M60 86L95 95L124 89L149 98M101 57L109 137M145 53L135 116M177 76L151 112M177 216L207 251M167 255L207 251M390 133L438 220M377 174L448 181M399 242L438 220M470 99L489 157M520 73L518 154M556 87L562 167M600 82L610 193M646 97L658 178M489 157L540 171M540 171L547 222M559 181L602 244M638 264L710 269M650 311L713 319"/>
-    </g>
-
-    <g class="world-map-tech-lines">
-      <path d="M30 90H760M400 28V365"/>
-      <path d="M250 45L370 120M430 265L570 175M605 310L720 255"/>
-      <circle cx="744" cy="90" r="2"/><circle cx="298" cy="75" r="2"/><circle cx="326" cy="315" r="2"/>
-      <circle cx="736" cy="228" r="2"/><circle cx="286" cy="172" r="2"/>
-    </g>
-
-    <g class="world-map-crosshairs">
-      <path d="M72 42h14M79 35v14M264 308h14M271 301v14M470 45h14M477 38v14M738 350h14M745 343v14"/>
-    </g>
-    <rect width="800" height="400" fill="url(#mapVignette)"/>
+    <circle cx="129.5" cy="47.3" r="2.4"/><circle cx="78.5" cy="65.1" r="2.4"/><circle cx="143.1" cy="105.9" r="2.4"/><circle cx="99.1" cy="47.7" r="2.4"/><circle cx="70.6" cy="90.5" r="2.4"/><circle cx="131.0" cy="94.0" r="2.4"/><circle cx="70.9" cy="98.0" r="2.4"/><circle cx="152.8" cy="107.8" r="2.4"/><circle cx="87.6" cy="59.0" r="2.4"/><circle cx="174.0" cy="75.3" r="2.4"/><circle cx="158.6" cy="99.3" r="2.4"/><circle cx="153.0" cy="110.7" r="2.4"/><circle cx="115.1" cy="132.6" r="2.4"/><circle cx="93.0" cy="94.7" r="2.4"/><circle cx="156.1" cy="100.7" r="2.4"/><circle cx="160.6" cy="97.0" r="2.4"/><circle cx="138.6" cy="49.1" r="2.4"/><circle cx="71.9" cy="71.0" r="2.4"/><circle cx="51.2" cy="66.0" r="2.4"/><circle cx="54.1" cy="70.0" r="2.4"/><circle cx="129.0" cy="77.8" r="2.4"/><circle cx="91.8" cy="63.9" r="2.4"/><circle cx="77.4" cy="129.3" r="2.4"/><circle cx="130.7" cy="99.8" r="2.4"/><circle cx="64.0" cy="110.6" r="2.4"/><circle cx="62.9" cy="79.2" r="2.4"/><circle cx="96.3" cy="144.8" r="2.4"/><circle cx="127.7" cy="152.1" r="2.4"/><circle cx="69.7" cy="111.4" r="2.4"/><circle cx="131.4" cy="115.2" r="2.4"/><circle cx="107.1" cy="121.7" r="2.4"/><circle cx="135.6" cy="126.7" r="2.4"/><circle cx="64.1" cy="109.7" r="2.4"/><circle cx="96.8" cy="111.0" r="2.4"/><circle cx="99.3" cy="161.8" r="2.4"/><circle cx="78.9" cy="107.5" r="2.4"/><circle cx="144.7" cy="130.8" r="2.4"/><circle cx="47.1" cy="140.2" r="2.4"/><circle cx="122.1" cy="123.8" r="2.4"/><circle cx="42.0" cy="120.5" r="2.4"/><circle cx="144.6" cy="132.3" r="2.4"/><circle cx="110.0" cy="133.0" r="2.4"/><circle cx="64.4" cy="141.3" r="2.4"/><circle cx="47.3" cy="124.8" r="2.4"/><circle cx="84.9" cy="166.3" r="2.4"/><circle cx="131.3" cy="111.1" r="2.4"/><circle cx="90.1" cy="104.3" r="2.4"/><circle cx="67.8" cy="141.1" r="2.4"/><circle cx="102.0" cy="102.2" r="2.4"/><circle cx="118.9" cy="133.2" r="2.4"/><circle cx="120.6" cy="132.4" r="2.4"/><circle cx="68.8" cy="94.6" r="2.4"/><circle cx="102.7" cy="149.0" r="2.4"/><circle cx="163.9" cy="124.0" r="2.4"/><circle cx="137.8" cy="153.5" r="2.4"/><circle cx="118.9" cy="176.1" r="2.4"/><circle cx="133.1" cy="129.8" r="2.4"/><circle cx="143.5" cy="166.1" r="2.4"/><circle cx="113.1" cy="136.8" r="2.4"/><circle cx="134.4" cy="151.2" r="2.4"/><circle cx="105.9" cy="130.7" r="2.4"/><circle cx="125.4" cy="156.2" r="2.4"/><circle cx="115.7" cy="130.4" r="2.4"/><circle cx="101.4" cy="159.2" r="2.4"/><circle cx="115.6" cy="178.4" r="2.4"/><circle cx="116.4" cy="161.8" r="2.4"/><circle cx="114.3" cy="124.3" r="2.4"/><circle cx="179.2" cy="155.0" r="2.4"/><circle cx="137.5" cy="169.9" r="2.4"/><circle cx="167.7" cy="128.3" r="2.4"/><circle cx="103.7" cy="145.2" r="2.4"/><circle cx="133.1" cy="147.7" r="2.4"/><circle cx="160.6" cy="162.1" r="2.4"/><circle cx="131.2" cy="138.8" r="2.4"/><circle cx="172.6" cy="132.4" r="2.4"/><circle cx="112.1" cy="146.4" r="2.4"/><circle cx="133.0" cy="134.5" r="2.4"/><circle cx="117.5" cy="179.6" r="2.4"/><circle cx="65.5" cy="88.1" r="2.4"/><circle cx="74.0" cy="47.5" r="2.4"/><circle cx="97.9" cy="53.3" r="2.4"/><circle cx="68.9" cy="55.7" r="2.4"/><circle cx="62.1" cy="47.9" r="2.4"/><circle cx="51.2" cy="84.2" r="2.4"/><circle cx="66.4" cy="66.2" r="2.4"/><circle cx="74.5" cy="80.9" r="2.4"/><circle cx="42.4" cy="59.8" r="2.4"/><circle cx="107.5" cy="74.0" r="2.4"/><circle cx="73.4" cy="82.4" r="2.4"/><circle cx="34.6" cy="74.2" r="2.4"/><circle cx="70.2" cy="87.6" r="2.4"/><circle cx="77.6" cy="78.8" r="2.4"/><circle cx="48.8" cy="51.0" r="2.4"/><circle cx="101.2" cy="57.3" r="2.4"/><circle cx="77.6" cy="76.0" r="2.4"/><circle cx="63.5" cy="74.2" r="2.4"/><circle cx="71.8" cy="91.7" r="2.4"/><circle cx="46.3" cy="80.8" r="2.4"/><circle cx="49.1" cy="64.8" r="2.4"/><circle cx="83.7" cy="60.0" r="2.4"/><circle cx="55.3" cy="82.6" r="2.4"/><circle cx="35.8" cy="67.9" r="2.4"/><circle cx="51.2" cy="91.7" r="2.4"/><circle cx="59.6" cy="52.9" r="2.4"/><circle cx="208.4" cy="252.4" r="2.4"/><circle cx="192.8" cy="283.6" r="2.4"/><circle cx="207.2" cy="207.9" r="2.4"/><circle cx="196.4" cy="278.3" r="2.4"/><circle cx="157.5" cy="235.9" r="2.4"/><circle cx="169.1" cy="241.5" r="2.4"/><circle cx="200.2" cy="197.4" r="2.4"/><circle cx="194.4" cy="204.0" r="2.4"/><circle cx="184.2" cy="274.6" r="2.4"/><circle cx="179.7" cy="205.4" r="2.4"/><circle cx="194.6" cy="203.8" r="2.4"/><circle cx="201.9" cy="235.7" r="2.4"/><circle cx="179.9" cy="176.1" r="2.4"/><circle cx="213.3" cy="235.0" r="2.4"/><circle cx="208.4" cy="239.1" r="2.4"/><circle cx="171.6" cy="273.9" r="2.4"/><circle cx="205.7" cy="269.7" r="2.4"/><circle cx="212.9" cy="198.1" r="2.4"/><circle cx="167.5" cy="186.3" r="2.4"/><circle cx="204.6" cy="272.3" r="2.4"/><circle cx="178.4" cy="243.3" r="2.4"/><circle cx="206.8" cy="272.0" r="2.4"/><circle cx="173.3" cy="277.4" r="2.4"/><circle cx="206.2" cy="270.0" r="2.4"/><circle cx="206.8" cy="204.3" r="2.4"/><circle cx="205.1" cy="186.9" r="2.4"/><circle cx="161.1" cy="315.3" r="2.4"/><circle cx="173.0" cy="274.4" r="2.4"/><circle cx="189.8" cy="268.2" r="2.4"/><circle cx="166.4" cy="319.1" r="2.4"/><circle cx="182.1" cy="282.0" r="2.4"/><circle cx="199.1" cy="292.9" r="2.4"/><circle cx="155.4" cy="284.8" r="2.4"/><circle cx="186.4" cy="275.1" r="2.4"/><circle cx="180.3" cy="290.9" r="2.4"/><circle cx="169.3" cy="296.1" r="2.4"/><circle cx="162.7" cy="306.7" r="2.4"/><circle cx="176.9" cy="307.6" r="2.4"/><circle cx="187.1" cy="303.7" r="2.4"/><circle cx="168.2" cy="255.6" r="2.4"/><circle cx="183.2" cy="276.4" r="2.4"/><circle cx="165.7" cy="317.8" r="2.4"/><circle cx="186.0" cy="274.0" r="2.4"/><circle cx="165.5" cy="282.7" r="2.4"/><circle cx="170.1" cy="273.7" r="2.4"/><circle cx="156.4" cy="283.6" r="2.4"/><circle cx="197.0" cy="304.2" r="2.4"/><circle cx="195.1" cy="299.2" r="2.4"/><circle cx="165.0" cy="293.8" r="2.4"/><circle cx="171.5" cy="296.4" r="2.4"/><circle cx="182.7" cy="287.2" r="2.4"/><circle cx="172.1" cy="267.1" r="2.4"/><circle cx="193.7" cy="216.0" r="2.4"/><circle cx="209.8" cy="186.8" r="2.4"/><circle cx="174.2" cy="200.6" r="2.4"/><circle cx="201.6" cy="193.4" r="2.4"/><circle cx="210.9" cy="210.0" r="2.4"/><circle cx="203.6" cy="189.0" r="2.4"/><circle cx="182.2" cy="199.0" r="2.4"/><circle cx="190.7" cy="205.2" r="2.4"/><circle cx="179.7" cy="207.9" r="2.4"/><circle cx="194.7" cy="189.8" r="2.4"/><circle cx="207.5" cy="210.8" r="2.4"/><circle cx="175.3" cy="197.0" r="2.4"/><circle cx="195.9" cy="182.0" r="2.4"/><circle cx="182.5" cy="213.9" r="2.4"/><circle cx="192.8" cy="212.1" r="2.4"/><circle cx="199.8" cy="218.0" r="2.4"/><circle cx="214.6" cy="204.5" r="2.4"/><circle cx="206.0" cy="200.2" r="2.4"/><circle cx="211.5" cy="201.9" r="2.4"/><circle cx="214.9" cy="209.7" r="2.4"/><circle cx="193.7" cy="190.4" r="2.4"/><circle cx="182.4" cy="205.5" r="2.4"/><circle cx="208.3" cy="200.9" r="2.4"/><circle cx="201.3" cy="191.0" r="2.4"/><circle cx="173.9" cy="191.4" r="2.4"/><circle cx="183.6" cy="192.8" r="2.4"/><circle cx="418.2" cy="69.7" r="2.4"/><circle cx="393.5" cy="100.9" r="2.4"/><circle cx="431.5" cy="65.6" r="2.4"/><circle cx="407.6" cy="92.4" r="2.4"/><circle cx="408.3" cy="73.6" r="2.4"/><circle cx="408.6" cy="112.7" r="2.4"/><circle cx="421.7" cy="100.9" r="2.4"/><circle cx="443.5" cy="104.9" r="2.4"/><circle cx="403.1" cy="104.2" r="2.4"/><circle cx="408.5" cy="103.9" r="2.4"/><circle cx="418.7" cy="95.8" r="2.4"/><circle cx="392.6" cy="74.3" r="2.4"/><circle cx="409.9" cy="63.6" r="2.4"/><circle cx="401.9" cy="100.0" r="2.4"/><circle cx="407.3" cy="71.2" r="2.4"/><circle cx="412.4" cy="69.1" r="2.4"/><circle cx="424.8" cy="63.5" r="2.4"/><circle cx="406.5" cy="93.6" r="2.4"/><circle cx="377.2" cy="98.0" r="2.4"/><circle cx="385.9" cy="87.9" r="2.4"/><circle cx="379.0" cy="83.2" r="2.4"/><circle cx="391.9" cy="80.3" r="2.4"/><circle cx="435.9" cy="83.2" r="2.4"/><circle cx="435.2" cy="108.6" r="2.4"/><circle cx="395.2" cy="66.6" r="2.4"/><circle cx="376.6" cy="92.2" r="2.4"/><circle cx="447.5" cy="85.1" r="2.4"/><circle cx="447.6" cy="84.2" r="2.4"/><circle cx="421.3" cy="81.1" r="2.4"/><circle cx="443.2" cy="64.8" r="2.4"/><circle cx="450.0" cy="84.6" r="2.4"/><circle cx="423.4" cy="78.9" r="2.4"/><circle cx="452.4" cy="61.1" r="2.4"/><circle cx="430.6" cy="81.4" r="2.4"/><circle cx="462.9" cy="71.3" r="2.4"/><circle cx="450.8" cy="59.7" r="2.4"/><circle cx="449.5" cy="79.6" r="2.4"/><circle cx="420.1" cy="84.8" r="2.4"/><circle cx="457.5" cy="78.6" r="2.4"/><circle cx="454.1" cy="69.5" r="2.4"/><circle cx="436.4" cy="70.3" r="2.4"/><circle cx="440.3" cy="69.3" r="2.4"/><circle cx="457.5" cy="86.6" r="2.4"/><circle cx="446.8" cy="86.8" r="2.4"/><circle cx="450.4" cy="72.7" r="2.4"/><circle cx="428.5" cy="86.1" r="2.4"/><circle cx="441.9" cy="74.4" r="2.4"/><circle cx="436.8" cy="83.3" r="2.4"/><circle cx="428.4" cy="87.7" r="2.4"/><circle cx="459.1" cy="65.8" r="2.4"/><circle cx="438.2" cy="79.0" r="2.4"/><circle cx="433.9" cy="58.0" r="2.4"/><circle cx="458.6" cy="143.2" r="2.4"/><circle cx="388.3" cy="204.8" r="2.4"/><circle cx="402.4" cy="213.0" r="2.4"/><circle cx="442.1" cy="152.6" r="2.4"/><circle cx="374.4" cy="197.0" r="2.4"/><circle cx="418.7" cy="200.8" r="2.4"/><circle cx="441.0" cy="189.6" r="2.4"/><circle cx="419.0" cy="204.3" r="2.4"/><circle cx="375.2" cy="147.2" r="2.4"/><circle cx="441.1" cy="155.6" r="2.4"/><circle cx="429.0" cy="172.3" r="2.4"/><circle cx="423.4" cy="167.6" r="2.4"/><circle cx="447.1" cy="158.1" r="2.4"/><circle cx="442.3" cy="152.1" r="2.4"/><circle cx="392.7" cy="137.1" r="2.4"/><circle cx="386.2" cy="137.0" r="2.4"/><circle cx="423.9" cy="201.2" r="2.4"/><circle cx="385.4" cy="146.6" r="2.4"/><circle cx="418.3" cy="197.5" r="2.4"/><circle cx="472.4" cy="177.5" r="2.4"/><circle cx="396.1" cy="135.1" r="2.4"/><circle cx="386.4" cy="147.7" r="2.4"/><circle cx="423.8" cy="152.4" r="2.4"/><circle cx="472.2" cy="180.3" r="2.4"/><circle cx="441.7" cy="137.6" r="2.4"/><circle cx="460.5" cy="174.1" r="2.4"/><circle cx="443.5" cy="243.1" r="2.4"/><circle cx="407.2" cy="228.5" r="2.4"/><circle cx="449.7" cy="232.6" r="2.4"/><circle cx="439.0" cy="224.1" r="2.4"/><circle cx="371.7" cy="249.2" r="2.4"/><circle cx="415.7" cy="213.4" r="2.4"/><circle cx="433.8" cy="246.7" r="2.4"/><circle cx="436.2" cy="204.8" r="2.4"/><circle cx="412.0" cy="229.6" r="2.4"/><circle cx="404.8" cy="274.6" r="2.4"/><circle cx="420.9" cy="247.1" r="2.4"/><circle cx="383.7" cy="203.2" r="2.4"/><circle cx="424.4" cy="197.3" r="2.4"/><circle cx="365.2" cy="229.6" r="2.4"/><circle cx="418.4" cy="212.0" r="2.4"/><circle cx="385.8" cy="257.8" r="2.4"/><circle cx="428.3" cy="229.9" r="2.4"/><circle cx="426.9" cy="281.6" r="2.4"/><circle cx="435.9" cy="248.8" r="2.4"/><circle cx="424.5" cy="282.7" r="2.4"/><circle cx="403.3" cy="239.9" r="2.4"/><circle cx="423.3" cy="279.9" r="2.4"/><circle cx="379.9" cy="213.8" r="2.4"/><circle cx="432.4" cy="242.6" r="2.4"/><circle cx="391.0" cy="193.7" r="2.4"/><circle cx="427.0" cy="257.0" r="2.4"/><circle cx="471.6" cy="150.0" r="2.4"/><circle cx="444.6" cy="131.5" r="2.4"/><circle cx="417.4" cy="147.0" r="2.4"/><circle cx="434.3" cy="139.0" r="2.4"/><circle cx="465.2" cy="153.3" r="2.4"/><circle cx="455.3" cy="139.9" r="2.4"/><circle cx="443.2" cy="156.7" r="2.4"/><circle cx="450.1" cy="155.9" r="2.4"/><circle cx="444.5" cy="132.0" r="2.4"/><circle cx="435.9" cy="142.7" r="2.4"/><circle cx="455.2" cy="165.7" r="2.4"/><circle cx="434.8" cy="158.5" r="2.4"/><circle cx="432.3" cy="169.6" r="2.4"/><circle cx="463.8" cy="152.2" r="2.4"/><circle cx="442.3" cy="141.8" r="2.4"/><circle cx="439.3" cy="150.6" r="2.4"/><circle cx="447.6" cy="146.2" r="2.4"/><circle cx="426.3" cy="143.9" r="2.4"/><circle cx="460.4" cy="155.5" r="2.4"/><circle cx="460.6" cy="137.0" r="2.4"/><circle cx="448.0" cy="168.8" r="2.4"/><circle cx="441.3" cy="158.7" r="2.4"/><circle cx="451.5" cy="138.5" r="2.4"/><circle cx="424.5" cy="152.2" r="2.4"/><circle cx="448.1" cy="132.1" r="2.4"/><circle cx="442.7" cy="133.2" r="2.4"/><circle cx="559.9" cy="99.9" r="2.4"/><circle cx="546.0" cy="100.6" r="2.4"/><circle cx="492.8" cy="123.4" r="2.4"/><circle cx="526.2" cy="91.9" r="2.4"/><circle cx="570.6" cy="100.6" r="2.4"/><circle cx="493.1" cy="120.3" r="2.4"/><circle cx="509.8" cy="130.4" r="2.4"/><circle cx="520.9" cy="122.4" r="2.4"/><circle cx="493.9" cy="85.9" r="2.4"/><circle cx="518.8" cy="75.4" r="2.4"/><circle cx="524.6" cy="89.2" r="2.4"/><circle cx="526.2" cy="103.0" r="2.4"/><circle cx="514.6" cy="87.5" r="2.4"/><circle cx="482.6" cy="113.8" r="2.4"/><circle cx="528.6" cy="81.3" r="2.4"/><circle cx="549.4" cy="114.4" r="2.4"/><circle cx="557.4" cy="92.0" r="2.4"/><circle cx="539.6" cy="122.5" r="2.4"/><circle cx="577.7" cy="99.7" r="2.4"/><circle cx="464.4" cy="100.2" r="2.4"/><circle cx="530.8" cy="125.9" r="2.4"/><circle cx="564.9" cy="95.8" r="2.4"/><circle cx="523.1" cy="97.0" r="2.4"/><circle cx="546.7" cy="93.7" r="2.4"/><circle cx="538.6" cy="75.8" r="2.4"/><circle cx="516.3" cy="132.8" r="2.4"/><circle cx="557.4" cy="105.4" r="2.4"/><circle cx="601.0" cy="118.1" r="2.4"/><circle cx="563.2" cy="75.3" r="2.4"/><circle cx="610.6" cy="110.8" r="2.4"/><circle cx="519.6" cy="100.5" r="2.4"/><circle cx="614.5" cy="84.7" r="2.4"/><circle cx="523.8" cy="100.7" r="2.4"/><circle cx="632.2" cy="85.5" r="2.4"/><circle cx="607.2" cy="122.3" r="2.4"/><circle cx="551.1" cy="80.0" r="2.4"/><circle cx="530.4" cy="92.5" r="2.4"/><circle cx="589.2" cy="113.4" r="2.4"/><circle cx="631.9" cy="99.6" r="2.4"/><circle cx="543.7" cy="123.0" r="2.4"/><circle cx="530.0" cy="86.9" r="2.4"/><circle cx="545.6" cy="70.4" r="2.4"/><circle cx="636.2" cy="104.2" r="2.4"/><circle cx="532.1" cy="85.3" r="2.4"/><circle cx="558.4" cy="97.0" r="2.4"/><circle cx="599.5" cy="83.9" r="2.4"/><circle cx="545.0" cy="117.6" r="2.4"/><circle cx="537.9" cy="80.8" r="2.4"/><circle cx="577.6" cy="69.0" r="2.4"/><circle cx="590.1" cy="96.0" r="2.4"/><circle cx="548.4" cy="95.3" r="2.4"/><circle cx="606.0" cy="109.6" r="2.4"/><circle cx="590.4" cy="119.6" r="2.4"/><circle cx="639.6" cy="146.4" r="2.4"/><circle cx="616.5" cy="136.9" r="2.4"/><circle cx="651.8" cy="96.7" r="2.4"/><circle cx="655.0" cy="120.9" r="2.4"/><circle cx="659.6" cy="129.9" r="2.4"/><circle cx="657.5" cy="140.5" r="2.4"/><circle cx="654.1" cy="146.3" r="2.4"/><circle cx="656.1" cy="92.8" r="2.4"/><circle cx="633.5" cy="117.2" r="2.4"/><circle cx="665.6" cy="73.1" r="2.4"/><circle cx="617.5" cy="132.3" r="2.4"/><circle cx="604.3" cy="76.9" r="2.4"/><circle cx="644.3" cy="152.4" r="2.4"/><circle cx="643.4" cy="147.2" r="2.4"/><circle cx="676.4" cy="88.1" r="2.4"/><circle cx="675.7" cy="108.4" r="2.4"/><circle cx="673.7" cy="132.2" r="2.4"/><circle cx="622.3" cy="75.4" r="2.4"/><circle cx="625.2" cy="136.2" r="2.4"/><circle cx="586.5" cy="113.3" r="2.4"/><circle cx="635.0" cy="125.6" r="2.4"/><circle cx="659.0" cy="117.6" r="2.4"/><circle cx="596.9" cy="86.0" r="2.4"/><circle cx="646.8" cy="147.4" r="2.4"/><circle cx="618.2" cy="101.7" r="2.4"/><circle cx="540.4" cy="139.6" r="2.4"/><circle cx="523.6" cy="137.2" r="2.4"/><circle cx="577.0" cy="154.6" r="2.4"/><circle cx="604.6" cy="135.1" r="2.4"/><circle cx="584.2" cy="119.3" r="2.4"/><circle cx="551.5" cy="115.9" r="2.4"/><circle cx="558.9" cy="134.5" r="2.4"/><circle cx="547.1" cy="136.6" r="2.4"/><circle cx="519.9" cy="151.1" r="2.4"/><circle cx="564.4" cy="168.7" r="2.4"/><circle cx="545.9" cy="133.9" r="2.4"/><circle cx="529.0" cy="117.3" r="2.4"/><circle cx="594.8" cy="137.3" r="2.4"/><circle cx="576.3" cy="148.5" r="2.4"/><circle cx="569.7" cy="111.3" r="2.4"/><circle cx="588.7" cy="124.6" r="2.4"/><circle cx="522.6" cy="143.9" r="2.4"/><circle cx="530.7" cy="123.0" r="2.4"/><circle cx="597.0" cy="129.7" r="2.4"/><circle cx="535.1" cy="120.5" r="2.4"/><circle cx="533.8" cy="129.4" r="2.4"/><circle cx="584.2" cy="141.6" r="2.4"/><circle cx="584.6" cy="138.6" r="2.4"/><circle cx="587.8" cy="140.8" r="2.4"/><circle cx="520.9" cy="140.2" r="2.4"/><circle cx="588.3" cy="162.0" r="2.4"/><circle cx="611.9" cy="157.1" r="2.4"/><circle cx="608.1" cy="153.1" r="2.4"/><circle cx="626.7" cy="159.3" r="2.4"/><circle cx="572.3" cy="167.6" r="2.4"/><circle cx="570.9" cy="144.3" r="2.4"/><circle cx="622.0" cy="163.4" r="2.4"/><circle cx="612.8" cy="156.8" r="2.4"/><circle cx="619.5" cy="131.9" r="2.4"/><circle cx="628.2" cy="184.7" r="2.4"/><circle cx="623.6" cy="178.8" r="2.4"/><circle cx="629.9" cy="140.1" r="2.4"/><circle cx="605.6" cy="141.0" r="2.4"/><circle cx="595.5" cy="156.7" r="2.4"/><circle cx="602.4" cy="131.7" r="2.4"/><circle cx="603.4" cy="171.6" r="2.4"/><circle cx="598.7" cy="135.7" r="2.4"/><circle cx="573.7" cy="176.7" r="2.4"/><circle cx="638.1" cy="163.9" r="2.4"/><circle cx="617.8" cy="164.3" r="2.4"/><circle cx="594.7" cy="133.6" r="2.4"/><circle cx="596.8" cy="171.6" r="2.4"/><circle cx="632.5" cy="185.8" r="2.4"/><circle cx="619.0" cy="149.6" r="2.4"/><circle cx="617.0" cy="139.9" r="2.4"/><circle cx="624.1" cy="140.7" r="2.4"/><circle cx="598.1" cy="178.4" r="2.4"/><circle cx="505.9" cy="158.4" r="2.4"/><circle cx="525.5" cy="146.8" r="2.4"/><circle cx="511.4" cy="111.6" r="2.4"/><circle cx="481.4" cy="120.8" r="2.4"/><circle cx="516.2" cy="128.5" r="2.4"/><circle cx="529.6" cy="144.0" r="2.4"/><circle cx="492.1" cy="118.5" r="2.4"/><circle cx="510.7" cy="111.8" r="2.4"/><circle cx="519.7" cy="122.9" r="2.4"/><circle cx="493.6" cy="130.5" r="2.4"/><circle cx="489.6" cy="153.3" r="2.4"/><circle cx="522.1" cy="144.1" r="2.4"/><circle cx="472.6" cy="147.1" r="2.4"/><circle cx="513.9" cy="126.3" r="2.4"/><circle cx="513.0" cy="139.1" r="2.4"/><circle cx="495.4" cy="126.4" r="2.4"/><circle cx="520.4" cy="116.8" r="2.4"/><circle cx="494.4" cy="127.0" r="2.4"/><circle cx="514.3" cy="139.2" r="2.4"/><circle cx="513.4" cy="112.7" r="2.4"/><circle cx="491.6" cy="146.0" r="2.4"/><circle cx="476.9" cy="118.2" r="2.4"/><circle cx="480.4" cy="129.7" r="2.4"/><circle cx="474.1" cy="132.8" r="2.4"/><circle cx="516.3" cy="140.0" r="2.4"/><circle cx="526.7" cy="158.4" r="2.4"/><circle cx="675.3" cy="154.4" r="2.4"/><circle cx="684.7" cy="145.1" r="2.4"/><circle cx="657.7" cy="168.1" r="2.4"/><circle cx="678.3" cy="169.9" r="2.4"/><circle cx="694.1" cy="134.6" r="2.4"/><circle cx="676.2" cy="151.4" r="2.4"/><circle cx="662.7" cy="138.6" r="2.4"/><circle cx="658.8" cy="140.0" r="2.4"/><circle cx="646.8" cy="150.6" r="2.4"/><circle cx="643.0" cy="150.6" r="2.4"/><circle cx="698.4" cy="141.0" r="2.4"/><circle cx="685.9" cy="169.1" r="2.4"/><circle cx="692.1" cy="134.2" r="2.4"/><circle cx="645.3" cy="131.8" r="2.4"/><circle cx="677.2" cy="165.6" r="2.4"/><circle cx="680.9" cy="130.6" r="2.4"/><circle cx="689.1" cy="149.6" r="2.4"/><circle cx="687.8" cy="165.6" r="2.4"/><circle cx="666.4" cy="175.4" r="2.4"/><circle cx="674.5" cy="158.1" r="2.4"/><circle cx="678.7" cy="171.9" r="2.4"/><circle cx="678.9" cy="129.1" r="2.4"/><circle cx="639.8" cy="146.5" r="2.4"/><circle cx="656.2" cy="136.5" r="2.4"/><circle cx="638.9" cy="150.4" r="2.4"/><circle cx="656.7" cy="147.1" r="2.4"/><circle cx="693.4" cy="305.8" r="2.4"/><circle cx="665.6" cy="298.1" r="2.4"/><circle cx="669.3" cy="314.6" r="2.4"/><circle cx="696.7" cy="297.5" r="2.4"/><circle cx="689.8" cy="307.6" r="2.4"/><circle cx="650.7" cy="298.8" r="2.4"/><circle cx="652.5" cy="310.7" r="2.4"/><circle cx="665.4" cy="283.6" r="2.4"/><circle cx="644.8" cy="296.9" r="2.4"/><circle cx="660.2" cy="301.1" r="2.4"/><circle cx="637.7" cy="293.6" r="2.4"/><circle cx="647.6" cy="295.4" r="2.4"/><circle cx="652.1" cy="304.9" r="2.4"/><circle cx="688.1" cy="307.4" r="2.4"/><circle cx="679.3" cy="289.2" r="2.4"/><circle cx="682.9" cy="307.8" r="2.4"/><circle cx="651.7" cy="304.1" r="2.4"/><circle cx="636.3" cy="292.5" r="2.4"/><circle cx="656.4" cy="304.8" r="2.4"/><circle cx="700.0" cy="290.5" r="2.4"/><circle cx="655.1" cy="314.6" r="2.4"/><circle cx="690.1" cy="308.5" r="2.4"/><circle cx="691.3" cy="311.9" r="2.4"/><circle cx="679.8" cy="301.3" r="2.4"/><circle cx="676.7" cy="296.2" r="2.4"/><circle cx="653.9" cy="293.1" r="2.4"/>
   </symbol>
 </svg>
 
@@ -254,13 +188,15 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <div class="map-pulse" style="left: 74.4%; top: 37%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
               </div>
             </div>
           </div>
+          <div class="explore-glow"></div>
+          <div class="explore-icon">📰</div>
         </div>
 
         <div class="explore-text">
@@ -290,13 +226,15 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <div class="map-pulse" style="left: 74.4%; top: 37%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
               </div>
             </div>
           </div>
+          <div class="explore-glow"></div>
+          <div class="explore-icon">📷</div>
         </div>
 
         <div class="explore-text">
@@ -326,13 +264,15 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <div class="map-pulse" style="left: 74.4%; top: 37%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
               </div>
             </div>
           </div>
+          <div class="explore-glow"></div>
+          <div class="explore-icon">👥</div>
         </div>
 
         <div class="explore-text">
@@ -362,13 +302,15 @@
           <div class="explore-map">
             <div class="explore-map-inner">
               <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <div class="map-pulse" style="left: 74.4%; top: 37%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
               </div>
             </div>
           </div>
+          <div class="explore-glow"></div>
+          <div class="explore-icon">📋</div>
         </div>
 
         <div class="explore-text">
