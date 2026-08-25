@@ -544,6 +544,8 @@ nav {
 .explore-glow {
   position: absolute;
 
+  z-index: 1;
+
   width: 280px;
   height: 280px;
 
@@ -563,12 +565,123 @@ nav {
 .explore-icon {
   position: relative;
 
+  z-index: 2;
+
   font-size: 7rem;
   line-height: 1;
 
   filter: drop-shadow(0 15px 35px rgba(99, 102, 241, 0.4));
 
   animation: exploreFloat 6s ease-in-out infinite;
+}
+
+/* Decorative world map behind each Explore ZORO visual */
+
+.explore-map {
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+.explore-map-inner {
+  position: relative;
+
+  width: 100%;
+  max-width: 440px;
+
+  aspect-ratio: 2 / 1;
+
+  opacity: 0.8;
+}
+
+.world-map-svg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+}
+
+.world-map-svg circle {
+  fill: rgba(255, 255, 255, 0.16);
+}
+
+.map-pulse {
+  position: absolute;
+
+  transform: translate(-50%, -100%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.map-pulse-label {
+  background: rgba(15, 15, 22, 0.92);
+  border: 1px solid var(--border);
+
+  color: #fff;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+
+  margin-bottom: 0.3rem;
+}
+
+.map-pulse-line {
+  width: 1px;
+  height: 26px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(99, 102, 241, 0.8),
+    rgba(99, 102, 241, 0.05)
+  );
+}
+
+.map-pulse-dot {
+  position: relative;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: var(--accent-hover);
+
+  box-shadow: 0 0 10px 2px rgba(99, 102, 241, 0.85);
+}
+
+.map-pulse-ring {
+  position: absolute;
+  inset: -8px;
+
+  border-radius: 50%;
+
+  border: 2px solid rgba(99, 102, 241, 0.6);
+
+  animation: mapPulseRing 2.2s ease-out infinite;
+}
+
+@keyframes mapPulseRing {
+  0% {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
 
 @keyframes explorePulse {
@@ -644,6 +757,14 @@ nav {
 
   .explore-icon {
     font-size: 5rem;
+  }
+
+  .explore-map-inner {
+    max-width: 320px;
+  }
+
+  .map-pulse-label {
+    font-size: 0.65rem;
   }
 
   .explore-text {
