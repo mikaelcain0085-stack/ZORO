@@ -174,6 +174,51 @@
     </g>
     <rect width="800" height="400" fill="url(#mizMapVignette)"/>
   </symbol>
+  <symbol id="myanmar-map-vector" viewBox="0 0 800 400">
+    <defs>
+      <linearGradient id="mmMapLandGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#1b2330"/>
+        <stop offset="100%" stop-color="#0b0f17"/>
+      </linearGradient>
+      <filter id="mmMapGlow" x="-20%" y="-30%" width="140%" height="160%">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <pattern id="mmTechGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <path d="M24 0H0V24" fill="none" stroke="rgba(129,140,248,0.10)" stroke-width="0.65"/>
+      </pattern>
+      <radialGradient id="mmMapVignette">
+        <stop offset="55%" stop-color="rgba(0,0,0,0)"/>
+        <stop offset="100%" stop-color="rgba(3,5,10,0.82)"/>
+      </radialGradient>
+    </defs>
+
+    <rect class="world-map-grid-bg" width="800" height="400" fill="url(#mmTechGrid)"/>
+    <g class="world-map-major-grid">
+      <path d="M0 100H800M0 200H800M0 300H800M100 0V400M200 0V400M300 0V400M400 0V400M500 0V400M600 0V400M700 0V400"/>
+    </g>
+
+    <g class="world-map-continents" fill="url(#mmMapLandGradient)" filter="url(#mmMapGlow)">
+      <!-- Myanmar outline -->
+      <path d="M 520 159 L 447 192 L 426 215 L 464 258 L 446 278 L 468 302 L 481 338 L 455 375 L 454 315 L 420 244 L 376 267 L 347 261 L 350 220 L 334 191 L 302 174 L 300 159 L 309 161 L 309 148 L 321 144 L 325 110 L 345 114 L 370 63 L 402 50 L 420 53 L 425 31 L 439 30 L 458 46 L 458 75 L 434 91 L 431 113 L 458 110 L 463 127 L 479 131 L 472 147 L 501 157 L 519 152 Z"/>
+    </g>
+
+    <g class="world-map-borders">
+      <path d="M343 126L394 150M343 126L394 191M394 191L396 245M343 126L325 110"/>
+    </g>
+
+    <g class="world-map-tech-lines">
+      <path d="M150 90H700M400 15V395"/>
+      <path d="M240 60L302 174M519 152L620 90M455 375L640 320"/>
+      <circle cx="343" cy="126" r="2.2"/><circle cx="394" cy="150" r="2"/><circle cx="394" cy="191" r="2"/>
+      <circle cx="396" cy="245" r="2"/>
+    </g>
+
+    <g class="world-map-crosshairs">
+      <path d="M240 45h14M247 38v14M600 90h14M607 83v14M240 340h14M247 333v14M580 355h14M587 348v14"/>
+    </g>
+    <rect width="800" height="400" fill="url(#mmMapVignette)"/>
+  </symbol>
 </svg>
 
   <!-- =========================
@@ -375,8 +420,8 @@
         <div class="explore-visual">
           <div class="explore-map">
             <div class="explore-map-inner">
-              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#world-map-dots"></use></svg>
-              <div class="map-pulse" style="left: 68.2%; top: 43.5%;">
+              <svg viewBox="0 0 800 400" class="world-map-svg"><use href="#myanmar-map-vector"></use></svg>
+              <div class="map-pulse" style="left: 42.9%; top: 31.5%;">
                 <span class="map-pulse-label">We are here</span>
                 <span class="map-pulse-line"></span>
                 <span class="map-pulse-dot"><span class="map-pulse-ring"></span></span>
