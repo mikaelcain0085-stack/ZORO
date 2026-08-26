@@ -538,171 +538,212 @@ nav {
   align-items: center;
   justify-content: center;
 
-  min-height: 280px;
+  min-height: 320px;
 }
 
-.explore-glow {
-  position: absolute;
-
-  z-index: 1;
-
-  width: 280px;
-  height: 280px;
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    rgba(99, 102, 241, 0.35),
-    transparent 70%
-  );
-
-  filter: blur(20px);
-
-  animation: explorePulse 5s ease-in-out infinite;
-}
-
-.explore-icon {
-  position: relative;
-
-  z-index: 2;
-
-  font-size: 7rem;
-  line-height: 1;
-
-  filter: drop-shadow(0 15px 35px rgba(99, 102, 241, 0.4));
-
-  animation: exploreFloat 6s ease-in-out infinite;
-}
-
-/* Decorative world map behind each Explore ZORO visual */
+/* ================= TECHNOLOGY WORLD MAP ================= */
 
 .explore-map {
   position: absolute;
   inset: 0;
-
   z-index: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   pointer-events: none;
 }
 
 .explore-map-inner {
   position: relative;
-
   width: 100%;
-  max-width: 440px;
-
+  max-width: 640px;
   aspect-ratio: 2 / 1;
-
-  opacity: 0.8;
+  opacity: 1;
+  overflow: visible;
 }
 
 .world-map-svg {
   display: block;
-
   width: 100%;
   height: 100%;
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.45));
 }
 
-.world-map-svg circle {
-  fill: rgba(255, 255, 255, 0.16);
+/* ================= NEWS: ANIMATED GLOBE ================= */
+
+.explore-globe-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explore-globe {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.5));
+}
+
+.explore-globe canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab;
+}
+
+.explore-globe canvas:active {
+  cursor: grabbing;
+}
+
+@media (max-width: 640px) {
+  .explore-globe {
+    max-width: 300px;
+  }
+}
+
+.world-map-grid-bg {
+  pointer-events: none;
+}
+
+.world-map-major-grid {
+  fill: none;
+  stroke: rgba(129, 140, 248, 0.08);
+  stroke-width: 0.8;
+}
+
+.world-map-continents {
+  stroke: rgba(148, 163, 184, 0.42);
+  stroke-width: 1.15;
+  stroke-linejoin: round;
+  filter: url(#mapGlow);
+}
+
+.world-map-borders {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.16);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.world-map-tech-lines {
+  fill: none;
+  stroke: rgba(99, 102, 241, 0.22);
+  stroke-width: 0.85;
+  stroke-dasharray: 3 7;
+}
+
+.world-map-tech-lines circle {
+  fill: #818cf8;
+  opacity: 0.75;
+  filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.9));
+}
+
+.world-map-crosshairs {
+  fill: none;
+  stroke: rgba(129, 140, 248, 0.5);
+  stroke-width: 1;
 }
 
 .map-pulse {
   position: absolute;
-
   transform: translate(-50%, -100%);
-
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
 }
 
 .map-pulse-label {
-  background: rgba(15, 15, 22, 0.92);
-  border: 1px solid var(--border);
-
-  color: #fff;
-
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 18, 29, 0.96), rgba(10, 12, 20, 0.92));
+  border: 1px solid rgba(129, 140, 248, 0.42);
+  color: #eef2ff;
   font-size: 0.72rem;
   font-weight: 600;
+  letter-spacing: 0.03em;
   white-space: nowrap;
-
-  padding: 0.3rem 0.65rem;
+  padding: 0.36rem 0.7rem;
   border-radius: 8px;
+  margin-bottom: 0.35rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32), 0 0 18px rgba(99, 102, 241, 0.12);
+}
 
-  margin-bottom: 0.3rem;
+.map-pulse-label::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 7px;
+  height: 7px;
+  background: rgba(15, 18, 29, 0.96);
+  border-right: 1px solid rgba(129, 140, 248, 0.42);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.42);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .map-pulse-line {
   width: 1px;
-  height: 26px;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(99, 102, 241, 0.8),
-    rgba(99, 102, 241, 0.05)
-  );
+  height: 32px;
+  background: linear-gradient(to bottom, rgba(129, 140, 248, 0.95), rgba(99, 102, 241, 0.08));
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.45);
 }
 
 .map-pulse-dot {
   position: relative;
-
-  width: 8px;
-  height: 8px;
-
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  background: #c7d2fe;
+  border: 2px solid #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 0 16px 4px rgba(99, 102, 241, 0.75);
+  animation: mapPulseDot 2.2s ease-in-out infinite;
+}
 
-  background: var(--accent-hover);
-
-  box-shadow: 0 0 10px 2px rgba(99, 102, 241, 0.85);
+.map-pulse-ring,
+.map-pulse-ring::after {
+  position: absolute;
+  content: '';
+  border-radius: 50%;
+  border: 1.5px solid rgba(129, 140, 248, 0.78);
+  pointer-events: none;
 }
 
 .map-pulse-ring {
-  position: absolute;
   inset: -8px;
+  animation: mapPulseRing 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
 
-  border-radius: 50%;
+.map-pulse-ring::after {
+  inset: -5px;
+  animation: mapPulseRing 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.7s infinite;
+}
 
-  border: 2px solid rgba(99, 102, 241, 0.6);
-
-  animation: mapPulseRing 2.2s ease-out infinite;
+@keyframes mapPulseDot {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 0 16px 4px rgba(99, 102, 241, 0.65);
+  }
+  50% {
+    transform: scale(1.16);
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.05), 0 0 24px 7px rgba(99, 102, 241, 0.9);
+  }
 }
 
 @keyframes mapPulseRing {
   0% {
-    transform: scale(0.4);
-    opacity: 1;
+    transform: scale(0.35);
+    opacity: 0.95;
   }
-  100% {
-    transform: scale(2.4);
+  75%, 100% {
+    transform: scale(3);
     opacity: 0;
   }
 }
 
-@keyframes explorePulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.12);
-  }
-}
-
-@keyframes exploreFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-18px);
-  }
-}
 
 .explore-text {
   flex: 1;
@@ -755,12 +796,12 @@ nav {
     padding: 3rem 1rem;
   }
 
-  .explore-icon {
-    font-size: 5rem;
+  .explore-visual {
+    width: 100%;
   }
 
   .explore-map-inner {
-    max-width: 320px;
+    max-width: 100%;
   }
 
   .map-pulse-label {
@@ -4075,11 +4116,7 @@ html {
     margin-top: 1.5rem;
   }
 }
-
-
-/* =========================================================
-   EXPLORE ZORO — PREMIUM QUICK NAVIGATION
-   ========================================================= */
+/* Explore ZORO premium navigation */
 .explore-quick-nav {
   width: min(900px, calc(100% - 48px));
   margin: -6px auto 54px;
@@ -4087,12 +4124,15 @@ html {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
+
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.025);
+
   box-shadow:
     0 14px 45px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -4100,53 +4140,37 @@ html {
 .explore-quick-link {
   min-height: 52px;
   padding: 0 18px;
+
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.88rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
+  font-weight: 600;
+
   border: 1px solid transparent;
   border-radius: 12px;
-  background: transparent;
-  transition:
-    transform 0.22s ease,
-    color 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
-}
 
-.explore-quick-link i {
-  color: rgba(255, 255, 255, 0.34);
-  font-style: normal;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  transition: color 0.22s ease;
+  transition: all 0.22s ease;
 }
 
 .explore-quick-link:hover {
   transform: translateY(-2px);
   color: #ffffff;
+
   border-color: rgba(102, 126, 234, 0.42);
-  background:
-    linear-gradient(135deg, rgba(102, 126, 234, 0.16), rgba(118, 75, 162, 0.08));
+
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.16),
+    rgba(118, 75, 162, 0.08)
+  );
+
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.explore-quick-link:hover i {
-  color: rgba(159, 178, 255, 0.9);
-}
-
-.explore-quick-link:focus-visible {
-  outline: 2px solid rgba(132, 153, 255, 0.9);
-  outline-offset: 2px;
 }
 
 #explore-news,
@@ -4161,24 +4185,11 @@ html {
     width: min(560px, calc(100% - 32px));
     grid-template-columns: repeat(2, 1fr);
     margin-bottom: 40px;
-    border-radius: 16px;
-  }
-
-  .explore-quick-link {
-    min-height: 50px;
-    padding: 0 14px;
-    font-size: 0.84rem;
   }
 }
 
 @media (max-width: 430px) {
   .explore-quick-nav {
     grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 6px;
-  }
-
-  .explore-quick-link {
-    min-height: 48px;
   }
 }
