@@ -157,7 +157,7 @@ async function initNewsGlobe() {
   controls.enablePan = false;
   controls.enableZoom = false;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.6;
+  controls.autoRotateSpeed = 1.75;
   controls.minPolarAngle = Math.PI / 3.5;
   controls.maxPolarAngle = Math.PI - Math.PI / 3;
   controls.minDistance = CAMERA_Z;

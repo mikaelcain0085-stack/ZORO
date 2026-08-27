@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 
@@ -47,10 +48,21 @@ class EnquiryViewSet(viewsets.ModelViewSet):
 # =========================================
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-GEMINI_MODEL = "gemini-3.5-flash"
-GEMINI_URL = (
-    f"https://generativelanguage.googleapis.com/v1beta/models/"
-    f"{GEMINI_MODEL}:generateContent"
+
+# Tried in order. If the first model is overloaded (503), we fall back
+# to the next one before giving up.
+GEMINI_MODELS = ["gemini-3.5-flash", "gemini-2.5-flash-lite"]
+
+GEMINI_URL_TEMPLATE = (
+    "https://generativelanguage.googleapis.com/v1beta/models/"
+    "{model}:generateContent"
+)
+
+# Friendly message shown to visitors only after every model/retry has
+# failed (e.g. Gemini is overloaded platform-wide). English + Mizo.
+CHAT_BUSY_MESSAGE = (
+    "I'm a bit busy right now — please try again in a moment.\n"
+    "Ka la buai rih deuh a, nakin deuh ah aw."
 )
 
 
@@ -127,42 +139,69 @@ def chat_view(request):
             "parts": [{"text": build_system_instruction()}]
         },
     }
+    body = json.dumps(payload).encode("utf-8")
 
-    req = urllib.request.Request(
-        GEMINI_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "x-goog-api-key": GEMINI_API_KEY,
-        },
-        method="POST",
-    )
+    data = None
+    last_error = None
 
-    try:
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="ignore")
-        print("Gemini API error:", exc.code, detail)
+    # Try each model; retry once on a 503 (overloaded) before moving
+    # on to the next model. Anything else (auth, bad request, etc.)
+    # is not worth retrying and fails fast.
+    for model in GEMINI_MODELS:
+        url = GEMINI_URL_TEMPLATE.format(model=model)
+        attempts = 2  # initial try + 1 retry, per model
 
-        return Response(
-            {"error": "Chat service returned an error."},
-            status=502,
-        )
-    except Exception as exc:
-        print("Gemini request failed:", exc)
+        for attempt in range(attempts):
+            req = urllib.request.Request(
+                url,
+                data=body,
+                headers={
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": GEMINI_API_KEY,
+                },
+                method="POST",
+            )
 
-        return Response(
-            {"error": "Could not reach the chat service."},
-            status=502,
-        )
+            try:
+                with urllib.request.urlopen(req, timeout=20) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                last_error = None
+                break  # success
+
+            except urllib.error.HTTPError as exc:
+                detail = exc.read().decode("utf-8", errors="ignore")
+                print(
+                    f"Gemini API error ({model}, attempt "
+                    f"{attempt + 1}):", exc.code, detail,
+                )
+                last_error = exc
+
+                if exc.code == 503 and attempt < attempts - 1:
+                    time.sleep(1.5)
+                    continue  # retry same model once
+
+                break  # move on to next model (or give up)
+
+            except Exception as exc:
+                print(
+                    f"Gemini request failed ({model}, attempt "
+                    f"{attempt + 1}):", exc,
+                )
+                last_error = exc
+                break  # move on to next model (or give up)
+
+        if data is not None:
+            break  # got a successful response, stop trying models
+
+    if data is None:
+        # Every model/retry failed — most likely Gemini is overloaded
+        # platform-wide (503). Tell the visitor plainly instead of a
+        # generic error.
+        return Response({"reply": CHAT_BUSY_MESSAGE})
 
     try:
         reply = data["candidates"][0]["content"]["parts"][0]["text"]
     except (KeyError, IndexError, TypeError):
-        reply = (
-            "Sorry, I couldn't generate a response just now. "
-            "Please try again."
-        )
+        reply = CHAT_BUSY_MESSAGE
 
     return Response({"reply": reply})
