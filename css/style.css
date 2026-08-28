@@ -604,18 +604,6 @@ nav {
   }
 }
 
-@media (max-width: 640px) {
-  /* On narrow phone screens, "cover" crops these landscape videos
-     down to an unrecognizable sliver. Show the full frame instead —
-     any empty space blends into the dark theme rather than looking
-     like a mistake. Desktop keeps the tighter "cover" crop. */
-  .donate-video,
-  .contact-video {
-    object-fit: contain;
-    background: #05050a;
-  }
-}
-
 .world-map-grid-bg {
   pointer-events: none;
 }
@@ -4335,5 +4323,21 @@ html {
 @media (max-width: 430px) {
   .explore-quick-nav {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ================= MOBILE-ONLY BACKGROUND VIDEO FRAMING =================
+   Placed at the very end of the file on purpose: the base .donate-video /
+   .contact-video rules (object-fit: cover) live earlier in this file, and
+   with equal CSS specificity the LATER rule always wins regardless of the
+   media query. Keep this block last so it can't get silently overridden
+   again. On narrow phone screens, "cover" crops these landscape videos
+   down to an unrecognizable sliver -- show the full frame instead. Desktop
+   keeps the tighter "cover" crop. */
+@media (max-width: 640px) {
+  .donate-video,
+  .contact-video {
+    object-fit: contain !important;
+    background: #05050a;
   }
 }
