@@ -1,17 +1,18 @@
-// ZORO — donation section background video
-// Only loads/plays while the visitor has actually scrolled to the
-// donate section; pauses again once it's scrolled out of view.
+// ZORO — background videos (donate + contact sections)
+// Each only loads/plays while it's actually scrolled into view;
+// pauses again once scrolled out of view, to save bandwidth/battery.
 (function () {
-  const video = document.querySelector(".donate-video");
-  if (!video) return;
+  const videos = document.querySelectorAll(".bg-scroll-video");
+  if (!videos.length) return;
 
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
+        const video = entry.target;
         if (entry.isIntersecting) {
           video.play().catch(() => {
             // Autoplay can be blocked in rare cases (e.g. low-power
-            // mode) — the poster/overlay still looks fine either way.
+            // mode) — the overlay still looks fine either way.
           });
         } else {
           video.pause();
@@ -21,5 +22,5 @@
     { threshold: 0.2 }
   );
 
-  io.observe(video);
+  videos.forEach((video) => io.observe(video));
 })();
