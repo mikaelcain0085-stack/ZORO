@@ -604,6 +604,18 @@ nav {
   }
 }
 
+@media (max-width: 640px) {
+  /* On narrow phone screens, "cover" crops these landscape videos
+     down to an unrecognizable sliver. Show the full frame instead —
+     any empty space blends into the dark theme rather than looking
+     like a mistake. Desktop keeps the tighter "cover" crop. */
+  .donate-video,
+  .contact-video {
+    object-fit: contain;
+    background: #05050a;
+  }
+}
+
 .world-map-grid-bg {
   pointer-events: none;
 }
