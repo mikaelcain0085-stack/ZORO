@@ -493,6 +493,19 @@
     ========================== -->
     <section id="donate" class="donate-section">
 
+      <div class="donate-media" aria-hidden="true">
+        <video
+          class="donate-video"
+          muted
+          loop
+          playsinline
+          preload="none"
+        >
+          <source src="https://res.cloudinary.com/cnth8guf/video/upload/v1787948116/hand_shake.mp4" type="video/mp4">
+        </video>
+        <div class="donate-video-overlay"></div>
+      </div>
+
       <div class="donate-container">
 
         <div class="donate-content">
@@ -518,18 +531,17 @@
         </div>
 
 
-        <div class="qr-card">
+        <div class="donate-card">
 
-          <!-- CHANGE qr.png TO YOUR ACTUAL QR CODE FILE NAME -->
-          <img
-            src="qr.png"
-            alt="ZORO Organisation Donation QR Code"
-            class="donation-qr"
-          >
+          <div class="qr-container">
+            <!-- CHANGE qr.png TO YOUR ACTUAL QR CODE FILE NAME -->
+            <img
+              src="qr.png"
+              alt="ZORO Organisation Donation QR Code"
+            >
+          </div>
 
-          <h3>
-            Scan to Donate
-          </h3>
+          <span class="scan-text">Scan to Donate</span>
 
           <p>
             Thank you for supporting ZORO Organisation.
@@ -2098,6 +2110,7 @@
 <!-- JAVASCRIPT -->
 <script src="js/app.js?v=4"></script>
 <script type="module" src="js/globe.js"></script>
+<script src="js/donate-video.js" defer></script>
 
 </body>
 </html>
