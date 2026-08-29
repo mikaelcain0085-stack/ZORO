@@ -765,6 +765,18 @@ nav {
   margin-bottom: 0.75rem;
 }
 
+/* ================= MIZO DECODE TEXT ANIMATION ================= */
+
+.decode-text {
+  transition: text-shadow 0.35s ease;
+}
+
+.decode-text.is-decoding {
+  text-shadow:
+    0 0 14px rgba(99, 102, 241, 0.65),
+    0 0 3px rgba(129, 140, 248, 0.85);
+}
+
 .explore-text h3 {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 700;
