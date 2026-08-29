@@ -10,6 +10,7 @@
   const STEP_MS = 35; // how often each character's glyph flickers
   const REVEAL_STAGGER = 26; // ms between each character locking in, left to right
   const ELEMENT_STAGGER = 90; // ms between each element in a section starting
+  const HOLD_ENGLISH_MS = 2500; // how long English stays visible before decoding starts
 
   const state = new WeakMap(); // element -> { intervalId, timeoutIds }
 
@@ -27,41 +28,49 @@
 
   function decodeTo(el, targetText, startDelay) {
     stopAnimation(el);
-    el.classList.add("is-decoding");
 
-    const chars = targetText.split("");
-    const revealed = new Array(chars.length).fill(false);
-    const timeoutIds = [];
+    const s = { intervalId: null, timeoutIds: [] };
+    state.set(el, s);
 
-    chars.forEach((ch, i) => {
-      if (ch === " ") {
-        revealed[i] = true;
-        return;
-      }
-      timeoutIds.push(
-        setTimeout(() => {
+    // Phase 1: do nothing — English stays fully visible/untouched.
+    const beginId = setTimeout(() => {
+      // Phase 2: scramble reveal into the Mizo text.
+      el.classList.add("is-decoding");
+
+      const chars = targetText.split("");
+      const revealed = new Array(chars.length).fill(false);
+
+      chars.forEach((ch, i) => {
+        if (ch === " ") {
           revealed[i] = true;
-        }, startDelay + i * REVEAL_STAGGER)
+          return;
+        }
+        s.timeoutIds.push(
+          setTimeout(() => {
+            revealed[i] = true;
+          }, i * REVEAL_STAGGER)
+        );
+      });
+
+      const scrambleDuration = chars.length * REVEAL_STAGGER + 150;
+
+      s.intervalId = setInterval(() => {
+        el.textContent = chars
+          .map((ch, i) => (revealed[i] ? ch : randomGlyph()))
+          .join("");
+      }, STEP_MS);
+
+      s.timeoutIds.push(
+        setTimeout(() => {
+          clearInterval(s.intervalId);
+          s.intervalId = null;
+          el.textContent = targetText;
+          el.classList.remove("is-decoding");
+        }, scrambleDuration)
       );
-    });
+    }, startDelay);
 
-    const totalDuration = startDelay + chars.length * REVEAL_STAGGER + 150;
-
-    const intervalId = setInterval(() => {
-      el.textContent = chars
-        .map((ch, i) => (revealed[i] ? ch : randomGlyph()))
-        .join("");
-    }, STEP_MS);
-
-    timeoutIds.push(
-      setTimeout(() => {
-        clearInterval(intervalId);
-        el.textContent = targetText;
-        el.classList.remove("is-decoding");
-      }, totalDuration)
-    );
-
-    state.set(el, { intervalId, timeoutIds });
+    s.timeoutIds.push(beginId);
   }
 
   function resetToEnglish(el, englishText) {
@@ -88,7 +97,7 @@
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               targets.forEach((el, i) => {
-                decodeTo(el, el.dataset.mi, i * ELEMENT_STAGGER);
+                decodeTo(el, el.dataset.mi, HOLD_ENGLISH_MS + i * ELEMENT_STAGGER);
               });
             } else {
               targets.forEach((el) => {
