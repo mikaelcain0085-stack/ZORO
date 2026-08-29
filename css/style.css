@@ -4397,3 +4397,143 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/* ================= LEADER STATUS TOGGLE (admin form) ================= */
+
+.leader-status-toggle {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.leader-status-option {
+  flex: 1;
+
+  padding: 0.7rem 1rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.leader-status-option:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.leader-status-option.active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+/* ================= LEADERS PUBLIC FILTER (premium pill toggle) ================= */
+
+.leaders-filter-toggle {
+  position: relative;
+
+  display: flex;
+
+  max-width: 380px;
+  margin: 1.25rem auto 0;
+
+  padding: 5px;
+
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.leaders-filter-glide {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+  width: calc(50% - 5px);
+  height: calc(100% - 10px);
+
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.45);
+
+  transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+
+  pointer-events: none;
+}
+
+.leaders-filter-toggle.previous-active .leaders-filter-glide {
+  transform: translateX(100%);
+}
+
+.leaders-filter-option {
+  position: relative;
+  z-index: 1;
+
+  flex: 1;
+
+  padding: 0.65rem 1rem;
+
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.leaders-filter-option.active {
+  color: #ffffff;
+}
+
+/* ================= LEADER YEAR / STATUS BADGES ================= */
+
+.leader-year-badge {
+  display: inline-block;
+
+  margin-bottom: 0.5rem;
+  padding: 0.3rem 0.75rem;
+
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 999px;
+
+  color: var(--accent-hover);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.leader-admin-status-badge {
+  display: inline-block;
+
+  margin: 0.35rem 0;
+  padding: 0.25rem 0.65rem;
+
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.leader-admin-status-badge.current {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.leader-admin-status-badge.previous {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent-hover);
+}

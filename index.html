@@ -842,6 +842,24 @@
           >
         </div>
 
+        <div class="leaders-filter-toggle" id="leadersFilterToggle">
+          <button
+            type="button"
+            class="leaders-filter-option active"
+            data-status="current"
+          >
+            Current Leaders
+          </button>
+          <button
+            type="button"
+            class="leaders-filter-option"
+            data-status="previous"
+          >
+            Previous Leaders
+          </button>
+          <span class="leaders-filter-glide"></span>
+        </div>
+
       </div>
 
       <div class="gallery-feed" id="leadersFeed"></div>
@@ -1755,6 +1773,49 @@
               id="leaderDesignation"
               placeholder="e.g. President, Secretary"
               required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Leader Status
+            </label>
+
+            <div class="leader-status-toggle" id="leaderStatusToggle">
+              <button
+                type="button"
+                class="leader-status-option active"
+                data-status="current"
+              >
+                Current Leader
+              </button>
+              <button
+                type="button"
+                class="leader-status-option"
+                data-status="previous"
+              >
+                Previous Leader
+              </button>
+            </div>
+
+            <input type="hidden" id="leaderStatus" value="current">
+
+          </div>
+
+
+          <div class="form-group" id="leaderYearGroup" style="display:none;">
+
+            <label for="leaderYear">
+              Year (Previous Leader)
+            </label>
+
+            <input
+              type="text"
+              id="leaderYear"
+              placeholder="e.g. 2015 or 2015-2019"
             >
 
           </div>

@@ -82,6 +82,7 @@ const leadersCard = document.getElementById("leadersCard");
 const backFromLeaders = document.getElementById("backFromLeaders");
 const leadersFeed = document.getElementById("leadersFeed");
 const leadersFeedCount = document.getElementById("leadersFeedCount");
+let leadersFeedStatusFilter = "current";
 
 const membersPage = document.getElementById("members");
 const membersCard = document.getElementById("membersCard");
@@ -99,6 +100,10 @@ const cancelLeaderEditBtn = document.getElementById("cancelLeaderEditBtn");
 const editingLeaderId = document.getElementById("editingLeaderId");
 const leaderImageInput = document.getElementById("leaderImage");
 const leaderPreview = document.getElementById("leaderPreview");
+const leaderStatusInput = document.getElementById("leaderStatus");
+const leaderStatusToggle = document.getElementById("leaderStatusToggle");
+const leaderYearGroup = document.getElementById("leaderYearGroup");
+const leaderYearInput = document.getElementById("leaderYear");
 const leaderHint = document.getElementById("leaderHint");
 const removeLeaderBtn = document.getElementById("removeLeaderBtn");
 
@@ -873,6 +878,35 @@ function setLeaderPreview(dataUrl) {
 }
 
 
+function setLeaderStatus(status) {
+    leaderStatusInput.value = status;
+
+    leaderStatusToggle
+        .querySelectorAll(".leader-status-option")
+        .forEach((btn) => {
+            btn.classList.toggle(
+                "active",
+                btn.dataset.status === status
+            );
+        });
+
+    leaderYearGroup.style.display =
+        status === "previous" ? "block" : "none";
+
+    if (status === "current") {
+        leaderYearInput.value = "";
+    }
+}
+
+leaderStatusToggle
+    .querySelectorAll(".leader-status-option")
+    .forEach((btn) => {
+        btn.addEventListener("click", () => {
+            setLeaderStatus(btn.dataset.status);
+        });
+    });
+
+
 leaderImageInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
 
@@ -1037,6 +1071,8 @@ function resetLeaderForm() {
 
     cancelLeaderEditBtn.style.display = "none";
 
+    setLeaderStatus("current");
+
     clearLeaderUpload();
 }
 
@@ -1144,6 +1180,10 @@ async function startEditLeader(id) {
 
     document.getElementById("leaderAddress").value =
         item.address || "";
+
+    setLeaderStatus(item.status || "current");
+
+    leaderYearInput.value = item.year || "";
 
     leaderFormTitle.textContent = "Edit Leader";
 
@@ -1934,6 +1974,25 @@ async function renderLeadersAdmin() {
                             )}
                         </p>
 
+                        <span class="leader-admin-status-badge ${
+                            leader.status === "previous"
+                                ? "previous"
+                                : "current"
+                        }">
+                            ${
+                                leader.status === "previous"
+                                    ? `Previous${
+                                          leader.year
+                                              ? " — " +
+                                                escapeHtml(
+                                                    leader.year
+                                                )
+                                              : ""
+                                      }`
+                                    : "Current"
+                            }
+                        </span>
+
                         <p>
                             📞 ${escapeHtml(
                                 leader.phone || ""
@@ -2026,7 +2085,13 @@ async function renderLeadersAdmin() {
 ========================================= */
 
 async function renderLeadersFeed() {
-    const leaders = await getLeaders();
+    const allLeaders = await getLeaders();
+
+    const leaders = allLeaders.filter(
+        (leader) =>
+            (leader.status || "current") ===
+            leadersFeedStatusFilter
+    );
 
     const count = leaders.length;
 
@@ -2047,7 +2112,11 @@ async function renderLeadersFeed() {
                 <div class="icon">👥</div>
 
                 <h3>
-                    No leaders listed yet
+                    No ${
+                        leadersFeedStatusFilter === "previous"
+                            ? "previous"
+                            : "current"
+                    } leaders listed yet
                 </h3>
 
                 <p>
@@ -2093,6 +2162,18 @@ async function renderLeadersFeed() {
                 }
 
                 <div class="leader-body">
+
+                    ${
+                        leader.status === "previous"
+                            ? `
+                            <span class="leader-year-badge">
+                                ${escapeHtml(
+                                    leader.year || "Previous"
+                                )}
+                            </span>
+                        `
+                            : ""
+                    }
 
                     <h3>
                         ${escapeHtml(leader.name)}
@@ -2371,6 +2452,23 @@ function showLeaders() {
     membersPage.classList.remove("active");
 
     leadersPage.classList.add("active");
+
+    leadersFeedStatusFilter = "current";
+
+    const leadersFilterToggleEl = document.getElementById(
+        "leadersFilterToggle"
+    );
+
+    leadersFilterToggleEl
+        .querySelectorAll(".leaders-filter-option")
+        .forEach((b) => {
+            b.classList.toggle(
+                "active",
+                b.dataset.status === "current"
+            );
+        });
+
+    leadersFilterToggleEl.classList.remove("previous-active");
 
     renderLeadersFeed();
 
@@ -2790,12 +2888,21 @@ leaderForm.addEventListener(
                 .value
                 .trim();
 
+        const status = leaderStatusInput.value;
+
+        const year =
+            status === "previous"
+                ? leaderYearInput.value.trim()
+                : "";
+
         const formData = new FormData();
 
         formData.append("name", name);
         formData.append("designation", designation);
         formData.append("phone", phone);
         formData.append("address", address);
+        formData.append("status", status);
+        formData.append("year", year);
 
         // Only append the image if a new file was chosen —
         // otherwise leave it out so the existing Cloudinary
@@ -2856,6 +2963,38 @@ backFromLeaders.addEventListener(
     "click",
     showLanding
 );
+
+const leadersFilterToggle = document.getElementById(
+    "leadersFilterToggle"
+);
+
+leadersFilterToggle
+    .querySelectorAll(".leaders-filter-option")
+    .forEach((btn) => {
+        btn.addEventListener("click", () => {
+            if (btn.dataset.status === leadersFeedStatusFilter) {
+                return;
+            }
+
+            leadersFeedStatusFilter = btn.dataset.status;
+
+            leadersFilterToggle
+                .querySelectorAll(".leaders-filter-option")
+                .forEach((b) => {
+                    b.classList.toggle(
+                        "active",
+                        b === btn
+                    );
+                });
+
+            leadersFilterToggle.classList.toggle(
+                "previous-active",
+                btn.dataset.status === "previous"
+            );
+
+            renderLeadersFeed();
+        });
+    });
 
 
 membersCard.addEventListener(

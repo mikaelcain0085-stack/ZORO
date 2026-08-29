@@ -50,10 +50,29 @@ class Photo(models.Model):
 
 
 class Leader(models.Model):
+    STATUS_CURRENT = "current"
+    STATUS_PREVIOUS = "previous"
+    STATUS_CHOICES = [
+        (STATUS_CURRENT, "Current"),
+        (STATUS_PREVIOUS, "Previous"),
+    ]
+
     name = models.CharField(max_length=200)
     designation = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
     address = models.TextField()
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=STATUS_CURRENT,
+    )
+    year = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        help_text="e.g. 2015 or 2015-2019. Only used for Previous leaders.",
+    )
 
     image = models.ImageField(
         upload_to="leaders/",
