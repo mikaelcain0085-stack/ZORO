@@ -10,7 +10,7 @@
   const STEP_MS = 35; // how often each character's glyph flickers
   const REVEAL_STAGGER = 26; // ms between each character locking in, left to right
   const ELEMENT_STAGGER = 90; // ms between each element in a section starting
-  const HOLD_ENGLISH_MS = 2500; // how long English stays visible before decoding starts
+  const HOLD_ENGLISH_MS = 1500; // how long English stays visible before decoding starts
 
   const state = new WeakMap(); // element -> { intervalId, timeoutIds }
 
