@@ -113,9 +113,32 @@
     });
   }
 
+  function initSectionTitle() {
+    const title = document.querySelector(".section-title");
+    if (!title) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            title.classList.add("is-visible");
+            io.disconnect(); // one-time reveal, not repeated
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    io.observe(title);
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => {
+      init();
+      initSectionTitle();
+    });
   } else {
     init();
+    initSectionTitle();
   }
 })();

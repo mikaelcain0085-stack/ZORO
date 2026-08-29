@@ -502,13 +502,73 @@ nav {
 }
 
 .section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  position: relative;
 
-  margin-bottom: 1rem;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 800;
+
+  margin-bottom: 2rem;
 
   text-align: center;
   letter-spacing: -0.02em;
+
+  background: linear-gradient(100deg, #ffffff 30%, var(--accent-hover) 45%, var(--accent) 55%, #ffffff 70%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  margin: 1rem auto 0;
+  border-radius: 2px;
+
+  background: linear-gradient(90deg, transparent, var(--accent-hover), transparent);
+
+  transition: width 1s ease 0.35s;
+}
+
+.section-title.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: titleShimmer 6s ease-in-out 0.9s infinite;
+}
+
+.section-title.is-visible::after {
+  width: 130px;
+}
+
+@keyframes titleShimmer {
+  0%,
+  100% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-title {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+    background-position: 0% 0;
+  }
+  .section-title::after {
+    width: 130px;
+    transition: none;
+  }
 }
 
 .explore-screen {
