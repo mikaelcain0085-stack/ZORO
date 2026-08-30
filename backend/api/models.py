@@ -14,8 +14,29 @@ class Member(models.Model):
 
 
 class News(models.Model):
+    STATUS_DRAFT = "draft"
+    STATUS_PUBLISHED = "published"
+    STATUS_CHOICES = [
+        (STATUS_DRAFT, "Draft"),
+        (STATUS_PUBLISHED, "Published"),
+    ]
+
     title = models.CharField(max_length=300)
+    subheadline = models.CharField(max_length=400, blank=True)
     content = models.TextField()
+
+    author = models.CharField(max_length=150, blank=True)
+    category = models.CharField(max_length=100, blank=True, default="General")
+    publish_date = models.DateField(blank=True, null=True)
+
+    is_front_page = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+    columns = models.PositiveSmallIntegerField(default=2)  # 2 or 3
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=STATUS_PUBLISHED,
+    )
 
     image = models.ImageField(
         upload_to="news/",
