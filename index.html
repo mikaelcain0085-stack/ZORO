@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/newspaper.css?v=1">
 
   <title>ZORO Organisation</title>
 
@@ -12,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap"
     rel="stylesheet"
   >
 
@@ -687,56 +688,74 @@
   ========================== -->
   <div id="news">
 
-    <header class="news-header">
+    <div class="np-reading-progress" id="npReadingProgress"></div>
 
-      <div class="news-header-left">
+    <div class="np-shell" id="npShell">
 
-        <button class="btn-back" id="backFromNews">
-          ← Back
-        </button>
+      <header class="np-masthead">
 
-        <h1>
-          ZORO <span>News</span>
-        </h1>
-
-      </div>
-
-    </header>
-
-
-    <main class="news-main">
-
-      <div class="news-hero-title">
-
-        <h2>
-          News Console
-        </h2>
-
-        <p>
-          Official updates and announcements from
-          Zo Re-Unification Organisation
-        </p>
-
-        <div class="news-count-badge" id="newsFeedCount">
-          0 articles
+        <div class="np-masthead-top">
+          <button class="np-back" id="backFromNews">← Back</button>
+          <button class="np-eink-toggle" id="npEinkToggle" type="button">
+            <span class="np-eink-dot"></span>
+            E-Ink Mode
+          </button>
         </div>
 
-        <div class="search-box public-search-box">
+        <h1 class="np-nameplate">The ZORO Herald</h1>
+        <p class="np-tagline">Official News of the Zo Re-Unification Organisation</p>
+
+        <div class="np-masthead-rule"></div>
+
+        <div class="np-masthead-bottom">
+          <span id="npMastheadDate"></span>
+          <span class="np-masthead-count" id="npArticleCount">0 articles</span>
+        </div>
+
+      </header>
+
+      <div class="np-toolbar">
+
+        <div class="np-category-tabs" id="npCategoryTabs">
+          <button type="button" class="np-tab active" data-category="all">All</button>
+        </div>
+
+        <div class="np-search">
           <svg class="btn-icon"><use href="#icon-search"></use></svg>
           <input
             type="text"
-            id="newsFeedSearchInput"
-            placeholder="Search news by title or content..."
+            id="npSearchInput"
+            placeholder="Search the Herald..."
           >
         </div>
 
       </div>
 
-      <div class="news-feed" id="newsFeed"></div>
+      <!-- FRONT PAGE (list/grid view) -->
+      <main class="np-frontpage" id="npFrontpage"></main>
 
-    </main>
+      <!-- ARTICLE READER (single article view) -->
+      <main class="np-reader" id="npReader" hidden>
+
+        <button class="np-reader-back" id="npReaderBack">← Back to Front Page</button>
+
+        <article class="np-article" id="npArticleContent"></article>
+
+        <div class="np-reader-nav">
+          <button type="button" class="np-nav-btn np-nav-prev" id="npPrevArticle">
+            ← Previous Article
+          </button>
+          <button type="button" class="np-nav-btn np-nav-next" id="npNextArticle">
+            Next Article →
+          </button>
+        </div>
+
+      </main>
+
+    </div>
 
   </div>
+
 
 
   <!-- =========================
@@ -2184,6 +2203,7 @@
 <script type="module" src="js/globe.js"></script>
 <script src="js/donate-video.js" defer></script>
 <script src="js/mizo-decode.js" defer></script>
+<script src="js/newspaper.js" defer></script>
 
 </body>
 </html>

@@ -37,8 +37,6 @@ const successToast = document.getElementById("successToast");
 
 const newsCard = document.getElementById("newsCard");
 const backFromNews = document.getElementById("backFromNews");
-const newsFeed = document.getElementById("newsFeed");
-const newsFeedCount = document.getElementById("newsFeedCount");
 const newsForm = document.getElementById("newsForm");
 const newsList = document.getElementById("newsList");
 const newsCount = document.getElementById("newsCount");
@@ -1523,192 +1521,8 @@ async function renderNewsAdmin() {
    RENDER NEWS PUBLIC
 ========================================= */
 
-async function renderNewsFeed() {
 
-    try {
-
-        const response = await fetch(
-            `${API_BASE}/news/`
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "Could not load news"
-            );
-        }
-        const news = await response.json();
-
-        const count = news.length;
-
-        newsFeedCount.textContent =
-            count === 0
-                ? "0 articles"
-                : count === 1
-                ? "1 article"
-                : `${count} articles`;
-
-
-        if (count === 0) {
-
-            newsFeed.innerHTML = `
-                <div class="news-empty-premium">
-
-                    <div class="icon">
-                        📰
-                    </div>
-
-                    <h3>
-                        No news published yet
-                    </h3>
-
-                    <p>
-                        Check back soon for official updates from ZORO.
-                    </p>
-
-                </div>
-            `;
-
-            return;
-        }
-
-
-        newsFeed.innerHTML = news
-            .map(
-                (item) => `
-
-                <article class="news-article">
-
-                    <div class="news-article-meta">
-
-                        <span class="news-article-date">
-
-                            ${formatDate(
-                                item.created_at
-                            )}
-
-                        </span>
-
-                        ${
-
-                            isRecent(
-                                item.created_at
-                            )
-
-                                ? `
-                                <span class="news-article-badge">
-                                    New
-                                </span>
-                                `
-
-                                : ""
-
-                        }
-
-                    </div>
-
-
-                    <h3>
-
-                        ${escapeHtml(
-                            item.title
-                        )}
-
-                    </h3>
-
-
-                    ${
-
-                        item.image
-
-                            ? `
-                            <img 
-                                class="news-article-img" 
-                                src="${item.image}" 
-                                alt="" 
-                            >
-                            `
-
-                            : ""
-
-                    }
-
-
-                    <div class="news-article-body">
-
-                        ${escapeHtml(
-                            item.content || ""
-                        )}
-
-                    </div>
-
-
-                    ${
-
-                        item.pdf
-
-                            ? `
-                            <div class="news-pdf-container">
-
-                                <a
-                                    href="${item.pdf.startsWith("http")
-                                        ? item.pdf
-                                        : BACKEND_URL + item.pdf}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="news-pdf-button" 
-                                >
-                                    <span class="pdf-icon">📄</span>
-                                    <span>View PDF Document</span>
-                                    <span class="pdf-arrow">↗</span>      
-                                </a>
-
-                            </div>
-                            `
-
-                            : ""
-
-                    }
-
-                </article>
-
-                `
-            )
-            .join("");
-
-
-    } catch (error) {
-
-        console.error(
-            "Error loading news:",
-            error
-        );
-
-
-        newsFeedCount.textContent =
-            "0 articles";
-
-
-        newsFeed.innerHTML = `
-            <div class="news-empty-premium">
-
-                <div class="icon">
-                    ⚠️
-                </div>
-
-                <h3>
-                    Could not load news
-                </h3>
-
-                <p>
-                    Please make sure the Django server is running.
-                </p>
-
-            </div>
-        `;
-
-    }
-
-}
+/* renderNewsFeed() moved to js/newspaper.js as renderNewspaperFrontPage() */
 
 
 /* =========================================
@@ -2421,7 +2235,9 @@ function showNewsConsole() {
 
     newsPage.classList.add("active");
 
-    renderNewsFeed();
+    if (typeof renderNewspaperFrontPage === "function") {
+        renderNewspaperFrontPage();
+    }
 
     window.scrollTo(0, 0);
 }
@@ -3183,10 +2999,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     // Public-facing feed pages
-    wireAdminSearch(
-        document.getElementById("newsFeedSearchInput"),
-        newsFeed
-    );
+    // News search is now handled inside js/newspaper.js (npSearchInput)
 
     wireAdminSearch(
         document.getElementById("galleryFeedSearchInput"),
