@@ -219,9 +219,25 @@
 
   // ---- reader view ----
   function renderArticleBody(article) {
-    // Existing articles have plain-text content (from the old admin
-    // form). Preserve line breaks safely without allowing raw HTML.
-    return npEscapeHtml(article.content || "");
+    const content = article.content || "";
+    const looksLikeHtml = /<[a-z][\s\S]*>/i.test(content);
+
+    if (looksLikeHtml) {
+      // Real HTML authored via the admin's rich text editor — the
+      // admin console is the only thing that can write this field,
+      // so it's trusted the same way the rest of this admin-driven
+      // site already trusts admin-entered data. Render it directly.
+      return content;
+    }
+
+    // Legacy plain-text article (from the old admin form, pre-editor
+    // overhaul) — escape it and wrap into paragraphs so it displays
+    // the same way it always did, just without relying on
+    // white-space:pre-line.
+    return content
+      .split(/\n{2,}/)
+      .map((para) => `<p>${npEscapeHtml(para)}</p>`)
+      .join("");
   }
 
   function renderReader() {
