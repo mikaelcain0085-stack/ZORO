@@ -435,7 +435,49 @@
   line-height: 1.75;
   text-align: justify;
   hyphens: auto;
-  white-space: pre-line;
+}
+
+.np-article-body p {
+  margin-bottom: 1rem;
+}
+
+.np-article-body h2,
+.np-article-body h3 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  margin: 1.2rem 0 0.5rem;
+  break-after: avoid;
+  text-align: left;
+}
+
+.np-article-body h2 {
+  font-size: 1.6rem;
+}
+
+.np-article-body h3 {
+  font-size: 1.3rem;
+}
+
+.np-article-body img {
+  max-width: 100%;
+  filter: grayscale(1) contrast(1.05);
+  margin: 1rem 0;
+  break-inside: avoid;
+}
+
+.np-article-body blockquote {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.35;
+  text-align: center;
+
+  border-top: 2px solid var(--np-rule);
+  border-bottom: 2px solid var(--np-rule);
+  padding: 1rem 0;
+  margin: 1.5rem 0;
+
+  break-inside: avoid;
 }
 
 .np-article-body.np-cols-2 {
@@ -586,4 +628,40 @@
     width: 100%;
     text-align: center;
   }
+}
+
+/* ================= ADMIN: LIVE PREVIEW CARD ================= */
+/* Redeclares the newspaper palette locally since this card renders
+   inside the (dark-themed) admin console, outside #news. */
+
+.np-preview-card {
+  --np-paper: #f5f1e8;
+  --np-paper-alt: #ede7d8;
+  --np-ink: #1a1a1a;
+  --np-ink-muted: #5a5648;
+  --np-rule: #1a1a1a;
+  --np-accent: #7a1f1f;
+
+  background: var(--np-paper);
+  color: var(--np-ink);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+
+  padding: 1.5rem;
+  border: 1px solid #000;
+  border-radius: 6px;
+
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.np-preview-card .np-lead,
+.np-preview-card .np-card {
+  cursor: default;
+}
+
+.np-preview-empty {
+  font-family: "Inter", sans-serif;
+  color: var(--np-ink-muted);
+  text-align: center;
+  padding: 2rem 1rem;
 }

@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="css/style.css?v=14">
   <link rel="stylesheet" href="css/newspaper.css?v=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.3/quill.snow.min.css">
 
   <title>ZORO Organisation</title>
 
@@ -1347,7 +1348,7 @@
 
   <!-- UPLOAD NEWS (upload subview) -->
   <div class="admin-subview active" id="newsUploadView">
-  <div class="card">
+  <div class="card np-editor-shell">
 
     <h2 id="newsFormTitle">
       Upload News
@@ -1368,144 +1369,130 @@
 
     <form id="newsForm">
 
-      <input
-        type="hidden"
-        id="editingNewsId"
-        value=""
-      >
+      <input type="hidden" id="editingNewsId" value="">
+      <input type="hidden" id="newsStatusField" value="published">
 
-      <!-- TITLE -->
-      <div class="form-group">
+      <div class="np-editor-grid">
 
-        <label for="newsTitle">
-          Title
-        </label>
+        <!-- LEFT: metadata form -->
+        <div class="np-editor-pane np-editor-form">
 
-        <input
-          type="text"
-          id="newsTitle"
-          placeholder="Enter news title"
-          required
-        >
-
-      </div>
-
-
-      <!-- CONTENT -->
-      <div class="form-group">
-
-        <label for="newsContent">
-          Content
-        </label>
-
-        <textarea
-          id="newsContent"
-          placeholder="Write the full news content here..."
-          required
-          style="min-height: 120px;"
-        ></textarea>
-
-      </div>
-
-
-      <!-- IMAGE UPLOAD -->
-      <div class="form-group">
-
-        <label>
-          Image (optional)
-        </label>
-
-        <div class="image-upload-area">
-
-          <input
-            type="file"
-            id="newsImage"
-            accept="image/*"
-          >
-
-          <div class="hint" id="imageHint">
-            📷 Click or drag to upload image
+          <div class="form-group">
+            <label for="newsTitle">Headline</label>
+            <input type="text" id="newsTitle" placeholder="Enter headline" required>
           </div>
 
-          <img
-            id="imagePreview"
-            class="image-preview"
-            alt="Preview"
-          >
+          <div class="form-group">
+            <label for="newsSubheadline">Sub-headline</label>
+            <input type="text" id="newsSubheadline" placeholder="Optional supporting line">
+          </div>
+
+          <div class="form-group">
+            <label for="newsAuthor">Author</label>
+            <input type="text" id="newsAuthor" placeholder="e.g. Editorial Desk">
+          </div>
+
+          <div class="form-group">
+            <label for="newsCategory">Category</label>
+            <input type="text" id="newsCategory" list="newsCategoryOptions" placeholder="e.g. Community" value="General">
+            <datalist id="newsCategoryOptions">
+              <option value="Community">
+              <option value="International">
+              <option value="Announcements">
+              <option value="Culture">
+              <option value="Press Release">
+              <option value="General">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="newsPublishDate">Date</label>
+            <input type="date" id="newsPublishDate">
+          </div>
+
+          <div class="form-group">
+            <label>Main Image (optional)</label>
+            <div class="image-upload-area">
+              <input type="file" id="newsImage" accept="image/*">
+              <div class="hint" id="imageHint">📷 Click or drag to upload image</div>
+              <img id="imagePreview" class="image-preview" alt="Preview">
+            </div>
+            <button type="button" class="btn-remove-image" id="removeImageBtn">Remove image</button>
+          </div>
+
+          <div class="form-group">
+            <label for="newsPdf">PDF Attachment (optional)</label>
+            <div class="pdf-upload-area">
+              <input type="file" id="newsPdf" accept=".pdf,application/pdf">
+              <div class="hint" id="pdfHint">📄 Click to upload PDF document</div>
+              <div class="pdf-file-name" id="pdfFileName"></div>
+            </div>
+            <button type="button" class="btn-remove-image" id="removePdfBtn">Remove PDF</button>
+          </div>
+
+          <div class="form-group">
+            <label>Layout</label>
+            <div class="np-editor-toggle-row">
+              <label class="np-checkbox">
+                <input type="checkbox" id="newsIsFrontPage"> Front Page
+              </label>
+              <label class="np-checkbox">
+                <input type="checkbox" id="newsIsFeatured"> Featured
+              </label>
+            </div>
+            <div class="np-editor-toggle-row">
+              <label class="np-radio">
+                <input type="radio" name="newsColumns" value="2" checked> 2 Columns
+              </label>
+              <label class="np-radio">
+                <input type="radio" name="newsColumns" value="3"> 3 Columns
+              </label>
+            </div>
+          </div>
 
         </div>
 
-        <button
-          type="button"
-          class="btn-remove-image"
-          id="removeImageBtn"
-        >
-          Remove image
-        </button>
+        <!-- CENTER: WYSIWYG editor -->
+        <div class="np-editor-pane np-editor-center">
+          <label>Body Content</label>
+          <div id="npQuillEditor"></div>
 
-      </div>
-
-
-      <!-- PDF UPLOAD -->
-      <div class="form-group">
-
-        <label for="newsPdf">
-          PDF Document (optional)
-        </label>
-
-        <div class="pdf-upload-area">
-
-          <input
-            type="file"
-            id="newsPdf"
-            accept=".pdf,application/pdf"
-          >
-
-          <div class="hint" id="pdfHint">
-            📄 Click to upload PDF document
+          <div class="np-outline">
+            <span class="np-outline-title">Paragraph Order</span>
+            <div id="npOutlineList"></div>
           </div>
-
-          <div
-            class="pdf-file-name"
-            id="pdfFileName"
-          ></div>
-
         </div>
 
-        <button
-          type="button"
-          class="btn-remove-image"
-          id="removePdfBtn"
-        >
-          Remove PDF
-        </button>
+        <!-- RIGHT: live preview -->
+        <div class="np-editor-pane np-editor-preview">
+          <label>Live Preview</label>
+          <div class="np-preview-card" id="npPreviewCard"></div>
+        </div>
 
       </div>
 
-
-      <!-- SUBMIT -->
-      <button
-        type="submit"
-        class="btn-submit"
-        id="newsSubmitBtn"
-      >
-        Publish News
-      </button>
-
-
-      <!-- CANCEL EDIT -->
-      <button
-        type="button"
-        class="btn-submit secondary"
-        id="cancelEditBtn"
-        style="display:none; margin-top:0.5rem;"
-      >
-        Cancel Edit
-      </button>
+      <div class="np-editor-actions">
+        <button type="button" class="btn-submit secondary" id="newsSaveDraftBtn">
+          Save as Draft
+        </button>
+        <button type="submit" class="btn-submit" id="newsSubmitBtn">
+          Publish News
+        </button>
+        <button
+          type="button"
+          class="btn-submit secondary"
+          id="cancelEditBtn"
+          style="display:none;"
+        >
+          Cancel Edit
+        </button>
+      </div>
 
     </form>
 
   </div>
+  </div>
+
   </div>
 
 
@@ -2204,6 +2191,8 @@
 <script src="js/donate-video.js" defer></script>
 <script src="js/mizo-decode.js" defer></script>
 <script src="js/newspaper.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.3/quill.min.js" defer></script>
+<script src="js/news-editor.js" defer></script>
 
 </body>
 </html>

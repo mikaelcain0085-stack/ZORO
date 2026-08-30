@@ -4537,3 +4537,191 @@ html {
   background: rgba(99, 102, 241, 0.15);
   color: var(--accent-hover);
 }
+
+/* ================= NEWS EDITOR (newspaper CMS) ================= */
+
+.np-editor-shell {
+  max-width: 100%;
+}
+
+.np-editor-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  gap: 1.5rem;
+
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.np-editor-pane label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.np-editor-toggle-row {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.np-checkbox,
+.np-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.np-checkbox input,
+.np-radio input {
+  accent-color: var(--accent);
+}
+
+/* ---- Quill editor, dark-themed to match the admin console ---- */
+
+.np-editor-center .ql-toolbar.ql-snow {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.np-editor-center .ql-container.ql-snow {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+  min-height: 320px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.np-editor-center .ql-editor {
+  min-height: 320px;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.np-editor-center .ql-editor.ql-blank::before {
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.np-editor-center .ql-snow .ql-stroke {
+  stroke: var(--text-muted);
+}
+
+.np-editor-center .ql-snow .ql-fill {
+  fill: var(--text-muted);
+}
+
+.np-editor-center .ql-snow .ql-picker {
+  color: var(--text-muted);
+}
+
+.np-editor-center .ql-toolbar.ql-snow .ql-formats button:hover .ql-stroke,
+.np-editor-center .ql-toolbar.ql-snow .ql-formats button.ql-active .ql-stroke {
+  stroke: var(--accent-hover);
+}
+
+.np-editor-center .ql-toolbar.ql-snow .ql-formats button:hover .ql-fill,
+.np-editor-center .ql-toolbar.ql-snow .ql-formats button.ql-active .ql-fill {
+  fill: var(--accent-hover);
+}
+
+.np-editor-center .ql-editor blockquote {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  padding: 0.7rem 0;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* ---- paragraph outline / reorder ---- */
+
+.np-outline {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.np-outline-title {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.np-outline-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.4rem;
+
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.np-outline-item span.np-outline-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.np-outline-move {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.np-outline-move:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.np-outline-move:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.np-editor-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.np-editor-actions .btn-submit {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1100px) {
+  .np-editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
