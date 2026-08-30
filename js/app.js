@@ -1114,7 +1114,7 @@ async function startEditNews(id) {
 }
 
 
-/* cancelEditBtn click handling for News moved to js/news-editor.js */
+cancelEditBtn.addEventListener("click", resetNewsForm);
 
 
 async function startEditPhoto(id) {
@@ -2461,9 +2461,100 @@ memberForm.addEventListener(
 /* =========================================
    NEWS FORM
 ========================================= */
+newsForm.addEventListener(
+    "submit",
+    async (e) => {
+        e.preventDefault();
 
-/* newsForm submit handling moved to js/news-editor.js (Draft/Publish CMS) */
+        const title =
+            document
+                .getElementById("newsTitle")
+                .value
+                .trim();
 
+        const content =
+            document
+                .getElementById("newsContent")
+                .value
+                .trim();
+
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("content", content);
+
+
+        // Add image if selected
+        if (
+            newsImageInput.files &&
+            newsImageInput.files[0]
+        ) {
+            formData.append(
+                "image",
+                newsImageInput.files[0]
+            );
+        }
+
+
+        // Add PDF if selected
+        if (currentPdfFile) {
+            formData.append(
+                "pdf",
+                currentPdfFile
+            );
+        }
+
+
+        const editId =
+            editingNewsId.value;
+
+        try {
+
+            if (editId) {
+
+                await updateNewsApi(
+                    editId,
+                    formData
+                );
+
+                newsSuccessToast.textContent =
+                    "News updated successfully!";
+
+            } else {
+
+                await createNews(
+                    formData
+                );
+
+                newsSuccessToast.textContent =
+                    "News published successfully!";
+            }
+
+
+            await renderNewsAdmin();
+
+            resetNewsForm();
+
+            newsSuccessToast.classList.add(
+                "show"
+            );
+
+            setTimeout(() => {
+                newsSuccessToast.classList.remove(
+                    "show"
+                );
+            }, 2500);
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Could not publish news. Please make sure the Django server is running."
+            );
+        }
+    }
+);
 
 
 newsCard.addEventListener(

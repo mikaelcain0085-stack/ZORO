@@ -8,6 +8,42 @@
 (function () {
   let quill = null;
 
+  // ---- category select (with "Other/custom" support) ----
+
+  const categorySelectEl = document.getElementById("newsCategory");
+  const categoryCustomEl = document.getElementById("newsCategoryCustom");
+
+  function getSelectedCategory() {
+    if (categorySelectEl.value === "__custom__") {
+      return categoryCustomEl.value.trim() || "General";
+    }
+    return categorySelectEl.value;
+  }
+
+  function setSelectedCategory(value) {
+    const presetValues = Array.from(categorySelectEl.options)
+      .map((o) => o.value)
+      .filter((v) => v !== "__custom__");
+
+    if (value && !presetValues.includes(value)) {
+      categorySelectEl.value = "__custom__";
+      categoryCustomEl.value = value;
+      categoryCustomEl.style.display = "block";
+    } else {
+      categorySelectEl.value = value || "General";
+      categoryCustomEl.value = "";
+      categoryCustomEl.style.display = "none";
+    }
+  }
+
+  categorySelectEl.addEventListener("change", () => {
+    categoryCustomEl.style.display =
+      categorySelectEl.value === "__custom__" ? "block" : "none";
+    renderLivePreview();
+  });
+
+  categoryCustomEl.addEventListener("input", renderLivePreview);
+
   // ---- Quill setup ----
 
   function initQuill() {
@@ -135,8 +171,7 @@
     const title = document.getElementById("newsTitle").value.trim();
     const subheadline = document.getElementById("newsSubheadline").value.trim();
     const author = document.getElementById("newsAuthor").value.trim();
-    const category =
-      document.getElementById("newsCategory").value.trim() || "General";
+    const category = getSelectedCategory();
     const previewImg = document.getElementById("imagePreview");
     const hasImage = previewImg.classList.contains("show");
 
@@ -199,8 +234,7 @@
       title: document.getElementById("newsTitle").value.trim(),
       subheadline: document.getElementById("newsSubheadline").value.trim(),
       author: document.getElementById("newsAuthor").value.trim(),
-      category:
-        document.getElementById("newsCategory").value.trim() || "General",
+      category: getSelectedCategory(),
       publish_date: document.getElementById("newsPublishDate").value || "",
       is_front_page: document.getElementById("newsIsFrontPage").checked,
       is_featured: document.getElementById("newsIsFeatured").checked,
@@ -291,7 +325,7 @@
   window.resetNewsForm = function resetNewsForm() {
     document.getElementById("newsForm").reset();
     editingNewsId.value = "";
-    document.getElementById("newsCategory").value = "General";
+    setSelectedCategory("General");
     document.getElementById("newsIsFrontPage").checked = false;
     document.getElementById("newsIsFeatured").checked = false;
     document.querySelector(
@@ -323,7 +357,7 @@
     document.getElementById("newsTitle").value = item.title || "";
     document.getElementById("newsSubheadline").value = item.subheadline || "";
     document.getElementById("newsAuthor").value = item.author || "";
-    document.getElementById("newsCategory").value = item.category || "General";
+    setSelectedCategory(item.category || "General");
     document.getElementById("newsPublishDate").value = item.publish_date || "";
     document.getElementById("newsIsFrontPage").checked = !!item.is_front_page;
     document.getElementById("newsIsFeatured").checked = !!item.is_featured;

@@ -6,7 +6,7 @@
 
   <link rel="stylesheet" href="css/style.css?v=14">
   <link rel="stylesheet" href="css/newspaper.css?v=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.3/quill.snow.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
 
   <title>ZORO Organisation</title>
 
@@ -1394,15 +1394,21 @@
 
           <div class="form-group">
             <label for="newsCategory">Category</label>
-            <input type="text" id="newsCategory" list="newsCategoryOptions" placeholder="e.g. Community" value="General">
-            <datalist id="newsCategoryOptions">
-              <option value="Community">
-              <option value="International">
-              <option value="Announcements">
-              <option value="Culture">
-              <option value="Press Release">
-              <option value="General">
-            </datalist>
+            <select id="newsCategory">
+              <option value="General" selected>General</option>
+              <option value="Community">Community</option>
+              <option value="International">International</option>
+              <option value="Announcements">Announcements</option>
+              <option value="Culture">Culture</option>
+              <option value="Press Release">Press Release</option>
+              <option value="__custom__">Other (type custom)...</option>
+            </select>
+            <input
+              type="text"
+              id="newsCategoryCustom"
+              placeholder="Enter custom category"
+              style="display:none; margin-top:0.6rem;"
+            >
           </div>
 
           <div class="form-group">
@@ -2191,7 +2197,7 @@
 <script src="js/donate-video.js" defer></script>
 <script src="js/mizo-decode.js" defer></script>
 <script src="js/newspaper.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.3/quill.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js" defer></script>
 <script src="js/news-editor.js" defer></script>
 
 </body>

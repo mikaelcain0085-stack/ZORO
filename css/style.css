@@ -989,6 +989,7 @@ footer {
 }
 
 .form-group input,
+.form-group select,
 .form-group textarea {
   width: 100%;
 
@@ -1010,6 +1011,7 @@ footer {
 }
 
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--accent);
 }
@@ -4599,6 +4601,14 @@ html {
   min-height: 320px;
   font-size: 1rem;
   color: var(--text);
+}
+
+/* Defensive fallback: if Quill's script fails to load for any reason,
+   this plain div still reserves real space instead of collapsing to
+   a tiny box. */
+#npQuillEditor {
+  min-height: 360px;
+  min-width: 100%;
 }
 
 .np-editor-center .ql-editor {
