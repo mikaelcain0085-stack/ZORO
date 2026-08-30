@@ -43,6 +43,12 @@
     return div.innerHTML;
   }
 
+  function stripHtmlToText(html) {
+    const div = document.createElement("div");
+    div.innerHTML = html || "";
+    return div.textContent || "";
+  }
+
   function plainExcerpt(text, max) {
     const clean = (text || "").replace(/\s+/g, " ").trim();
     return clean.length > max ? clean.slice(0, max).trim() + "…" : clean;
@@ -244,8 +250,16 @@
     const article = filtered[readerIndex];
     if (!article) return;
 
+    // Multi-column layout only makes sense once there's enough text
+    // to actually fill more than one column — otherwise short
+    // articles awkwardly split a sentence or two across columns.
+    const plainLength = stripHtmlToText(article.content || "").length;
     const columnsClass =
-      Number(article.columns) === 3 ? "np-cols-3" : "np-cols-2";
+      plainLength < 400
+        ? "np-cols-1"
+        : Number(article.columns) === 3
+        ? "np-cols-3"
+        : "np-cols-2";
 
     articleContentEl.innerHTML = `
       <span class="np-article-category">${npEscapeHtml(

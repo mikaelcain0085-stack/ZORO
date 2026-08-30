@@ -488,6 +488,10 @@
   columns: 1;
 }
 
+.np-article-body.np-cols-1 {
+  columns: 1;
+}
+
 @media (min-width: 720px) {
   .np-article-body.np-cols-2 {
     columns: 2;
