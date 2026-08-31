@@ -49,6 +49,14 @@
     return div.textContent || "";
   }
 
+  // Subheadline, title, and author are plain-text fields — they
+  // should never contain real HTML. If tag-like text ends up in one
+  // (typed/pasted by mistake, or from any other source), strip it
+  // rather than showing raw "<p>...</p>" characters to readers.
+  function plainTextOnly(value) {
+    return (value || "").replace(/<\/?[a-z][^>]*>/gi, "").trim();
+  }
+
   function plainExcerpt(text, max) {
     const clean = (text || "").replace(/\s+/g, " ").trim();
     return clean.length > max ? clean.slice(0, max).trim() + "…" : clean;
@@ -133,12 +141,16 @@
   }
 
   function articleCard(article, isLead) {
+    const title = plainTextOnly(article.title);
+    const subheadline = plainTextOnly(article.subheadline);
+    const author = plainTextOnly(article.author);
+
     const img = article.image
-      ? `<img src="${article.image}" alt="${npEscapeHtml(article.title)}">`
+      ? `<img src="${article.image}" alt="${npEscapeHtml(title)}">`
       : "";
 
-    const sub = article.subheadline
-      ? `<p class="np-sub">${npEscapeHtml(article.subheadline)}</p>`
+    const sub = subheadline
+      ? `<p class="np-sub">${npEscapeHtml(subheadline)}</p>`
       : `<p class="np-sub">${npEscapeHtml(
           plainExcerpt(article.content, isLead ? 160 : 90)
         )}</p>`;
@@ -152,10 +164,10 @@
               <span class="np-eyebrow">${npEscapeHtml(
                 article.category || "General"
               )}</span>
-              <h2>${npEscapeHtml(article.title)}</h2>
+              <h2>${npEscapeHtml(title)}</h2>
               ${sub}
               <span class="np-byline">
-                ${article.author ? "By " + npEscapeHtml(article.author) + " — " : ""}
+                ${author ? "By " + npEscapeHtml(author) + " — " : ""}
                 ${npFormatDate(article.publish_date || article.created_at)}
               </span>
             </div>
@@ -170,10 +182,10 @@
         <span class="np-eyebrow">${npEscapeHtml(
           article.category || "General"
         )}</span>
-        <h3>${npEscapeHtml(article.title)}</h3>
+        <h3>${npEscapeHtml(title)}</h3>
         ${sub}
         <span class="np-byline">
-          ${article.author ? "By " + npEscapeHtml(article.author) + " — " : ""}
+          ${author ? "By " + npEscapeHtml(author) + " — " : ""}
           ${npFormatDate(article.publish_date || article.created_at)}
         </span>
       </div>
@@ -262,16 +274,20 @@
       <span class="np-article-category">${npEscapeHtml(
         article.category || "General"
       )}</span>
-      <h1>${npEscapeHtml(article.title)}</h1>
+      <h1>${npEscapeHtml(plainTextOnly(article.title))}</h1>
       ${
         article.subheadline
-          ? `<p class="np-sub">${npEscapeHtml(article.subheadline)}</p>`
+          ? `<p class="np-sub">${npEscapeHtml(
+              plainTextOnly(article.subheadline)
+            )}</p>`
           : ""
       }
       <div class="np-article-meta">
         ${
           article.author
-            ? `<span>By ${npEscapeHtml(article.author)}</span>`
+            ? `<span>By ${npEscapeHtml(
+                plainTextOnly(article.author)
+              )}</span>`
             : ""
         }
         <span>${npFormatDate(
