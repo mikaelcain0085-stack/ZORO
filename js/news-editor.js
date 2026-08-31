@@ -162,60 +162,72 @@
     renderLivePreview();
   }
 
-  // ---- live preview ----
+  // ---- live preview: full article, exact fidelity ----
+  // Builds a "draft article" from current form state + Quill content,
+  // then renders it with the EXACT SAME function the public reader
+  // page uses (window.buildNewspaperArticleHTML, exposed by
+  // js/newspaper.js) — guaranteeing the preview matches what
+  // publishes, by construction rather than by careful copying.
+
+  function buildDraftArticle() {
+    const previewImg = document.getElementById("imagePreview");
+    const hasImage = previewImg.classList.contains("show");
+
+    return {
+      title: document.getElementById("newsTitle").value.trim(),
+      subheadline: document.getElementById("newsSubheadline").value.trim(),
+      author: document.getElementById("newsAuthor").value.trim(),
+      category: getSelectedCategory(),
+      publish_date: document.getElementById("newsPublishDate").value || "",
+      created_at: new Date().toISOString(),
+      is_front_page: document.getElementById("newsIsFrontPage").checked,
+      columns: document.querySelector('input[name="newsColumns"]:checked')
+        .value,
+      image: hasImage ? previewImg.src : "",
+      content: quill ? quill.root.innerHTML : "",
+    };
+  }
 
   function renderLivePreview() {
     const previewEl = document.getElementById("npPreviewCard");
     if (!previewEl) return;
 
-    const title = document.getElementById("newsTitle").value.trim();
-    const subheadline = document.getElementById("newsSubheadline").value.trim();
-    const author = document.getElementById("newsAuthor").value.trim();
-    const category = getSelectedCategory();
-    const previewImg = document.getElementById("imagePreview");
-    const hasImage = previewImg.classList.contains("show");
+    const draft = buildDraftArticle();
 
-    if (!title) {
+    if (!draft.title) {
       previewEl.innerHTML =
-        '<p class="np-preview-empty">Start filling in the headline to see a live preview.</p>';
+        '<p class="np-preview-empty">Start writing to see the full live preview.</p>';
       return;
     }
 
-    const dateStr = new Date().toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    if (typeof window.buildNewspaperArticleHTML !== "function") {
+      previewEl.innerHTML =
+        '<p class="np-preview-empty">Preview unavailable — js/newspaper.js did not load.</p>';
+      return;
+    }
 
-    previewEl.innerHTML = `
-      <div class="np-lead" style="border:none; padding:0; margin:0; cursor:default;">
-        ${
-          hasImage
-            ? `<img src="${previewImg.src}" style="width:100%; height:160px; object-fit:cover; filter:grayscale(1) contrast(1.05); border:1px solid #000; margin-bottom:0.8rem;">`
-            : ""
-        }
-        <span class="np-eyebrow">${escapeHtml(category)}</span>
-        <h2 style="font-size:1.4rem;">${escapeHtml(title)}</h2>
-        ${
-          subheadline
-            ? `<p class="np-sub" style="font-size:0.95rem;">${escapeHtml(
-                subheadline
-              )}</p>`
-            : ""
-        }
-        <span class="np-byline">${
-          author ? "By " + escapeHtml(author) + " — " : ""
-        }${dateStr}</span>
-      </div>
-    `;
+    previewEl.innerHTML = `<article class="np-article">${window.buildNewspaperArticleHTML(
+      draft
+    )}</article>`;
   }
 
-  ["newsTitle", "newsSubheadline", "newsAuthor", "newsCategory"].forEach(
-    (id) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("input", renderLivePreview);
-    }
-  );
+  [
+    "newsTitle",
+    "newsSubheadline",
+    "newsAuthor",
+    "newsPublishDate",
+  ].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", renderLivePreview);
+  });
+
+  document
+    .getElementById("newsIsFrontPage")
+    .addEventListener("change", renderLivePreview);
+
+  document
+    .querySelectorAll('input[name="newsColumns"]')
+    .forEach((el) => el.addEventListener("change", renderLivePreview));
 
   // refresh the preview once the main image finishes loading/clearing
   // (app.js owns the actual upload/FileReader logic for #imagePreview)
@@ -226,6 +238,7 @@
   document
     .getElementById("removeImageBtn")
     .addEventListener("click", () => setTimeout(renderLivePreview, 0));
+
 
   // ---- submit (Draft / Publish) ----
 
@@ -268,10 +281,6 @@
 
     if (newsImageInput.files && newsImageInput.files[0]) {
       formData.append("image", newsImageInput.files[0]);
-    }
-
-    if (currentPdfFile) {
-      formData.append("pdf", currentPdfFile);
     }
 
     const editId = editingNewsId.value;
@@ -341,7 +350,6 @@
     cancelEditBtn.style.display = "none";
 
     clearImageUpload();
-    clearPdfUpload();
 
     renderOutline();
     renderLivePreview();

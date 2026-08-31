@@ -49,13 +49,6 @@ const newsImageInput = document.getElementById("newsImage");
 const imagePreview = document.getElementById("imagePreview");
 const imageHint = document.getElementById("imageHint");
 const removeImageBtn = document.getElementById("removeImageBtn");
-const newsPdfInput = document.getElementById("newsPdf");
-const pdfFileName = document.getElementById("pdfFileName");
-const pdfHint = document.getElementById("pdfHint");
-const removePdfBtn = document.getElementById("removePdfBtn");
-
-let currentPdfFile = null;
-let currentPdfUrl = null;
 
 const galleryPage = document.getElementById("gallery");
 const galleryCard = document.getElementById("galleryCard");
@@ -738,54 +731,12 @@ newsImageInput.addEventListener("change", (e) => {
 
 removeImageBtn.addEventListener("click", clearImageUpload);
 /* =========================================
-   NEWS PDF UPLOAD
+   NEWS PDF UPLOAD — removed (see js/news-editor.js rebuild)
 ========================================= */
 
 function clearPdfUpload() {
-    currentPdfFile = null;
-    currentPdfUrl = null;
-
-    newsPdfInput.value = "";
-
-    pdfFileName.textContent = "";
-
-    if (pdfHint) {
-        pdfHint.style.display = "";
-    }
-
-    removePdfBtn.classList.remove("show");
+    // no-op: PDF upload was removed from the News admin editor
 }
-
-
-newsPdfInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-        alert("Please select a valid PDF file.");
-
-        clearPdfUpload();
-
-        return;
-    }
-
-    currentPdfFile = file;
-
-    pdfFileName.textContent = `📄 ${file.name}`;
-
-    if (pdfHint) {
-        pdfHint.style.display = "none";
-    }
-
-    removePdfBtn.classList.add("show");
-});
-
-
-removePdfBtn.addEventListener(
-    "click",
-    clearPdfUpload
-);
 
 
 /* =========================================
@@ -1114,7 +1065,7 @@ async function startEditNews(id) {
 }
 
 
-cancelEditBtn.addEventListener("click", resetNewsForm);
+/* cancelEditBtn click handling for News moved to js/news-editor.js */
 
 
 async function startEditPhoto(id) {
@@ -2461,100 +2412,9 @@ memberForm.addEventListener(
 /* =========================================
    NEWS FORM
 ========================================= */
-newsForm.addEventListener(
-    "submit",
-    async (e) => {
-        e.preventDefault();
 
-        const title =
-            document
-                .getElementById("newsTitle")
-                .value
-                .trim();
+/* newsForm submit handling moved to js/news-editor.js (Draft/Publish CMS) */
 
-        const content =
-            document
-                .getElementById("newsContent")
-                .value
-                .trim();
-
-        const formData = new FormData();
-
-        formData.append("title", title);
-        formData.append("content", content);
-
-
-        // Add image if selected
-        if (
-            newsImageInput.files &&
-            newsImageInput.files[0]
-        ) {
-            formData.append(
-                "image",
-                newsImageInput.files[0]
-            );
-        }
-
-
-        // Add PDF if selected
-        if (currentPdfFile) {
-            formData.append(
-                "pdf",
-                currentPdfFile
-            );
-        }
-
-
-        const editId =
-            editingNewsId.value;
-
-        try {
-
-            if (editId) {
-
-                await updateNewsApi(
-                    editId,
-                    formData
-                );
-
-                newsSuccessToast.textContent =
-                    "News updated successfully!";
-
-            } else {
-
-                await createNews(
-                    formData
-                );
-
-                newsSuccessToast.textContent =
-                    "News published successfully!";
-            }
-
-
-            await renderNewsAdmin();
-
-            resetNewsForm();
-
-            newsSuccessToast.classList.add(
-                "show"
-            );
-
-            setTimeout(() => {
-                newsSuccessToast.classList.remove(
-                    "show"
-                );
-            }, 2500);
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Could not publish news. Please make sure the Django server is running."
-            );
-        }
-    }
-);
 
 
 newsCard.addEventListener(

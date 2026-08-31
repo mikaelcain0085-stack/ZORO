@@ -1348,20 +1348,22 @@
 
   <!-- UPLOAD NEWS (upload subview) -->
   <div class="admin-subview active" id="newsUploadView">
-  <div class="card np-editor-shell">
+  <div class="np-editor-shell">
 
-    <h2 id="newsFormTitle">
-      Upload News
-    </h2>
-
-    <button
-      type="button"
-      class="glass-btn admin-goto-list"
-      data-target="newsListView"
-    >
-      <svg class="btn-icon"><use href="#icon-list"></use></svg>
-      Go to Uploaded News to edit, delete or view
-    </button>
+    <div class="np-editor-topbar">
+      <div>
+        <h2 id="newsFormTitle">Upload News</h2>
+        <p class="np-editor-subtitle">Write and format the story exactly as it will appear in The ZORO Herald.</p>
+      </div>
+      <button
+        type="button"
+        class="glass-btn admin-goto-list"
+        data-target="newsListView"
+      >
+        <svg class="btn-icon"><use href="#icon-list"></use></svg>
+        Go to Uploaded News
+      </button>
+    </div>
 
     <div class="success-toast" id="newsSuccessToast">
       News published successfully!
@@ -1372,27 +1374,33 @@
       <input type="hidden" id="editingNewsId" value="">
       <input type="hidden" id="newsStatusField" value="published">
 
-      <div class="np-editor-grid">
+      <!-- METADATA BAR -->
+      <div class="np-meta-bar">
 
-        <!-- LEFT: metadata form -->
-        <div class="np-editor-pane np-editor-form">
+        <div class="np-meta-main">
+          <input
+            type="text"
+            id="newsTitle"
+            class="np-headline-input"
+            placeholder="Write a headline..."
+            required
+          >
+          <input
+            type="text"
+            id="newsSubheadline"
+            class="np-subheadline-input"
+            placeholder="Add a sub-headline (optional)..."
+          >
+        </div>
 
-          <div class="form-group">
-            <label for="newsTitle">Headline</label>
-            <input type="text" id="newsTitle" placeholder="Enter headline" required>
-          </div>
+        <div class="np-meta-fields">
 
-          <div class="form-group">
-            <label for="newsSubheadline">Sub-headline</label>
-            <input type="text" id="newsSubheadline" placeholder="Optional supporting line">
-          </div>
-
-          <div class="form-group">
+          <div class="np-meta-field">
             <label for="newsAuthor">Author</label>
             <input type="text" id="newsAuthor" placeholder="e.g. Editorial Desk">
           </div>
 
-          <div class="form-group">
+          <div class="np-meta-field">
             <label for="newsCategory">Category</label>
             <select id="newsCategory">
               <option value="General" selected>General</option>
@@ -1407,36 +1415,26 @@
               type="text"
               id="newsCategoryCustom"
               placeholder="Enter custom category"
-              style="display:none; margin-top:0.6rem;"
+              style="display:none; margin-top:0.5rem;"
             >
           </div>
 
-          <div class="form-group">
+          <div class="np-meta-field">
             <label for="newsPublishDate">Date</label>
             <input type="date" id="newsPublishDate">
           </div>
 
-          <div class="form-group">
-            <label>Main Image (optional)</label>
-            <div class="image-upload-area">
+          <div class="np-meta-field np-meta-field-wide">
+            <label>Main Image</label>
+            <div class="image-upload-area np-image-upload-compact">
               <input type="file" id="newsImage" accept="image/*">
-              <div class="hint" id="imageHint">📷 Click or drag to upload image</div>
+              <div class="hint" id="imageHint">📷 Click or drag to upload</div>
               <img id="imagePreview" class="image-preview" alt="Preview">
             </div>
             <button type="button" class="btn-remove-image" id="removeImageBtn">Remove image</button>
           </div>
 
-          <div class="form-group">
-            <label for="newsPdf">PDF Attachment (optional)</label>
-            <div class="pdf-upload-area">
-              <input type="file" id="newsPdf" accept=".pdf,application/pdf">
-              <div class="hint" id="pdfHint">📄 Click to upload PDF document</div>
-              <div class="pdf-file-name" id="pdfFileName"></div>
-            </div>
-            <button type="button" class="btn-remove-image" id="removePdfBtn">Remove PDF</button>
-          </div>
-
-          <div class="form-group">
+          <div class="np-meta-field np-meta-field-wide">
             <label>Layout</label>
             <div class="np-editor-toggle-row">
               <label class="np-checkbox">
@@ -1445,8 +1443,6 @@
               <label class="np-checkbox">
                 <input type="checkbox" id="newsIsFeatured"> Featured
               </label>
-            </div>
-            <div class="np-editor-toggle-row">
               <label class="np-radio">
                 <input type="radio" name="newsColumns" value="2" checked> 2 Columns
               </label>
@@ -1458,9 +1454,15 @@
 
         </div>
 
-        <!-- CENTER: WYSIWYG editor -->
-        <div class="np-editor-pane np-editor-center">
-          <label>Body Content</label>
+      </div>
+
+      <!-- EDITOR + LIVE PREVIEW -->
+      <div class="np-workspace">
+
+        <div class="np-workspace-pane">
+          <div class="np-workspace-label">
+            <span>✍️ Story Editor</span>
+          </div>
           <div id="npQuillEditor"></div>
 
           <div class="np-outline">
@@ -1469,10 +1471,14 @@
           </div>
         </div>
 
-        <!-- RIGHT: live preview -->
-        <div class="np-editor-pane np-editor-preview">
-          <label>Live Preview</label>
-          <div class="np-preview-card" id="npPreviewCard"></div>
+        <div class="np-workspace-pane">
+          <div class="np-workspace-label">
+            <span>📰 Live Preview</span>
+            <span class="np-workspace-label-sub">Exactly as readers will see it</span>
+          </div>
+          <div class="np-preview-shell">
+            <div class="np-preview-scroll" id="npPreviewCard"></div>
+          </div>
         </div>
 
       </div>
@@ -1497,8 +1503,6 @@
     </form>
 
   </div>
-  </div>
-
   </div>
 
 

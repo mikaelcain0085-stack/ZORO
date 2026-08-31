@@ -246,13 +246,10 @@
       .join("");
   }
 
-  function renderReader() {
-    const article = filtered[readerIndex];
-    if (!article) return;
-
-    // Multi-column layout only makes sense once there's enough text
-    // to actually fill more than one column — otherwise short
-    // articles awkwardly split a sentence or two across columns.
+  // Shared article-HTML builder — used by both the public reader
+  // view AND the admin's live preview, so the two are guaranteed to
+  // match exactly (same function, not two hand-maintained copies).
+  function buildArticleHTML(article) {
     const plainLength = stripHtmlToText(article.content || "").length;
     const columnsClass =
       plainLength < 400
@@ -261,7 +258,7 @@
         ? "np-cols-3"
         : "np-cols-2";
 
-    articleContentEl.innerHTML = `
+    return `
       <span class="np-article-category">${npEscapeHtml(
         article.category || "General"
       )}</span>
@@ -272,22 +269,38 @@
           : ""
       }
       <div class="np-article-meta">
-        ${article.author ? `<span>By ${npEscapeHtml(article.author)}</span>` : ""}
-        <span>${npFormatDate(article.publish_date || article.created_at)}</span>
+        ${
+          article.author
+            ? `<span>By ${npEscapeHtml(article.author)}</span>`
+            : ""
+        }
+        <span>${npFormatDate(
+          article.publish_date || article.created_at
+        )}</span>
       </div>
       ${
         article.image
-          ? `<img class="np-article-hero" src="${article.image}" alt="${npEscapeHtml(
-              article.title
-            )}">`
+          ? `<img class="np-article-hero" src="${
+              article.image
+            }" alt="${npEscapeHtml(article.title)}">`
           : ""
       }
       <div class="np-article-body ${columnsClass}">${renderArticleBody(
-        article
-      )}</div>
-      ${
-        article.pdf
-          ? `<p style="margin-top:1.5rem;">
+      article
+    )}</div>
+    `;
+  }
+
+  window.buildNewspaperArticleHTML = buildArticleHTML;
+
+  function renderReader() {
+    const article = filtered[readerIndex];
+    if (!article) return;
+
+    articleContentEl.innerHTML =
+      buildArticleHTML(article) +
+      (article.pdf
+        ? `<p style="margin-top:1.5rem;">
               <a href="${
                 article.pdf.startsWith("http")
                   ? article.pdf
@@ -296,9 +309,7 @@
                 📄 View attached PDF document ↗
               </a>
             </p>`
-          : ""
-      }
-    `;
+        : "");
 
     prevBtn.disabled = readerIndex <= 0;
     nextBtn.disabled = readerIndex >= filtered.length - 1;
