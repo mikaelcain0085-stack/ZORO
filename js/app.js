@@ -107,8 +107,8 @@ let currentLeaderData = null;
    DJANGO API
 ========================================= */
 
-const API_BASE = "https://zoro-backend-249l.onrender.com/api";
-const BACKEND_URL = "https://zoro-s8oa.onrender.com";
+const API_BASE = "https://zoro-backend-seven.vercel.app/api";
+const BACKEND_URL = "https://zoro-backend-seven.vercel.app";
 /* =========================================
    NEWS DJANGO API
 ========================================= */
