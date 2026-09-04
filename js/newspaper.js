@@ -388,6 +388,15 @@
     applyEinkPreference();
     closeReader();
 
+    frontpageEl.hidden = false;
+    frontpageEl.className = "np-frontpage np-empty";
+    frontpageEl.innerHTML = `
+      <div class="np-loading">
+        <div class="np-loading-spinner"></div>
+        <p>Bringing today's edition to press...</p>
+      </div>
+    `;
+
     await loadArticles();
     applyFilters();
     renderCategoryTabs();

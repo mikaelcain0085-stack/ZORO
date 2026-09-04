@@ -4915,3 +4915,40 @@ html {
     flex-direction: column;
   }
 }
+
+/* ================= PREMIUM LOADING INDICATOR (dark pages) ================= */
+
+.premium-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  gap: 1.1rem;
+}
+
+.premium-spinner {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 3px solid rgba(99, 102, 241, 0.15);
+  border-top-color: var(--accent);
+  animation: premiumSpin 0.8s linear infinite;
+}
+
+.premium-loading p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@keyframes premiumSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-spinner {
+    animation: none;
+  }
+}

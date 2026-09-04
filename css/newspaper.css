@@ -669,3 +669,43 @@
   text-align: center;
   padding: 2rem 1rem;
 }
+
+/* ================= LOADING INDICATOR (newspaper theme) ================= */
+
+.np-loading {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  gap: 1.1rem;
+  font-family: "Inter", sans-serif;
+}
+
+.np-loading-spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid rgba(26, 26, 26, 0.15);
+  border-top-color: var(--np-ink, #1a1a1a);
+  animation: npLoadingSpin 0.8s linear infinite;
+}
+
+.np-loading p {
+  color: var(--np-ink-muted, #5a5648);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+@keyframes npLoadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .np-loading-spinner {
+    animation: none;
+  }
+}

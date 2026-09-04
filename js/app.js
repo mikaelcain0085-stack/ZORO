@@ -639,6 +639,18 @@ async function deleteLeader(id) {
    HELPER FUNCTIONS
 ========================================= */
 
+function showPremiumLoading(container, label) {
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="premium-loading" style="grid-column: 1 / -1;">
+            <div class="premium-spinner"></div>
+            <p>${escapeHtml(label || "Loading...")}</p>
+        </div>
+    `;
+}
+
+
 function escapeHtml(text) {
     const div = document.createElement("div");
 
@@ -1612,6 +1624,8 @@ async function renderPhotosAdmin() {
 ========================================= */
 
 async function renderGalleryFeed() {
+    showPremiumLoading(galleryFeed, "Loading the gallery...");
+
     const photos = await getPhotos();
 
     const count = photos.length;
@@ -1850,6 +1864,8 @@ async function renderLeadersAdmin() {
 ========================================= */
 
 async function renderLeadersFeed() {
+    showPremiumLoading(leadersFeed, "Loading leaders...");
+
     const allLeaders = await getLeaders();
 
     const leaders = allLeaders.filter(
@@ -1991,6 +2007,8 @@ async function renderLeadersFeed() {
 ========================================= */
 
 async function renderMembersFeed() {
+    showPremiumLoading(membersFeed, "Loading members...");
+
     try {
         const members = await getMembers();
 
