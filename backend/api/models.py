@@ -7,6 +7,7 @@ class Member(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField(blank=True)
     address = models.TextField(blank=True)
+    zoro_id = models.CharField(max_length=50, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

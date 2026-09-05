@@ -199,6 +199,7 @@ async function addMember(member) {
             phone: member.phone,
             email: member.email || "",
             address: member.address || "",
+            zoro_id: member.zoro_id || "",
         }),
     });
 
@@ -1231,6 +1232,16 @@ async function renderMembers() {
                                 : ""
                         }
 
+                        ${
+                            member.zoro_id
+                                ? `
+                                <p>
+                                    🪪 ${escapeHtml(member.zoro_id)}
+                                </p>
+                            `
+                                : ""
+                        }
+
                     </div>
 
                     <button
@@ -2006,101 +2017,130 @@ async function renderLeadersFeed() {
    RENDER MEMBERS PUBLIC
 ========================================= */
 
+let cachedMembers = [];
+let membersSearchTerm = "";
+
+function zoroIdFor(member) {
+    if (member.zoro_id && member.zoro_id.trim()) {
+        return member.zoro_id.trim();
+    }
+    return "ZORO-" + String(member.id).padStart(4, "0");
+}
+
+function memberMatchesSearch(member, term) {
+    if (!term) return true;
+
+    const haystack = [
+        member.full_name || "",
+        member.phone || "",
+        member.address || "",
+        zoroIdFor(member),
+        String(member.id),
+    ]
+        .join(" ")
+        .toLowerCase();
+
+    return haystack.includes(term.toLowerCase());
+}
+
+function renderMembersTableRows() {
+    const filtered = cachedMembers.filter((m) =>
+        memberMatchesSearch(m, membersSearchTerm)
+    );
+
+    membersFeedCount.textContent =
+        filtered.length === 0
+            ? "0 members"
+            : filtered.length === 1
+            ? "1 member"
+            : `${filtered.length} members`;
+
+    if (cachedMembers.length === 0) {
+        membersFeed.innerHTML = `
+            <tr>
+                <td colspan="4" class="mem-empty-cell">
+                    <div class="mem-empty">
+                        <span>📋</span>
+                        No members listed yet. Check back soon.
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    if (filtered.length === 0) {
+        membersFeed.innerHTML = `
+            <tr>
+                <td colspan="4" class="mem-empty-cell">
+                    <div class="mem-empty">
+                        <span>🔍</span>
+                        No members found.
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    membersFeed.innerHTML = filtered
+        .map(
+            (member) => `
+            <tr>
+                <td data-label="Full Name">${escapeHtml(member.full_name || "")}</td>
+                <td data-label="Phone Number">${escapeHtml(member.phone || "")}</td>
+                <td data-label="Address">${escapeHtml(member.address || "")}</td>
+                <td data-label="ZORO ID">${zoroIdFor(member)}</td>
+            </tr>
+        `
+        )
+        .join("");
+}
+
 async function renderMembersFeed() {
-    showPremiumLoading(membersFeed, "Loading members...");
+    membersFeed.innerHTML = `
+        <tr>
+            <td colspan="4" class="mem-empty-cell">
+                <div class="mem-empty">
+                    <div class="premium-spinner" style="border-color:rgba(99,102,241,0.15); border-top-color:#6366f1;"></div>
+                    Loading members...
+                </div>
+            </td>
+        </tr>
+    `;
 
     try {
-        const members = await getMembers();
+        cachedMembers = await getMembers();
+        membersSearchTerm = "";
+        membersFeedSearchInput.value = "";
 
-        const count = members.length;
-
-        membersFeedCount.textContent =
-            count === 0
-                ? "0 members"
-                : count === 1
-                ? "1 member"
-                : `${count} members`;
-
-        if (count === 0) {
-            membersFeed.innerHTML = `
-                <div
-                    class="news-empty-premium"
-                    style="grid-column: 1 / -1;"
-                >
-
-                    <div class="icon">📋</div>
-
-                    <h3>
-                        No members listed yet
-                    </h3>
-
-                    <p>
-                        Check back soon for members of ZORO.
-                    </p>
-
-                </div>
-            `;
-
-            return;
-        }
-
-        membersFeed.innerHTML = members
-            .map(
-                (member) => `
-                <div class="member-card-public">
-
-                    <h3>
-                        ${escapeHtml(member.full_name)}
-                    </h3>
-
-                    <p>
-                        📞 ${escapeHtml(member.phone)}
-                    </p>
-
-                    ${
-                        member.email
-                            ? `
-                            <p>
-                                ✉️ ${escapeHtml(member.email)}
-                            </p>
-                        `
-                            : ""
-                    }
-
-                    ${
-                        member.address
-                            ? `
-                            <p>
-                                📍 ${escapeHtml(member.address)}
-                            </p>
-                        `
-                            : ""
-                    }
-
-                </div>
-            `
-            )
-            .join("");
+        renderMembersTableRows();
     } catch (error) {
         console.error(error);
 
         membersFeed.innerHTML = `
-            <div class="news-empty-premium">
-
-                <div class="icon">⚠️</div>
-
-                <h3>
-                    Could not load members
-                </h3>
-
-                <p>
-                    Please make sure the Django server is running.
-                </p>
-
-            </div>
+            <tr>
+                <td colspan="4" class="mem-empty-cell">
+                    <div class="mem-empty">
+                        <span>⚠️</span>
+                        Could not load members. Please make sure the server is running.
+                    </div>
+                </td>
+            </tr>
         `;
     }
 }
+
+
+const membersFeedSearchInput = document.getElementById(
+    "membersFeedSearchInput"
+);
+
+membersFeedSearchInput.addEventListener("input", () => {
+    membersSearchTerm = membersFeedSearchInput.value.trim();
+    renderMembersTableRows();
+});
+
 
 
 /* =========================================
@@ -2400,6 +2440,12 @@ memberForm.addEventListener(
                 address:
                     document
                         .getElementById("memberAddress")
+                        .value
+                        .trim(),
+
+                zoro_id:
+                    document
+                        .getElementById("memberZoroId")
                         .value
                         .trim(),
             });
@@ -2889,10 +2935,8 @@ document.addEventListener("DOMContentLoaded", function () {
         leadersFeed
     );
 
-    wireAdminSearch(
-        document.getElementById("membersFeedSearchInput"),
-        membersFeed
-    );
+    // Members search is handled inside renderMembersFeed() itself now
+    // (rebuilds table rows on input, rather than hiding DOM elements).
 });
 // =========================
 // CONTACT ENQUIRY FORM

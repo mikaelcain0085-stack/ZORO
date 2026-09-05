@@ -894,15 +894,15 @@
   ========================== -->
   <div id="members">
 
-    <header class="news-header">
+    <header class="news-header mem-header">
 
       <div class="news-header-left">
 
-        <button class="btn-back" id="backFromMembers">
+        <button class="btn-back mem-back" id="backFromMembers">
           ← Back
         </button>
 
-        <h1>
+        <h1 class="mem-header-title">
           ZORO <span>Members</span>
         </h1>
 
@@ -911,34 +911,42 @@
     </header>
 
 
-    <main class="news-main">
+    <main class="mem-main">
 
-      <div class="news-hero-title">
+      <div class="mem-hero">
 
-        <h2>
-          Members
-        </h2>
+        <h2>Member Directory</h2>
 
-        <p>
-          Registered members of Zo Re-Unification Organisation
-        </p>
+        <p>Registered members of Zo Re-Unification Organisation</p>
 
-        <div class="news-count-badge" id="membersFeedCount">
+        <div class="mem-count-badge" id="membersFeedCount">
           0 members
-        </div>
-
-        <div class="search-box public-search-box">
-          <svg class="btn-icon"><use href="#icon-search"></use></svg>
-          <input
-            type="text"
-            id="membersFeedSearchInput"
-            placeholder="Search members by name..."
-          >
         </div>
 
       </div>
 
-      <div class="gallery-feed" id="membersFeed"></div>
+      <div class="mem-search-bar">
+        <svg class="btn-icon"><use href="#icon-search"></use></svg>
+        <input
+          type="text"
+          id="membersFeedSearchInput"
+          placeholder="Search Members — name, phone, address, or ZORO ID..."
+        >
+      </div>
+
+      <div class="mem-table-wrap">
+        <table class="mem-table">
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Phone Number</th>
+              <th>Address</th>
+              <th>ZORO ID</th>
+            </tr>
+          </thead>
+          <tbody id="membersFeed"></tbody>
+        </table>
+      </div>
 
     </main>
 
