@@ -764,15 +764,15 @@
   ========================== -->
   <div id="gallery">
 
-    <header class="news-header">
+    <header class="news-header pg-header">
 
       <div class="news-header-left">
 
-        <button class="btn-back" id="backFromGallery">
+        <button class="btn-back pg-back" id="backFromGallery">
           ← Back
         </button>
 
-        <h1>
+        <h1 class="pg-header-title">
           ZORO <span>Photo Gallery</span>
         </h1>
 
@@ -781,34 +781,30 @@
     </header>
 
 
-    <main class="news-main">
+    <main class="pg-main">
 
-      <div class="news-hero-title">
+      <div class="pg-hero">
 
-        <h2>
-          Photo Gallery
-        </h2>
+        <h2>Photo Gallery</h2>
 
-        <p>
-          Moments and photos from Zo Re-Unification Organisation
-        </p>
+        <p>Moments and photos from Zo Re-Unification Organisation</p>
 
-        <div class="news-count-badge" id="galleryFeedCount">
+        <div class="pg-count-badge" id="galleryFeedCount">
           0 photos
-        </div>
-
-        <div class="search-box public-search-box">
-          <svg class="btn-icon"><use href="#icon-search"></use></svg>
-          <input
-            type="text"
-            id="galleryFeedSearchInput"
-            placeholder="Search photos by description..."
-          >
         </div>
 
       </div>
 
-      <div class="gallery-feed" id="galleryFeed"></div>
+      <div class="pg-search-bar">
+        <svg class="btn-icon"><use href="#icon-search"></use></svg>
+        <input
+          type="text"
+          id="galleryFeedSearchInput"
+          placeholder="Search photos by description..."
+        >
+      </div>
+
+      <div class="pg-masonry" id="galleryFeed"></div>
 
     </main>
 

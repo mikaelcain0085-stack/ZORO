@@ -1634,83 +1634,104 @@ async function renderPhotosAdmin() {
    RENDER GALLERY
 ========================================= */
 
-async function renderGalleryFeed() {
-    showPremiumLoading(galleryFeed, "Loading the gallery...");
+let cachedPhotos = [];
+let gallerySearchTerm = "";
 
-    const photos = await getPhotos();
+function photoMatchesSearch(photo, term) {
+    if (!term) return true;
+    return (photo.description || "").toLowerCase().includes(term.toLowerCase());
+}
 
-    const count = photos.length;
+function renderGalleryItems() {
+    const filtered = cachedPhotos.filter((p) =>
+        photoMatchesSearch(p, gallerySearchTerm)
+    );
 
     galleryFeedCount.textContent =
-        count === 0
+        filtered.length === 0
             ? "0 photos"
-            : count === 1
+            : filtered.length === 1
             ? "1 photo"
-            : `${count} photos`;
+            : `${filtered.length} photos`;
 
-    if (count === 0) {
+    if (cachedPhotos.length === 0) {
         galleryFeed.innerHTML = `
-            <div
-                class="news-empty-premium"
-                style="grid-column: 1 / -1;"
-            >
-
-                <div class="icon">📷</div>
-
+            <div class="pg-empty">
+                <span>📷</span>
                 <h3>No photos yet</h3>
-
-                <p>
-                    Check back soon for photos from ZORO.
-                </p>
-
+                <p>Check back soon for photos from ZORO.</p>
             </div>
         `;
-
         return;
     }
 
-    galleryFeed.innerHTML = photos
+    if (filtered.length === 0) {
+        galleryFeed.innerHTML = `
+            <div class="pg-empty">
+                <span>🔍</span>
+                <h3>No photos found</h3>
+                <p>Try a different search term.</p>
+            </div>
+        `;
+        return;
+    }
+
+    galleryFeed.innerHTML = filtered
         .map(
             (photo) => `
-            <div class="gallery-item">
-
-                <img
-                    src="${photo.image}"
-                    alt=""
-                    data-full="${photo.image}"
-                >
-
-                <div class="gallery-item-body">
-
-                    <p>
-                        ${escapeHtml(
-                            photo.description || ""
-                        )}
-                    </p>
-
-                    <span class="gallery-item-date">
-                        ${formatDate(
-                            photo.created_at
-                        )}
-                    </span>
-
+            <figure class="pg-item">
+                <div class="pg-item-frame">
+                    <img
+                        src="${photo.image}"
+                        alt=""
+                        data-full="${photo.image}"
+                        loading="lazy"
+                    >
+                    <div class="pg-item-overlay">
+                        <span class="pg-item-view">View</span>
+                    </div>
                 </div>
-
-            </div>
+                <figcaption>
+                    <p>${escapeHtml(photo.description || "")}</p>
+                    <span class="pg-item-date">${formatDate(photo.created_at)}</span>
+                </figcaption>
+            </figure>
         `
         )
         .join("");
 
-    galleryFeed
-        .querySelectorAll("img")
-        .forEach((image) => {
-            image.addEventListener("click", () => {
-                openLightbox(
-                    image.dataset.full || image.src
-                );
-            });
+    galleryFeed.querySelectorAll("img").forEach((image) => {
+        image.addEventListener("click", () => {
+            openLightbox(image.dataset.full || image.src);
         });
+    });
 }
+
+async function renderGalleryFeed() {
+    galleryFeed.innerHTML = `
+        <div class="pg-empty">
+            <div class="premium-spinner" style="border-color:rgba(249,115,22,0.15); border-top-color:#f97316;"></div>
+            Loading the gallery...
+        </div>
+    `;
+
+    cachedPhotos = await getPhotos();
+    gallerySearchTerm = "";
+    galleryFeedSearchInput.value = "";
+
+    renderGalleryItems();
+}
+
+
+const galleryFeedSearchInput = document.getElementById(
+    "galleryFeedSearchInput"
+);
+
+galleryFeedSearchInput.addEventListener("input", () => {
+    gallerySearchTerm = galleryFeedSearchInput.value.trim();
+    renderGalleryItems();
+});
+
 
 
 /* =========================================
@@ -2924,11 +2945,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Public-facing feed pages
     // News search is now handled inside js/newspaper.js (npSearchInput)
-
-    wireAdminSearch(
-        document.getElementById("galleryFeedSearchInput"),
-        galleryFeed
-    );
+    // Gallery search is now handled inside renderGalleryFeed() itself
+    // (rebuilds masonry items on input, like the Members table).
 
     wireAdminSearch(
         document.getElementById("leadersFeedSearchInput"),
