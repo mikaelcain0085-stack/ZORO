@@ -1896,7 +1896,12 @@ async function renderLeadersAdmin() {
 ========================================= */
 
 async function renderLeadersFeed() {
-    showPremiumLoading(leadersFeed, "Loading leaders...");
+    leadersFeed.innerHTML = `
+        <div class="ldr-empty">
+            <div class="premium-spinner" style="border-color:rgba(67,56,202,0.15); border-top-color:#4338ca;"></div>
+            Loading leaders...
+        </div>
+    `;
 
     const allLeaders = await getLeaders();
 
@@ -1917,13 +1922,8 @@ async function renderLeadersFeed() {
 
     if (count === 0) {
         leadersFeed.innerHTML = `
-            <div
-                class="news-empty-premium"
-                style="grid-column: 1 / -1;"
-            >
-
-                <div class="icon">👥</div>
-
+            <div class="ldr-empty">
+                <span>👥</span>
                 <h3>
                     No ${
                         leadersFeedStatusFilter === "previous"
@@ -1931,11 +1931,9 @@ async function renderLeadersFeed() {
                             : "current"
                     } leaders listed yet
                 </h3>
-
                 <p>
                     Check back soon for Hruaitute from ZORO.
                 </p>
-
             </div>
         `;
 
@@ -1943,83 +1941,64 @@ async function renderLeadersFeed() {
     }
 
     leadersFeed.innerHTML = leaders
-        .map(
-            (leader) => `
-            <div class="leader-card-public">
+        .map((leader, index) => {
+            const isFeatured = index === 0;
+            const accentClass = `ldr-accent-${index % 6}`;
 
-                ${
-                    leader.image
-                        ? `
-                        <img
-                            src="${leader.image}"
-                            alt="${escapeHtml(
-                                leader.name
-                            )}"
-                            data-full="${leader.image}"
-                        >
-                    `
-                        : `
-                        <div
-                            style="
-                                height: 220px;
-                                background: var(--bg);
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                opacity: 0.4;
-                            "
-                        >
-                            👥
-                        </div>
-                    `
-                }
-
-                <div class="leader-body">
-
-                    ${
-                        leader.status === "previous"
-                            ? `
-                            <span class="leader-year-badge">
-                                ${escapeHtml(
-                                    leader.year || "Previous"
-                                )}
-                            </span>
-                        `
-                            : ""
-                    }
-
-                    <h3>
-                        ${escapeHtml(leader.name)}
-                    </h3>
-
-                    <p
-                        style="
-                            color: var(--accent-hover);
-                            font-weight: 500;
-                        "
+            const photo = leader.image
+                ? `
+                    <img
+                        src="${leader.image}"
+                        alt="${escapeHtml(leader.name)}"
+                        data-full="${leader.image}"
                     >
-                        ${escapeHtml(
-                            leader.designation || ""
-                        )}
-                    </p>
+                `
+                : `<div class="ldr-photo-fallback">👤</div>`;
 
-                    <p>
-                        📞 ${escapeHtml(
-                            leader.phone || ""
-                        )}
-                    </p>
+            const featuredLabel = isFeatured
+                ? `
+                    <span class="ldr-featured-label">
+                        ${escapeHtml(leader.designation || "Leader")}
+                    </span>
+                `
+                : "";
 
-                    <p>
-                        📍 ${escapeHtml(
-                            leader.address || ""
-                        )}
-                    </p>
-
+            return `
+                <div class="ldr-card ${accentClass}${
+                isFeatured ? " featured" : ""
+            }">
+                    ${featuredLabel}
+                    ${photo}
+                    <div class="ldr-card-overlay">
+                        ${
+                            leader.status === "previous"
+                                ? `<span class="ldr-year-tag">${escapeHtml(
+                                      leader.year || "Previous"
+                                  )}</span><br>`
+                                : ""
+                        }
+                        <h3>${escapeHtml(leader.name)}</h3>
+                        <p>${escapeHtml(leader.designation || "")}</p>
+                        <div class="ldr-contact">
+                            ${
+                                leader.phone
+                                    ? `<span>📞 ${escapeHtml(
+                                          leader.phone
+                                      )}</span>`
+                                    : ""
+                            }
+                            ${
+                                leader.address
+                                    ? `<span>📍 ${escapeHtml(
+                                          leader.address
+                                      )}</span>`
+                                    : ""
+                            }
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-        `
-        )
+            `;
+        })
         .join("");
 
     leadersFeed
@@ -2032,6 +2011,7 @@ async function renderLeadersFeed() {
             });
         });
 }
+
 
 
 /* =========================================
