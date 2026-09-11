@@ -1941,10 +1941,7 @@ async function renderLeadersFeed() {
     }
 
     leadersFeed.innerHTML = leaders
-        .map((leader, index) => {
-            const isFeatured = index === 0;
-            const accentClass = `ldr-accent-${index % 6}`;
-
+        .map((leader) => {
             const photo = leader.image
                 ? `
                     <img
@@ -1955,46 +1952,45 @@ async function renderLeadersFeed() {
                 `
                 : `<div class="ldr-photo-fallback">👤</div>`;
 
-            const featuredLabel = isFeatured
-                ? `
-                    <span class="ldr-featured-label">
-                        ${escapeHtml(leader.designation || "Leader")}
-                    </span>
-                `
-                : "";
+            const hasContact = Boolean(leader.phone || leader.address);
 
             return `
-                <div class="ldr-card ${accentClass}${
-                isFeatured ? " featured" : ""
-            }">
-                    ${featuredLabel}
-                    ${photo}
-                    <div class="ldr-card-overlay">
+                <div class="ldr-card">
+                    <div class="ldr-photo">
+                        ${photo}
+                    </div>
+                    <div class="ldr-card-body">
                         ${
                             leader.status === "previous"
                                 ? `<span class="ldr-year-tag">${escapeHtml(
                                       leader.year || "Previous"
-                                  )}</span><br>`
+                                  )}</span>`
                                 : ""
                         }
                         <h3>${escapeHtml(leader.name)}</h3>
                         <p>${escapeHtml(leader.designation || "")}</p>
-                        <div class="ldr-contact">
-                            ${
-                                leader.phone
-                                    ? `<span>📞 ${escapeHtml(
-                                          leader.phone
-                                      )}</span>`
-                                    : ""
-                            }
-                            ${
-                                leader.address
-                                    ? `<span>📍 ${escapeHtml(
-                                          leader.address
-                                      )}</span>`
-                                    : ""
-                            }
-                        </div>
+                        ${
+                            hasContact
+                                ? `
+                                    <div class="ldr-contact">
+                                        ${
+                                            leader.phone
+                                                ? `<span>📞 ${escapeHtml(
+                                                      leader.phone
+                                                  )}</span>`
+                                                : ""
+                                        }
+                                        ${
+                                            leader.address
+                                                ? `<span>📍 ${escapeHtml(
+                                                      leader.address
+                                                  )}</span>`
+                                                : ""
+                                        }
+                                    </div>
+                                `
+                                : ""
+                        }
                     </div>
                 </div>
             `;
