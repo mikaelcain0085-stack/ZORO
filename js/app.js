@@ -17,8 +17,13 @@ const loginError = document.getElementById("loginError");
 const logoutBtn = document.getElementById("logoutBtn");
 const contactNavBtn = document.getElementById("contactNavBtn");
 const getInTouchBtn = document.getElementById("getInTouchBtn");
+
 const contactPage = document.getElementById("contactPage");
 const backFromContact = document.getElementById("backFromContact");
+
+const legacyEnquiryBtn = document.getElementById("legacyEnquiryBtn");
+
+
 const contactForm = document.getElementById("contactForm");
 const contactName = document.getElementById("contactName");
 const contactEmail = document.getElementById("contactEmail");
@@ -2757,6 +2762,30 @@ getInTouchBtn.addEventListener("click", (event) => {
     contactPage.classList.add("active");
 
 });
+// =========================
+// LEGACY → ENQUIRY
+// =========================
+
+if (legacyEnquiryBtn) {
+
+    legacyEnquiryBtn.addEventListener("click", () => {
+
+        landing.classList.add("hidden");
+
+        newsPage.classList.remove("active");
+        galleryPage.classList.remove("active");
+        leadersPage.classList.remove("active");
+        membersPage.classList.remove("active");
+        admin.classList.remove("active");
+
+        contactPage.classList.add("active");
+
+        window.scrollTo(0, 0);
+
+    });
+
+}
+
 // =========================
 // CONTACT PAGE
 // =========================

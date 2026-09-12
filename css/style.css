@@ -5672,3 +5672,529 @@ html {
     padding: 0.85rem 0.9rem 0.9rem;
   }
 }
+/* =====================================================
+   ZORO ACCOLADES / LEGACY PAGE
+   ===================================================== */
+#accoladesPage {
+  display: none;
+}
+
+#accoladesPage.active {
+  display: block;
+}
+.zoro-accolades-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #080711;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.zoro-accolades-hero {
+  position: relative;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.zoro-accolades-banner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -3;
+}
+
+.zoro-accolades-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 6, 16, 0.96) 0%,
+      rgba(10, 8, 22, 0.86) 42%,
+      rgba(20, 13, 40, 0.48) 72%,
+      rgba(8, 7, 17, 0.35) 100%
+    );
+}
+
+.zoro-accolades-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      0deg,
+      rgba(6, 5, 14, 0.92) 0%,
+      transparent 35%,
+      rgba(20, 10, 40, 0.22) 100%
+    );
+}
+
+.zoro-accolades-content {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 110px 7%;
+}
+
+.zoro-accolades-eyebrow {
+  margin: 0 0 22px;
+  color: #b98cff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.zoro-accolades-content h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  line-height: 0.94;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+}
+
+.zoro-accolades-content h2 span {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #c9b1ff 48%,
+    #8f68d9 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zoro-accolades-lead {
+  max-width: 720px;
+  margin: 34px 0 0;
+  color: #f1edf8;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.65;
+}
+
+.zoro-accolades-text {
+  max-width: 680px;
+  margin: 18px 0 0;
+  color: rgba(231, 225, 242, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+.zoro-accolades-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 760px;
+  margin-top: 42px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.zoro-accolades-highlights > div {
+  padding: 22px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zoro-accolades-highlights > div:last-child {
+  border-right: none;
+}
+
+.zoro-accolades-highlights strong {
+  display: block;
+  color: #ffffff;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+}
+
+.zoro-accolades-highlights span {
+  display: block;
+  margin-top: 7px;
+  color: rgba(221, 214, 235, 0.65);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.zoro-enquiry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 42px;
+  padding: 16px 23px 16px 27px;
+  border: 1px solid rgba(185, 140, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(124, 76, 205, 0.16);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.zoro-enquiry-btn:hover {
+  transform: translateY(-3px);
+  border-color: #c6a5ff;
+  background: rgba(145, 91, 230, 0.32);
+  box-shadow: 0 18px 50px rgba(116, 66, 190, 0.25);
+}
+
+.zoro-enquiry-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #b98cff;
+  color: #110a1d;
+  font-size: 1.15rem;
+  transition: transform 0.35s ease;
+}
+
+.zoro-enquiry-btn:hover .zoro-enquiry-arrow {
+  transform: translateX(4px);
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+  .zoro-accolades-hero {
+    min-height: 100vh;
+    align-items: flex-end;
+  }
+
+  .zoro-accolades-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(7, 6, 16, 0.48) 0%,
+        rgba(8, 7, 17, 0.68) 38%,
+        rgba(7, 6, 16, 0.97) 82%,
+        rgba(7, 6, 16, 1) 100%
+      );
+  }
+
+  .zoro-accolades-content {
+    padding: 80px 24px 55px;
+  }
+
+  .zoro-accolades-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+  }
+
+  .zoro-accolades-content h2 {
+    font-size: clamp(2.8rem, 14vw, 4.5rem);
+  }
+
+  .zoro-accolades-lead {
+    margin-top: 25px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .zoro-accolades-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .zoro-accolades-highlights {
+    grid-template-columns: 1fr;
+    margin-top: 30px;
+  }
+
+  .zoro-accolades-highlights > div {
+    padding: 15px 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .zoro-accolades-highlights > div:last-child {
+    border-bottom: none;
+  }
+
+  .zoro-enquiry-btn {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+}
+/* =====================================================
+   ZORO LEGACY / ACCOLADES SECTION
+   ===================================================== */
+
+.zoro-legacy-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: #080711;
+  color: #ffffff;
+  isolation: isolate;
+}
+
+.zoro-legacy-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.zoro-legacy-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.zoro-legacy-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 6, 16, 0.96) 0%,
+      rgba(10, 8, 22, 0.86) 42%,
+      rgba(20, 13, 40, 0.48) 72%,
+      rgba(8, 7, 17, 0.35) 100%
+    );
+}
+
+.zoro-legacy-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      0deg,
+      rgba(6, 5, 14, 0.92) 0%,
+      transparent 35%,
+      rgba(20, 10, 40, 0.22) 100%
+    );
+}
+
+.zoro-legacy-container {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 110px 7%;
+}
+
+.zoro-legacy-content {
+  max-width: 850px;
+}
+
+.zoro-legacy-eyebrow {
+  display: block;
+  margin-bottom: 22px;
+  color: #b98cff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.zoro-legacy-content h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  line-height: 0.94;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+}
+
+.zoro-legacy-content h2 span {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #c9b1ff 48%,
+    #8f68d9 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zoro-legacy-lead {
+  max-width: 720px;
+  margin: 34px 0 0;
+  color: #f1edf8;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.65;
+}
+
+.zoro-legacy-text {
+  max-width: 680px;
+  margin: 18px 0 0;
+  color: rgba(231, 225, 242, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+.zoro-legacy-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 760px;
+  margin-top: 42px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.zoro-legacy-highlights > div {
+  padding: 22px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zoro-legacy-highlights > div:last-child {
+  border-right: none;
+}
+
+.zoro-legacy-highlights strong {
+  display: block;
+  color: #ffffff;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+}
+
+.zoro-legacy-highlights span {
+  display: block;
+  margin-top: 7px;
+  color: rgba(221, 214, 235, 0.65);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.zoro-legacy-enquiry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 42px;
+  padding: 16px 23px 16px 27px;
+  border: 1px solid rgba(185, 140, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(124, 76, 205, 0.16);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.zoro-legacy-enquiry-btn:hover {
+  transform: translateY(-3px);
+  border-color: #c6a5ff;
+  background: rgba(145, 91, 230, 0.32);
+  box-shadow: 0 18px 50px rgba(116, 66, 190, 0.25);
+}
+
+.zoro-legacy-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #b98cff;
+  color: #110a1d;
+  font-size: 1.15rem;
+  transition: transform 0.35s ease;
+}
+
+.zoro-legacy-enquiry-btn:hover .zoro-legacy-arrow {
+  transform: translateX(4px);
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+  .zoro-legacy-section {
+    min-height: 100vh;
+    align-items: flex-end;
+  }
+
+  .zoro-legacy-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(7, 6, 16, 0.48) 0%,
+        rgba(8, 7, 17, 0.68) 38%,
+        rgba(7, 6, 16, 0.97) 82%,
+        rgba(7, 6, 16, 1) 100%
+      );
+  }
+
+  .zoro-legacy-container {
+    padding: 80px 24px 55px;
+  }
+
+  .zoro-legacy-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+  }
+
+  .zoro-legacy-content h2 {
+    font-size: clamp(2.8rem, 14vw, 4.5rem);
+  }
+
+  .zoro-legacy-lead {
+    margin-top: 25px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .zoro-legacy-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .zoro-legacy-highlights {
+    grid-template-columns: 1fr;
+    margin-top: 30px;
+  }
+
+  .zoro-legacy-highlights > div {
+    padding: 15px 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .zoro-legacy-highlights > div:last-child {
+    border-bottom: none;
+  }
+
+  .zoro-legacy-enquiry-btn {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+}
