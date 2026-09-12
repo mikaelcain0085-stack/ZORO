@@ -689,6 +689,13 @@ nav {
   stroke-linejoin: round;
 }
 
+.mizoram-core-outline {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.42);
+  stroke-width: 0.85;
+  stroke-linejoin: round;
+}
+
 .world-map-tech-lines {
   fill: none;
   stroke: rgba(99, 102, 241, 0.22);
