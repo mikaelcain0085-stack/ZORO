@@ -20,7 +20,7 @@ const THEME = {
 
   shininess: 0.9,
 
-  polygonColor: "rgba(200, 210, 255, 0.95)",
+  polygonColor: "rgba(145, 155, 225, 0.62)",
   atmosphereColor: "#6366f1",
 
   ambientLight: "#8890ff",
