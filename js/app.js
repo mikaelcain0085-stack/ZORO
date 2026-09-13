@@ -1,5 +1,25 @@
-const ADMIN_USER = "zoro";
-const ADMIN_PASS = "1234";
+const SUPABASE_URL = "https://syqrgakfgmziqusdywgj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_I2jOyt09h9yAuMq26Tf3jg_RDpvdXZD";
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            flowType: "implicit"
+        }
+    }
+);
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    console.log("ZORO AUTH EVENT:", event);
+    console.log("ZORO AUTH SESSION:", session);
+    console.log("ZORO AUTH EMAIL:", session?.user?.email);
+});
 
 const NEWS_KEY = "zoro_news";
 const PHOTO_KEY = "zoro_photos";
@@ -2158,12 +2178,14 @@ membersFeedSearchInput.addEventListener("input", () => {
    PAGE NAVIGATION
 ========================================= */
 
-function openModal() {
+function openModal(preserveError = false) {
     modal.classList.add("active");
 
     document.body.style.overflow = "hidden";
 
-    loginError.classList.remove("show");
+    if (!preserveError) {
+        loginError.classList.remove("show");
+    }
 
     loginForm.reset();
 }
@@ -2221,12 +2243,7 @@ async function showAdmin() {
         console.log("Enquiries loaded");
     } catch (error) {
         console.error("Enquiries error:", error);
-    }
-
-    sessionStorage.setItem(
-        "zoro_logged_in",
-        "true"
-    );
+    }    
 }
 /* =========================================
    ZORO INTRODUCTION PAGE
@@ -2243,9 +2260,7 @@ function showLanding() {
 
     landing.classList.remove("hidden");
 
-    sessionStorage.removeItem(
-        "zoro_logged_in"
-    );
+    
 }
 
 
@@ -2339,21 +2354,55 @@ function showMembers() {
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
+        landing.classList.add("hidden");
 
-        if (
-            sessionStorage.getItem(
-                "zoro_logged_in"
-            ) === "true"
-        ) {
+        const {
+            data: { session }
+        } = await supabaseClient.auth.getSession();
 
-            await showAdmin();
-
-        } else {
-
+        if (!session) {
             showLanding();
-
+            return;
         }
 
+        const { data: adminUser, error } =
+            await supabaseClient
+                .from("admin_users")
+                .select("email")
+                .eq("email", session.user.email)
+                .maybeSingle();
+                console.log("ADMIN USER CHECK:", adminUser);
+console.log("ADMIN USER ERROR:", error);
+console.log("LOGGED IN EMAIL:", session.user.email);
+
+        if (error) {
+            console.error(
+                "Admin authorization error:",
+                error
+            );
+
+            showLanding();
+            return;
+        }
+
+        if (!adminUser) {
+    await supabaseClient.auth.signOut();
+
+    showLanding();
+
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+
+    loginError.textContent =
+        "Your Google account is not authorized as a ZORO administrator.";
+
+    loginError.classList.add("show");
+
+    loginForm.reset();
+
+    return;
+}
+        await showAdmin();
     }
 );
 
@@ -2395,31 +2444,25 @@ document.addEventListener("keydown", (e) => {
 
 loginForm.addEventListener(
     "submit",
-    (e) => {
+    async (e) => {
         e.preventDefault();
 
-        const username =
-            document
-                .getElementById("username")
-                .value
-                .trim();
+        loginError.classList.remove("show");
 
-        const password =
-            document
-                .getElementById("password")
-                .value;
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo: window.location.origin
+            }
+        });
 
-        if (
-            username === ADMIN_USER &&
-            password === ADMIN_PASS
-        ) {
-            showAdmin();
-        } else {
+        if (error) {
+            console.error("Google login error:", error);
+            loginError.textContent = "Unable to sign in with Google.";
             loginError.classList.add("show");
         }
     }
 );
-
 
 logoutBtn.addEventListener(
     "click",
