@@ -6,6 +6,9 @@ const PHOTO_KEY = "zoro_photos";
 const LEADER_KEY = "zoro_leaders";
 
 const landing = document.getElementById("landing");
+
+
+
 const admin = document.getElementById("admin");
 const newsPage = document.getElementById("news");
 const modal = document.getElementById("loginModal");
@@ -20,6 +23,12 @@ const getInTouchBtn = document.getElementById("getInTouchBtn");
 
 const contactPage = document.getElementById("contactPage");
 const backFromContact = document.getElementById("backFromContact");
+
+const openDonationBtn = document.getElementById("openDonationBtn");
+const donationModal = document.getElementById("donationModal");
+const closeDonationBtn = document.getElementById("closeDonationBtn");
+const closeDonationBtnBottom = document.getElementById("closeDonationBtnBottom");
+const donationModalBackdrop = document.querySelector(".donation-modal-backdrop");
 
 const legacyEnquiryBtn = document.getElementById("legacyEnquiryBtn");
 
@@ -2219,6 +2228,10 @@ async function showAdmin() {
         "true"
     );
 }
+/* =========================================
+   ZORO INTRODUCTION PAGE
+========================================= */
+
 
 function showLanding() {
     admin.classList.remove("active");
@@ -2785,6 +2798,125 @@ if (legacyEnquiryBtn) {
     });
 
 }
+// =========================
+// DONATION MODAL
+// =========================
+
+if (openDonationBtn && donationModal) {
+
+    openDonationBtn.addEventListener("click", () => {
+
+        donationModal.classList.add("show");
+        donationModal.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+    });
+
+}
+
+
+function closeDonationModal() {
+
+    if (!donationModal) return;
+
+    donationModal.classList.remove("show");
+    donationModal.setAttribute("aria-hidden", "true");
+
+    document.body.style.overflow = "";
+
+}
+
+
+if (closeDonationBtn) {
+
+    closeDonationBtn.addEventListener("click", closeDonationModal);
+
+}
+
+
+if (closeDonationBtnBottom) {
+
+    closeDonationBtnBottom.addEventListener("click", closeDonationModal);
+
+}
+
+
+if (donationModalBackdrop) {
+
+    donationModalBackdrop.addEventListener("click", closeDonationModal);
+
+}
+
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape") {
+
+        closeDonationModal();
+
+    }
+
+});
+// =========================
+// MAP MODAL
+// =========================
+
+const openMapBtn = document.getElementById("openMapBtn");
+const mapModal = document.getElementById("mapModal");
+const closeMapBtn = document.getElementById("closeMapBtn");
+const mapModalBackdrop = document.querySelector(".map-modal-backdrop");
+
+
+if (openMapBtn && mapModal) {
+
+    openMapBtn.addEventListener("click", () => {
+
+        mapModal.classList.add("show");
+        mapModal.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+    });
+
+}
+
+
+function closeMapModal() {
+
+    if (!mapModal) return;
+
+    mapModal.classList.remove("show");
+    mapModal.setAttribute("aria-hidden", "true");
+
+    document.body.style.overflow = "";
+
+}
+
+
+if (closeMapBtn) {
+
+    closeMapBtn.addEventListener("click", closeMapModal);
+
+}
+
+
+if (mapModalBackdrop) {
+
+    mapModalBackdrop.addEventListener("click", closeMapModal);
+
+}
+
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape") {
+
+        closeMapModal();
+
+    }
+
+});
 
 // =========================
 // CONTACT PAGE
@@ -3167,3 +3299,58 @@ if (chatForm) {
         chatInput.focus();
     });
 }
+// =========================
+// MAP MODAL
+// =========================
+
+
+
+if (openMapBtn && mapModal) {
+
+    openMapBtn.addEventListener("click", () => {
+
+        mapModal.classList.add("show");
+        mapModal.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+    });
+
+}
+
+
+function closeMapModal() {
+
+    if (!mapModal) return;
+
+    mapModal.classList.remove("show");
+    mapModal.setAttribute("aria-hidden", "true");
+
+    document.body.style.overflow = "";
+
+}
+
+
+if (closeMapBtn) {
+
+    closeMapBtn.addEventListener("click", closeMapModal);
+
+}
+
+
+if (mapModalBackdrop) {
+
+    mapModalBackdrop.addEventListener("click", closeMapModal);
+
+}
+
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape") {
+
+        closeMapModal();
+
+    }
+
+});
