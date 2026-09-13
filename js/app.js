@@ -2466,9 +2466,17 @@ loginForm.addEventListener(
 
 logoutBtn.addEventListener(
     "click",
-    showLanding
-);
+    async () => {
+        const { error } = await supabaseClient.auth.signOut();
 
+        if (error) {
+            console.error("Logout error:", error);
+            return;
+        }
+
+        showLanding();
+    }
+);
 
 /* =========================================
    ADD MEMBER
