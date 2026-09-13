@@ -12,15 +12,16 @@ const CAMERA_Z = 300;
 // ---- Theme (matches css/style.css --accent / --bg) ----
 const THEME = {
 
-  globeColor: "#16264a",
+  globeColor: "#0a0a1a",
 
-  emissive: "#25265c",
+  emissive: "#1a1442",
 
-  emissiveIntensity: 0.25,
+  emissiveIntensity: 0.15,
 
   shininess: 0.9,
 
-  polygonColor: "rgba(145, 155, 225, 0.62)",
+  polygonColor: "rgba(129, 140, 248, 0.55)",
+
   atmosphereColor: "#6366f1",
 
   ambientLight: "#8890ff",
