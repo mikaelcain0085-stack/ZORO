@@ -11,16 +11,26 @@ const CAMERA_Z = 300;
 
 // ---- Theme (matches css/style.css --accent / --bg) ----
 const THEME = {
-  globeColor: "#0a0a1a",
-  emissive: "#1a1442",
-  emissiveIntensity: 0.15,
+
+  globeColor: "#16264a",
+
+  emissive: "#25265c",
+
+  emissiveIntensity: 0.25,
+
   shininess: 0.9,
-  polygonColor: "rgba(129, 140, 248, 0.55)",
+
+  polygonColor: "rgba(200, 210, 255, 0.95)",
   atmosphereColor: "#6366f1",
+
   ambientLight: "#8890ff",
+
   directionalLeftLight: "#6366f1",
+
   directionalTopLight: "#ffffff",
+
   pointLight: "#818cf8",
+
 };
 
 const ARC_COLORS = ["#6366f1", "#818cf8", "#a78bfa"];
