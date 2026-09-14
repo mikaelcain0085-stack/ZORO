@@ -435,10 +435,14 @@
   line-height: 1.75;
   text-align: justify;
   hyphens: auto;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
 }
-
 .np-article-body p {
   margin-bottom: 1rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .np-article-body h2,

@@ -1729,6 +1729,8 @@ footer {
   line-height: 1.75;
 
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .news-empty-premium {
@@ -8787,4 +8789,8 @@ word-break: break-word;
     padding-bottom: 2.3rem;
   }
 
+}
+/* Wider workspace for News Editor */
+.admin-main:has(#newsUploadView.active) {
+  max-width: 1400px;
 }
