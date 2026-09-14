@@ -3582,3 +3582,80 @@ document.addEventListener("keydown", (event) => {
     }
 
 });
+// =========================
+// LEGAL PAGE NAVIGATION
+// =========================
+
+const termsLink = document.getElementById("termsLink");
+const termsPage = document.getElementById("termsPage");
+const backFromTerms = document.getElementById("backFromTerms");
+
+termsLink?.addEventListener("click", function () {
+
+    landing.classList.add("hidden");
+
+    newsPage.classList.remove("active");
+    galleryPage.classList.remove("active");
+    leadersPage.classList.remove("active");
+    membersPage.classList.remove("active");
+    admin.classList.remove("active");
+
+    termsPage.classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+});
+
+
+backFromTerms?.addEventListener("click", function () {
+
+    termsPage.classList.remove("active");
+
+    showLanding();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+});
+// =========================
+// PRIVACY PAGE NAVIGATION
+// =========================
+
+const privacyLink = document.getElementById("privacyLink");
+const privacyPage = document.getElementById("privacyPage");
+const backFromPrivacy = document.getElementById("backFromPrivacy");
+
+privacyLink?.addEventListener("click", function () {
+
+    landing.classList.add("hidden");
+
+    newsPage.classList.remove("active");
+    galleryPage.classList.remove("active");
+    leadersPage.classList.remove("active");
+    membersPage.classList.remove("active");
+    admin.classList.remove("active");
+    termsPage.classList.remove("active");
+
+    privacyPage.classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+});
+
+
+backFromPrivacy?.addEventListener("click", function () {
+
+    privacyPage.classList.remove("active");
+
+    showLanding();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+});
