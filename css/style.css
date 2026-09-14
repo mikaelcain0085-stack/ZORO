@@ -4701,7 +4701,7 @@ html {
 
 .np-workspace {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
   margin-bottom: 1.5rem;
@@ -4711,8 +4711,10 @@ html {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 16px;
+  min-width: 0;
   padding: 1.25rem;
 }
+
 
 .np-workspace-label {
   display: flex;
@@ -4744,17 +4746,24 @@ html {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 0 0 8px 8px;
-  min-height: 340px;
+  height: 340px;
+min-height: 0;
+overflow: hidden;
   font-size: 1.05rem;
   color: var(--text);
 }
 
 .np-workspace-pane .ql-editor {
-  min-height: 340px;
+  height: 100%;
+  min-height: 0;
+  overflow-wrap: anywhere;
+word-break: break-word;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
   font-family: "Playfair Display", Georgia, serif;
   line-height: 1.7;
 }
-
 .np-workspace-pane .ql-editor.ql-blank::before {
   color: var(--text-muted);
   font-style: normal;
@@ -4795,7 +4804,7 @@ html {
 }
 
 #npQuillEditor {
-  min-height: 360px;
+  min-height: 0;
   min-width: 100%;
 }
 
@@ -4927,7 +4936,7 @@ html {
 
 @media (max-width: 700px) {
   .np-workspace {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 

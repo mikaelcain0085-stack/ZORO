@@ -2578,7 +2578,7 @@ console.log("LOGGED IN EMAIL:", session.user.email);
 
     return;
 }
-        await showAdmin();
+        showAdmin();
 authGate.remove();
     }
 );
