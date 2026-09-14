@@ -1288,8 +1288,9 @@ async function startEditNews(id) {
 
 async function startEditPhoto(id) {
     const photos = await getPhotos();
-    const item = photos.find((photo) => photo.id === id);
-
+    const item = photos.find(
+    (photo) => String(photo.id) === String(id)
+);
     if (!item) return;
 
     editingPhotoId.value = id;
@@ -1329,8 +1330,8 @@ cancelPhotoEditBtn.addEventListener(
 async function startEditLeader(id) {
     const leaders = await getLeaders();
     const item = leaders.find(
-        (leader) => leader.id === id
-    );
+    (leader) => String(leader.id) === String(id)
+);
 
     if (!item) return;
 
@@ -2522,19 +2523,21 @@ function showMembers() {
    AUTO LOGIN
 ========================================= */
 
+const authGate = document.getElementById("authGate");
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
         landing.classList.add("hidden");
-
         const {
             data: { session }
         } = await supabaseClient.auth.getSession();
 
         if (!session) {
-            showLanding();
-            return;
-        }
+    showLanding();
+    authGate.remove();
+    return;
+}
 
         const { data: adminUser, error } =
             await supabaseClient
@@ -2547,19 +2550,21 @@ console.log("ADMIN USER ERROR:", error);
 console.log("LOGGED IN EMAIL:", session.user.email);
 
         if (error) {
-            console.error(
-                "Admin authorization error:",
-                error
-            );
+    console.error(
+        "Admin authorization error:",
+        error
+    );
 
-            showLanding();
-            return;
-        }
+    showLanding();
+    authGate.remove();
+    return;
+}
 
         if (!adminUser) {
     await supabaseClient.auth.signOut();
 
     showLanding();
+    authGate.remove();
 
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -2574,6 +2579,7 @@ console.log("LOGGED IN EMAIL:", session.user.email);
     return;
 }
         await showAdmin();
+authGate.remove();
     }
 );
 
