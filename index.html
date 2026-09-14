@@ -1604,13 +1604,7 @@
 ========================= -->
 <div id="admin">
 
- <div class="bg-lines" aria-hidden="true">
-   <span class="bg-line"></span>
-   <span class="bg-line"></span>
-   <span class="bg-line"></span>
-   <span class="bg-line"></span>
-   <span class="bg-line"></span>
- </div>
+ 
 
  <header class="admin-header">
 
@@ -2507,21 +2501,110 @@
     </h2>
 
     <div
-      class="enquiries-list"
-      id="enquiriesList"
-    >
+  class="enquiries-list"
+  id="enquiriesList"
+>
 
-      <div class="empty-state">
-        <span>📩</span>
-        No enquiries yet.
-      </div>
+  <div class="enquiries-loading">
+    <span class="enquiry-spinner"></span>
+    <span>Loading enquiries...</span>
+  </div>
 
-    </div>
+</div>
 
   </div>
 
 </div>
 
+</div>
+<!-- =========================
+     ENQUIRY VIEW MODAL
+========================= -->
+
+<div
+  class="enquiry-modal-overlay"
+  id="enquiryModal"
+  aria-hidden="true"
+>
+  <div
+    class="enquiry-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="enquiryModalTitle"
+  >
+
+    <button
+      type="button"
+      class="enquiry-modal-close"
+      id="closeEnquiryModal"
+      aria-label="Close enquiry"
+    >
+      &times;
+    </button>
+
+    <div class="enquiry-modal-label">
+      ENQUIRY
+    </div>
+
+    <h2 id="enquiryModalTitle">
+      Enquiry
+    </h2>
+
+    <div class="enquiry-modal-details">
+
+      <div>
+        <span>Name</span>
+        <strong id="enquiryModalName"></strong>
+      </div>
+
+      <div>
+        <span>Email</span>
+        <strong id="enquiryModalEmail"></strong>
+      </div>
+
+      <div>
+        <span>Phone</span>
+        <strong id="enquiryModalPhone"></strong>
+      </div>
+
+      <div>
+        <span>Date</span>
+        <strong id="enquiryModalDate"></strong>
+      </div>
+
+    </div>
+
+    <div class="enquiry-modal-message">
+
+      <div class="enquiry-modal-message-label">
+        Message
+      </div>
+
+      <p id="enquiryModalMessage"></p>
+
+    </div>
+
+    <div class="enquiry-modal-actions">
+
+      <button
+        type="button"
+        class="btn-delete-enquiry-modal"
+        id="deleteEnquiryModal"
+      >
+        🗑 Delete Enquiry
+      </button>
+
+      <button
+        type="button"
+        class="btn-close-enquiry"
+        id="closeEnquiryModalBottom"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
 </div>
 
   </main>

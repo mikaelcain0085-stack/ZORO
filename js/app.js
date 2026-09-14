@@ -257,6 +257,12 @@ async function deleteMember(id) {
     return true;
 }
 async function getEnquiries() {
+        enquiriesList.innerHTML = `
+        <div class="enquiries-loading">
+            <span class="enquiry-spinner"></span>
+            <span>Loading enquiries...</span>
+        </div>
+    `;
 
     try {
 
@@ -304,62 +310,72 @@ function renderEnquiriesAdmin(enquiries) {
         `;
 
         return;
-
     }
+
     async function deleteEnquiry(id) {
 
-    const confirmed = confirm(
-        "Are you sure you want to delete this enquiry?"
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            `${API_BASE}/enquiries/${id}/`,
-            {
-                method: "DELETE"
-            }
+        const confirmed = confirm(
+            "Are you sure you want to delete this enquiry?"
         );
 
-        if (!response.ok) {
-            throw new Error(
-                "Could not delete enquiry"
-            );
+        if (!confirmed) {
+            return;
         }
 
-        await getEnquiries();
+        try {
 
-        alert(
-            "Enquiry deleted successfully."
-        );
+            const response = await fetch(
+                `${API_BASE}/enquiries/${id}/`,
+                {
+                    method: "DELETE"
+                }
+            );
 
-    } catch (error) {
+            if (!response.ok) {
+                throw new Error(
+                    "Could not delete enquiry"
+                );
+            }
 
-        console.error(
-            "Delete enquiry error:",
-            error
-        );
+            closeEnquiryModal();
 
-        alert(
-            "Unable to delete enquiry. Please try again."
-        );
+            await getEnquiries();
 
+            alert(
+                "Enquiry deleted successfully."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Delete enquiry error:",
+                error
+            );
+
+            alert(
+                "Unable to delete enquiry. Please try again."
+            );
+        }
     }
-
-}
 
     enquiriesList.innerHTML = enquiries.map((enquiry) => {
 
         const date = new Date(
             enquiry.created_at
         ).toLocaleString();
+        
+
+        const preview = enquiry.message
+            ? enquiry.message
+                .replace(/\s+/g, " ")
+                .trim()
+            : "No message provided.";
 
         return `
-            <div class="enquiry-item">
+            <div
+                class="enquiry-item"
+                data-enquiry-id="${enquiry.id}"
+            >
 
                 <div class="enquiry-header">
 
@@ -373,63 +389,218 @@ function renderEnquiriesAdmin(enquiries) {
 
                 </div>
 
-                <p>
-                    <strong>Name:</strong>
-                    ${enquiry.name}
-                </p>
-
-                <p>
-                    <strong>Email:</strong>
+                <p class="enquiry-meta">
+                    <strong>${enquiry.name}</strong>
+                    <span>·</span>
                     ${enquiry.email}
+                    <span>·</span>
+                    ${enquiry.phone || "No phone"}
                 </p>
 
-                <p>
-                    <strong>Phone:</strong>
-                    ${enquiry.phone || "Not provided"}
+                <p class="enquiry-preview">
+                    ${preview}
                 </p>
-
-                <div class="enquiry-message">
-
-                    <strong>Message:</strong>
-
-                    <p>
-                        ${enquiry.message}
-                    </p>
-                
-
-                </div>
-                <button
-                    class="btn-delete-enquiry"
-                    data-enquiry-id="${enquiry.id}"
-                >
-                  🗑 Delete Enquiry
-                </button>
 
             </div>
         `;
 
     }).join("");
-    const deleteButtons = document.querySelectorAll(
-        ".btn-delete-enquiry"
-    );
 
-    deleteButtons.forEach((button) => {
+    const enquiryItems =
+        enquiriesList.querySelectorAll(
+            ".enquiry-item"
+        );
 
-        button.addEventListener("click", () => {
+    enquiryItems.forEach((item) => {
 
-            const enquiryId = button.getAttribute(
-                "data-enquiry-id"
-           );
+        item.addEventListener("click", () => {
 
-           deleteEnquiry(enquiryId);
+            const enquiryId =
+                item.getAttribute(
+                    "data-enquiry-id"
+                );
 
+            const enquiry =
+                enquiries.find(
+                    (entry) =>
+                        String(entry.id) ===
+                        String(enquiryId)
+                );
+
+            if (!enquiry) {
+                return;
+            }
+
+            openEnquiryModal(
+                enquiry,
+                deleteEnquiry
+            );
         });
 
     });
+}
+/* =========================================
+   ENQUIRY VIEW MODAL
+========================================= */
 
+const enquiryModal =
+    document.getElementById("enquiryModal");
+
+const closeEnquiryModalButton =
+    document.getElementById(
+        "closeEnquiryModal"
+    );
+
+const closeEnquiryModalBottom =
+    document.getElementById(
+        "closeEnquiryModalBottom"
+    );
+
+const deleteEnquiryModal =
+    document.getElementById(
+        "deleteEnquiryModal"
+    );
+
+const enquiryModalTitle =
+    document.getElementById(
+        "enquiryModalTitle"
+    );
+
+const enquiryModalName =
+    document.getElementById(
+        "enquiryModalName"
+    );
+
+const enquiryModalEmail =
+    document.getElementById(
+        "enquiryModalEmail"
+    );
+
+const enquiryModalPhone =
+    document.getElementById(
+        "enquiryModalPhone"
+    );
+
+const enquiryModalDate =
+    document.getElementById(
+        "enquiryModalDate"
+    );
+
+const enquiryModalMessage =
+    document.getElementById(
+        "enquiryModalMessage"
+    );
+
+let activeEnquiryDelete = null;
+
+
+function openEnquiryModal(
+    enquiry,
+    deleteFunction
+) {
+
+    enquiryModalTitle.textContent =
+        enquiry.subject || "Enquiry";
+
+    enquiryModalName.textContent =
+        enquiry.name || "Not provided";
+
+    enquiryModalEmail.textContent =
+        enquiry.email || "Not provided";
+
+    enquiryModalPhone.textContent =
+        enquiry.phone || "Not provided";
+
+    enquiryModalDate.textContent =
+        new Date(
+            enquiry.created_at
+        ).toLocaleString();
+
+    enquiryModalMessage.textContent =
+        enquiry.message || "No message provided.";
+
+    activeEnquiryDelete = () => {
+        deleteFunction(enquiry.id);
+    };
+
+    enquiryModal.classList.add("active");
+
+    enquiryModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow = "hidden";
 }
 
 
+function closeEnquiryModal() {
+
+    enquiryModal.classList.remove("active");
+
+    enquiryModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow = "";
+
+    activeEnquiryDelete = null;
+}
+
+
+closeEnquiryModalButton.addEventListener(
+    "click",
+    closeEnquiryModal
+);
+
+
+closeEnquiryModalBottom.addEventListener(
+    "click",
+    closeEnquiryModal
+);
+
+
+enquiryModal.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            event.target ===
+            enquiryModal
+        ) {
+            closeEnquiryModal();
+        }
+
+    }
+);
+
+
+deleteEnquiryModal.addEventListener(
+    "click",
+    () => {
+
+        if (activeEnquiryDelete) {
+            activeEnquiryDelete();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Escape" &&
+            enquiryModal.classList.contains("active")
+        ) {
+            closeEnquiryModal();
+        }
+
+    }
+);
 /* =========================================
    NEWS LOCAL STORAGE
 ========================================= */
