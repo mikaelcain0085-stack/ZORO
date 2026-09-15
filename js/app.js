@@ -3380,6 +3380,15 @@ const navLinks = document.getElementById("navLinks");
 if (menuToggle && navLinks) {
     menuToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
+        menuToggle.classList.toggle("active");
+    });
+
+    // Close mobile menu after clicking a navigation link
+    navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("active");
+            menuToggle.classList.remove("active");
+        });
     });
 }
 

@@ -255,10 +255,11 @@
   </a>
 
   <!-- Mobile Menu Button -->
-  <button class="menu-toggle" id="menuToggle">
-    ☰
-  </button>
-
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
   <div class="nav-links" id="navLinks">
     <a href="#donate">Donate</a>
     <a href="#features">Features</a>
@@ -2160,6 +2161,7 @@
 
 
   <main class="admin-main">
+    <div class="admin-workspace-layout">
 
     <!-- =========================
          MEMBERS MANAGEMENT
@@ -3090,6 +3092,7 @@
 
   </div>
 </div>
+</div>
 
   </main>
 
@@ -3229,7 +3232,7 @@
 <!-- JAVASCRIPT -->
 <!-- JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/app.js?v=5"></script>
 <script type="module" src="js/globe.js"></script>
 <script src="js/donate-video.js" defer></script>
 <script src="js/mizo-decode.js" defer></script>

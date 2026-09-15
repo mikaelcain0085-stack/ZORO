@@ -54,9 +54,11 @@
   // (typed/pasted by mistake, or from any other source), strip it
   // rather than showing raw "<p>...</p>" characters to readers.
   function plainTextOnly(value) {
-    return (value || "").replace(/<\/?[a-z][^>]*>/gi, "").trim();
-  }
-
+  return (value || "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&lt;\/?[a-z][^&]*?&gt;/gi, "")
+    .trim();
+}
   function plainExcerpt(text, max) {
     const clean = (text || "").replace(/\s+/g, " ").trim();
     return clean.length > max ? clean.slice(0, max).trim() + "…" : clean;

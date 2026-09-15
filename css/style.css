@@ -3687,11 +3687,52 @@ html {
 
 .menu-toggle {
     display: none;
+    position: relative;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin-left: auto;
     background: transparent;
     border: none;
-    color: white;
-    font-size: 28px;
     cursor: pointer;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    position: absolute;
+    left: 9px;
+    width: 24px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.2s ease, top 0.3s ease;
+}
+
+.menu-toggle span:nth-child(1) {
+    top: 13px;
+}
+
+.menu-toggle span:nth-child(2) {
+    top: 20px;
+}
+
+.menu-toggle span:nth-child(3) {
+    top: 27px;
+}
+
+/* Hamburger → X */
+.menu-toggle.active span:nth-child(1) {
+    top: 20px;
+    transform: rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    top: 20px;
+    transform: rotate(-45deg);
 }
 
 @media (max-width: 768px) {
@@ -8509,7 +8550,7 @@ word-break: break-word;
   border: 0;
   background: transparent;
 
-  color: rgba(255, 255, 255, 0.62);
+  color: #b45f06;
 
   font: inherit;
   font-size: 0.75rem;
@@ -8793,4 +8834,340 @@ word-break: break-word;
 /* Wider workspace for News Editor */
 .admin-main:has(#newsUploadView.active) {
   max-width: 1400px;
+}
+/* =========================================================
+   ZORO ADMIN DASHBOARD — MEMBERS / PHOTOS / LEADERS
+   Desktop workspace redesign
+   News + Enquiries remain untouched
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+  /* -----------------------------------------
+     LEFT CONTROL PANE
+     ----------------------------------------- */
+
+  #admin .admin-nav-wrapper {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+
+    width: 260px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+
+    padding: 32px 18px 24px;
+
+    box-sizing: border-box;
+
+    background: rgba(12, 12, 20, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+    z-index: 40;
+  }
+
+  #admin .admin-nav-wrapper .admin-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    gap: 6px;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button {
+    width: 100%;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 0 18px;
+
+    border-radius: 12px;
+
+    text-align: left;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+      background 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button:hover {
+    transform: translateX(3px);
+  }
+
+  /* Logout area */
+  #admin .admin-nav-wrapper .admin-actions {
+    width: 100%;
+    margin: 0;
+  }
+
+  #admin .admin-nav-wrapper .admin-actions .btn-logout {
+    width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     MAIN DASHBOARD AREA
+     ----------------------------------------- */
+
+  #admin .admin-main {
+    width: calc(100% - 260px);
+    max-width: none;
+
+    margin-left: 260px;
+    margin-right: 0;
+
+    padding: 42px 42px 60px;
+
+    box-sizing: border-box;
+  }
+
+
+  /* -----------------------------------------
+     ONLY MEMBERS / PHOTOS / LEADERS
+     ----------------------------------------- */
+
+  #admin #membersSection,
+  #admin #photosSection,
+  #admin #leadersSection {
+    width: 100%;
+    max-width: none;
+  }
+
+  #admin #membersSection .admin-grid,
+  #admin #photosSection .admin-grid,
+  #admin #leadersSection .admin-grid {
+    width: 100%;
+    max-width: none;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    gap: 24px;
+
+    align-items: start;
+  }
+
+  #admin #membersSection .admin-grid > *,
+  #admin #photosSection .admin-grid > *,
+  #admin #leadersSection .admin-grid > * {
+    min-width: 0;
+    width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     PREMIUM CARDS
+     ----------------------------------------- */
+
+  #admin #membersSection .card,
+  #admin #photosSection .card,
+  #admin #leadersSection .card {
+    width: 100% !important;
+    max-width: none !important;
+
+    box-sizing: border-box;
+
+    border-radius: 18px;
+  }
+
+}
+/* =========================================================
+   ZORO ADMIN — CONTROL PANE POLISH
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+  /* Clean the old header area */
+  #admin .admin-header {
+    min-height: 70px;
+    height: 70px;
+    box-sizing: border-box;
+
+    background: rgba(8, 8, 14, 0.96);
+  }
+
+  #admin .admin-header h1 {
+    margin: 0;
+  }
+
+
+  /* Control pane */
+  #admin .admin-nav-wrapper {
+    top: 70px;
+
+    background:
+      linear-gradient(
+        180deg,
+        rgba(15, 15, 27, 0.98) 0%,
+        rgba(9, 9, 16, 0.98) 100%
+      );
+
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+
+    box-shadow: 12px 0 40px rgba(0, 0, 0, 0.18);
+  }
+
+
+  /* Small sidebar heading */
+  #admin .admin-nav::before {
+    content: "CONTROL PANEL";
+
+    display: block;
+
+    padding: 4px 16px 14px;
+
+    color: rgba(255, 255, 255, 0.35);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+
+  /* Navigation buttons */
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button {
+    position: relative;
+
+    min-height: 48px;
+
+    color: #a8a8b8 !important;
+
+    background: transparent !important;
+
+    border: 1px solid transparent !important;
+
+    border-radius: 12px;
+
+    transition:
+      color 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+
+  /* Hover */
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button:hover {
+    color: #ffffff !important;
+
+    background: rgba(255, 255, 255, 0.055) !important;
+
+    border-color: rgba(255, 255, 255, 0.06) !important;
+
+    transform: translateX(3px);
+  }
+
+
+  /* Active button */
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button.active {
+    color: #ffffff !important;
+
+    background: linear-gradient(
+      90deg,
+      rgba(99, 102, 241, 0.20),
+      rgba(99, 102, 241, 0.08)
+    ) !important;
+
+    border-color: rgba(99, 102, 241, 0.22) !important;
+
+    box-shadow:
+      inset 3px 0 0 #6366f1,
+      0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+
+  /* Active indicator */
+  #admin .admin-nav-wrapper .admin-nav .admin-nav-button.active::after {
+    content: "";
+
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #7c7cff;
+
+    transform: translateY(-50%);
+
+    box-shadow: 0 0 10px rgba(124, 124, 255, 0.7);
+  }
+
+
+  /* Logout */
+  #admin .admin-nav-wrapper .admin-actions .btn-logout {
+    min-height: 44px;
+
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  #admin .admin-nav-wrapper .admin-actions .btn-logout:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+}
+/* Fix admin sidebar/header overlap */
+@media (min-width: 769px) {
+
+  #admin .admin-header {
+    position: sticky;
+    top: 0;
+    height: 70px;
+    min-height: 70px;
+    padding: 0 2rem;
+    box-sizing: border-box;
+  }
+
+  #admin .admin-nav-wrapper {
+    top: 70px;
+    height: calc(100vh - 70px);
+    bottom: auto;
+  }
+
+  #admin .admin-main {
+    position: relative;
+    z-index: 1;
+  }
+
+}
+@media (min-width: 769px) {
+  #admin .admin-nav::before {
+    color: #b45f06;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+  }
 }
