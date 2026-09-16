@@ -3390,63 +3390,69 @@ if (menuToggle && navLinks) {
 
     // Scroll to an in-page section.
     //
-    // NOTE: window.scrollTo() does NOT work on this page. Because
-    // html/body carry `height: 100%` plus `overflow-x: hidden`, the <html>
-    // element is the scrolling box rather than the viewport, so window-level
-    // scrolling is a no-op. scrollIntoView() walks up and scrolls whichever
-    // ancestor actually scrolls, so it works in every case.
+    // NOTE ON WHY THIS IS WRITTEN THE WAY IT IS:
+    // `html, body { height: 100%; }` (style.css) pins <html> to exactly the
+    // viewport height, so <html> never actually overflows -- all of the
+    // page's real overflow (and therefore all real scrolling) happens on
+    // <body> instead. But window.scrollY / window.scrollTo() /
+    // document.scrollingElement all read and write <html>'s scroll position,
+    // not <body>'s, so anything going through them is silently touching a
+    // box that can't move.
     //
-    // Clearance for the fixed navbar comes from `scroll-margin-top` in
-    // style.css, which scrollIntoView() honours.
+    // scrollIntoView() *usually* finds <body> as the real scrolling
+    // ancestor and works -- but on iOS Safari specifically, firing a second
+    // scrollIntoView() call (the "settle" correction below used to do this
+    // with a different `behavior`) while a smooth one is still animating is
+    // a known trigger for WebKit's scroll animation to get stuck, silently
+    // dropping the *next* tap's scroll request entirely. That matches the
+    // reported symptom of Donate/Features sometimes doing nothing.
+    //
+    // Fix: scroll the confirmed real container (<body> here) directly via
+    // its own .scrollTo(), and only ever issue one corrective follow-up
+    // call, so there's never a second animation to collide with the first.
+    const scrollContainer =
+        document.scrollingElement &&
+        document.scrollingElement.scrollHeight >
+            document.scrollingElement.clientHeight
+            ? document.scrollingElement
+            : document.body;
+
     const scrollToSection = (target) => {
 
-        const jump = (behavior) => {
-            try {
-                target.scrollIntoView({
-                    behavior: behavior,
-                    block: "start",
-                });
-            } catch (err) {
-                target.scrollIntoView(true);
-            }
-        };
-
-        const wantedTop = () => {
+        const scrollMarginTop = () => {
             const value = parseFloat(
                 window.getComputedStyle(target).scrollMarginTop
             );
             return isNaN(value) ? 0 : value;
         };
 
-        jump("smooth");
+        // Target's offset measured against the container that will
+        // actually move, recomputed fresh each time this is called.
+        const computeTop = () => (
+            target.getBoundingClientRect().top +
+            scrollContainer.scrollTop -
+            scrollMarginTop()
+        );
 
-        // On a real phone, #features is still settling when the scroll starts:
-        // the WebGL globes and decode-text animations resize after load, and
-        // mobile browsers abort an in-flight smooth scroll when layout shifts
-        // under it. Re-check the position and correct it instantly if needed.
-        let attempts = 0;
-        let lastTop = null;
+        scrollContainer.scrollTo({
+            top: computeTop(),
+            behavior: "smooth",
+        });
 
-        const settle = () => {
-
-            attempts += 1;
-
+        // #features/#donate can still be resizing after load (the WebGL
+        // globe, decode-text animation, etc. settle a moment after paint).
+        // Re-check the position once and, if it's off, correct it with a
+        // single instant jump -- never a second smooth scroll, so there is
+        // nothing for it to collide with.
+        setTimeout(() => {
             const top = target.getBoundingClientRect().top;
-
-            // Close enough - we arrived.
-            if (Math.abs(top - wantedTop()) <= 4) return;
-
-            // Nothing moved since the last correction, so the page cannot
-            // scroll any further. Stop rather than loop.
-            if (lastTop !== null && Math.abs(top - lastTop) <= 1) return;
-
-            lastTop = top;
-            jump("auto");
-
-            if (attempts < 6) setTimeout(settle, 250);
-        };
-
-        setTimeout(settle, 350);
+            if (Math.abs(top - scrollMarginTop()) > 4) {
+                scrollContainer.scrollTo({
+                    top: computeTop(),
+                    behavior: "auto",
+                });
+            }
+        }, 450);
     };
 
     navLinks.querySelectorAll("a").forEach((link) => {
