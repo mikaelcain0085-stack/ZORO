@@ -9171,3 +9171,22 @@ word-break: break-word;
     letter-spacing: 0.16em;
   }
 }
+/* =========================================
+   IN-PAGE ANCHOR OFFSET (fixed navbar)
+========================================= */
+
+#features,
+#donate,
+#contact {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 768px) {
+
+  #features,
+  #donate,
+  #contact {
+    scroll-margin-top: 76px;
+  }
+
+}

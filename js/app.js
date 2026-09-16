@@ -3383,11 +3383,113 @@ if (menuToggle && navLinks) {
         menuToggle.classList.toggle("active");
     });
 
-    // Close mobile menu after clicking a navigation link
+    const closeMobileMenu = () => {
+        navLinks.classList.remove("active");
+        menuToggle.classList.remove("active");
+    };
+
+    // Scroll to an in-page section.
+    //
+    // NOTE: window.scrollTo() does NOT work on this page. Because
+    // html/body carry `height: 100%` plus `overflow-x: hidden`, the <html>
+    // element is the scrolling box rather than the viewport, so window-level
+    // scrolling is a no-op. scrollIntoView() walks up and scrolls whichever
+    // ancestor actually scrolls, so it works in every case.
+    //
+    // Clearance for the fixed navbar comes from `scroll-margin-top` in
+    // style.css, which scrollIntoView() honours.
+    const scrollToSection = (target) => {
+
+        const jump = (behavior) => {
+            try {
+                target.scrollIntoView({
+                    behavior: behavior,
+                    block: "start",
+                });
+            } catch (err) {
+                target.scrollIntoView(true);
+            }
+        };
+
+        const wantedTop = () => {
+            const value = parseFloat(
+                window.getComputedStyle(target).scrollMarginTop
+            );
+            return isNaN(value) ? 0 : value;
+        };
+
+        jump("smooth");
+
+        // On a real phone, #features is still settling when the scroll starts:
+        // the WebGL globes and decode-text animations resize after load, and
+        // mobile browsers abort an in-flight smooth scroll when layout shifts
+        // under it. Re-check the position and correct it instantly if needed.
+        let attempts = 0;
+        let lastTop = null;
+
+        const settle = () => {
+
+            attempts += 1;
+
+            const top = target.getBoundingClientRect().top;
+
+            // Close enough - we arrived.
+            if (Math.abs(top - wantedTop()) <= 4) return;
+
+            // Nothing moved since the last correction, so the page cannot
+            // scroll any further. Stop rather than loop.
+            if (lastTop !== null && Math.abs(top - lastTop) <= 1) return;
+
+            lastTop = top;
+            jump("auto");
+
+            if (attempts < 6) setTimeout(settle, 250);
+        };
+
+        setTimeout(settle, 350);
+    };
+
     navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-            navLinks.classList.remove("active");
-            menuToggle.classList.remove("active");
+
+        link.addEventListener("click", (event) => {
+
+            const href = link.getAttribute("href") || "";
+
+            // Not an in-page link (e.g. the logo) - leave it alone.
+            if (href.charAt(0) !== "#" || href.length < 2) {
+                closeMobileMenu();
+                return;
+            }
+
+            // Contact has its own handler that swaps to the Contact page.
+            // Just stop the hash jump and close the menu.
+            if (link.id === "contactNavBtn") {
+                event.preventDefault();
+                closeMobileMenu();
+                return;
+            }
+
+            const target = document.getElementById(href.slice(1));
+
+            if (!target) {
+                closeMobileMenu();
+                return;
+            }
+
+            // Handle the scroll ourselves. Letting the browser do it breaks on
+            // mobile: closing the menu puts display:none on this link's own
+            // container before the default jump runs, so the jump is dropped.
+            event.preventDefault();
+            closeMobileMenu();
+
+            // Wait for the menu to collapse so offsets are measured correctly.
+            if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(() => {
+                    window.requestAnimationFrame(() => scrollToSection(target));
+                });
+            } else {
+                setTimeout(() => scrollToSection(target), 50);
+            }
         });
     });
 }
