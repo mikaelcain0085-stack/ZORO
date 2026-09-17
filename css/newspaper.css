@@ -2,23 +2,29 @@
    THE ZORO HERALD — newspaper / e-ink reading experience
    Scoped entirely under #news / .np-* so it never leaks into
    the rest of the (dark, sans-serif) ZORO site.
+
+   Visual language: modern editorial broadsheet (NYT/Guardian-
+   style) — crisp white ground, disciplined type scale, thin
+   precise rules instead of aged double-rules/texture, and a
+   single confident accent color. All classes, IDs and DOM
+   hooks are unchanged from the original — this file only
+   restyles, nothing here depends on new markup.
 ========================================================= */
 
 #news {
-  --np-paper: #f5f1e8;
-  --np-paper-alt: #ede7d8;
-  --np-ink: #1a1a1a;
-  --np-ink-muted: #5a5648;
-  --np-rule: #1a1a1a;
-  --np-accent: #7a1f1f; /* muted masthead red, used sparingly */
+  --np-paper: #ffffff;
+  --np-paper-alt: #f7f6f3;
+  --np-ink: #121212;
+  --np-ink-muted: #6b6b6b;
+  --np-rule: #121212;
+  --np-rule-soft: rgba(18, 18, 18, 0.1);
+  --np-accent: #b3151a; /* modern masthead red */
 
   min-height: 100vh;
   background: var(--np-paper);
-  background-image:
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.015) 0px, transparent 1px, transparent 2px),
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.012) 0px, transparent 1px, transparent 2px);
   color: var(--np-ink);
   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 #news.active {
@@ -27,18 +33,19 @@
 
 /* ---- e-ink dark mode: pure black on off-white-turned-cream ---- */
 #news.np-eink-mode {
-  --np-paper: #050505;
-  --np-paper-alt: #0d0d0d;
+  --np-paper: #060606;
+  --np-paper-alt: #101010;
   --np-ink: #ececec;
-  --np-ink-muted: #9a9a9a;
+  --np-ink-muted: #999999;
   --np-rule: #ececec;
-  --np-accent: #d8b4b4;
+  --np-rule-soft: rgba(236, 236, 236, 0.16);
+  --np-accent: #e8595d;
 }
 
 .np-shell {
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 5rem;
+  padding: 2.25rem 1.5rem 5rem;
 }
 
 /* ================= READING PROGRESS BAR ================= */
@@ -58,7 +65,7 @@
 
 .np-masthead {
   text-align: center;
-  padding-bottom: 1rem;
+  padding-bottom: 1.25rem;
 }
 
 .np-masthead-top {
@@ -67,24 +74,23 @@
   justify-content: space-between;
 
   font-family: "Inter", sans-serif;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .np-back {
   background: none;
-  border: 1px solid var(--np-ink);
-  color: var(--np-ink);
-  padding: 0.5rem 1rem;
+  border: none;
+  color: var(--np-ink-muted);
+  padding: 0.5rem 0;
   font-family: "Inter", sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.15s ease;
 }
 
 .np-back:hover {
-  background: var(--np-ink);
-  color: var(--np-paper);
+  color: var(--np-ink);
 }
 
 .np-eink-toggle {
@@ -93,54 +99,51 @@
   gap: 0.5rem;
 
   background: none;
-  border: 1px solid var(--np-ink);
-  color: var(--np-ink);
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--np-rule-soft);
+  border-radius: 999px;
+  color: var(--np-ink-muted);
+  padding: 0.4rem 0.9rem;
   font-family: "Inter", sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .np-eink-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: currentColor;
   display: inline-block;
 }
 
 .np-eink-toggle:hover {
-  background: var(--np-ink);
-  color: var(--np-paper);
+  border-color: var(--np-ink);
+  color: var(--np-ink);
 }
 
 .np-nameplate {
   font-family: "Playfair Display", serif;
-  font-weight: 900;
-  font-size: clamp(2.6rem, 8vw, 5rem);
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  letter-spacing: -0.02em;
   line-height: 1;
   margin: 0.2rem 0;
 }
 
 .np-tagline {
   font-family: "Inter", sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--np-ink-muted);
-  margin: 0.4rem 0 1rem;
+  margin: 0.5rem 0 1.25rem;
 }
 
 .np-masthead-rule {
-  height: 3px;
+  height: 1px;
   background: var(--np-rule);
-  border-top: 1px solid var(--np-rule);
-  border-bottom: 1px solid var(--np-rule);
-  padding: 2px 0;
-  background-clip: content-box;
 }
 
 .np-masthead-bottom {
@@ -148,12 +151,12 @@
   justify-content: space-between;
 
   font-family: "Inter", sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--np-ink-muted);
 
-  margin-top: 0.6rem;
+  margin-top: 0.7rem;
 }
 
 /* ================= TOOLBAR: CATEGORY TABS + SEARCH ================= */
@@ -165,35 +168,37 @@
   justify-content: space-between;
   gap: 1rem;
 
-  border-bottom: 2px solid var(--np-rule);
-  padding-bottom: 1rem;
-  margin: 1.5rem 0 2rem;
+  border-top: 1px solid var(--np-rule);
+  border-bottom: 1px solid var(--np-rule-soft);
+  padding: 0.9rem 0;
+  margin: 0 0 2.5rem;
 }
 
 .np-category-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .np-tab {
   font-family: "Inter", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 
   background: none;
-  border: 1px solid var(--np-ink-muted);
+  border: 1px solid transparent;
+  border-radius: 999px;
   color: var(--np-ink-muted);
   padding: 0.4rem 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .np-tab:hover {
-  border-color: var(--np-ink);
   color: var(--np-ink);
+  border-color: var(--np-rule-soft);
 }
 
 .np-tab.active {
@@ -207,14 +212,21 @@
   align-items: center;
   gap: 0.5rem;
 
-  border: 1px solid var(--np-ink-muted);
-  padding: 0.45rem 0.8rem;
+  background: var(--np-paper-alt);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
   min-width: 240px;
+  transition: border-color 0.15s ease;
+}
+
+.np-search:focus-within {
+  border-color: var(--np-ink-muted);
 }
 
 .np-search .btn-icon {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
   color: var(--np-ink-muted);
 }
@@ -238,7 +250,7 @@
 .np-frontpage {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
+  gap: 2.75rem 2.25rem;
 }
 
 .np-frontpage[hidden],
@@ -257,56 +269,58 @@
 .np-lead {
   grid-column: 1 / -1;
 
-  border-bottom: 3px double var(--np-rule);
-  padding-bottom: 2rem;
-  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--np-rule);
+  padding-bottom: 2.25rem;
+  margin-bottom: 0.25rem;
 
   cursor: pointer;
 }
 
 .np-lead-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2.5rem;
   align-items: center;
 }
 
 .np-lead img {
   width: 100%;
-  height: 340px;
+  height: 360px;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  border: 1px solid var(--np-ink);
+  border-radius: 2px;
 }
 
 .np-eyebrow {
   font-family: "Inter", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: 0.7rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--np-accent);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   display: block;
 }
 
 .np-lead h2 {
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
-  line-height: 1.1;
-  margin-bottom: 0.6rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.7rem;
 }
 
 .np-lead .np-sub {
-  font-size: 1.05rem;
-  font-style: italic;
+  font-size: 1.1rem;
+  font-style: normal;
   color: var(--np-ink-muted);
-  margin-bottom: 0.8rem;
-  line-height: 1.4;
+  margin-bottom: 0.9rem;
+  line-height: 1.45;
 }
 
 .np-byline {
   font-family: "Inter", sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--np-ink-muted);
@@ -314,42 +328,42 @@
 
 .np-card {
   cursor: pointer;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 0;
 }
 
 .np-card img {
   width: 100%;
-  height: 170px;
+  height: 180px;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  border: 1px solid var(--np-ink);
-  margin-bottom: 0.7rem;
+  border-radius: 2px;
+  margin-bottom: 0.85rem;
 }
 
 .np-card h3 {
-  font-size: 1.25rem;
-  line-height: 1.2;
-  margin-bottom: 0.4rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.28rem;
+  line-height: 1.22;
+  letter-spacing: -0.005em;
+  margin-bottom: 0.45rem;
 }
 
 .np-card .np-sub {
   font-size: 0.9rem;
   color: var(--np-ink-muted);
-  line-height: 1.35;
-  margin-bottom: 0.5rem;
+  line-height: 1.45;
+  margin-bottom: 0.6rem;
 }
 
 .np-card:hover h3,
 .np-lead:hover h2 {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: var(--np-accent);
 }
 
 /* ================= ARTICLE READER ================= */
 
 .np-reader {
-  max-width: 780px;
+  max-width: 740px;
   margin: 0 auto;
 }
 
@@ -359,41 +373,44 @@
   font-weight: 600;
 
   background: none;
-  border: 1px solid var(--np-ink);
-  color: var(--np-ink);
-  padding: 0.5rem 1rem;
+  border: none;
+  color: var(--np-ink-muted);
+  padding: 0.5rem 0;
   margin-bottom: 2rem;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .np-reader-back:hover {
-  background: var(--np-ink);
-  color: var(--np-paper);
+  color: var(--np-ink);
 }
 
 .np-article-category {
   font-family: "Inter", sans-serif;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-size: 0.74rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--np-accent);
   display: block;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.7rem;
 }
 
 .np-article h1 {
-  font-size: clamp(2rem, 5vw, 3.1rem);
-  line-height: 1.08;
-  margin-bottom: 0.7rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4.6vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.8rem;
 }
 
 .np-article .np-sub {
   font-size: 1.2rem;
-  font-style: italic;
+  font-style: normal;
   color: var(--np-ink-muted);
-  line-height: 1.4;
-  margin-bottom: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.1rem;
 }
 
 .np-article-meta {
@@ -402,23 +419,22 @@
   flex-wrap: wrap;
 
   font-family: "Inter", sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--np-ink-muted);
 
-  border-top: 1px solid var(--np-ink-muted);
-  border-bottom: 1px solid var(--np-ink-muted);
-  padding: 0.6rem 0;
-  margin: 1rem 0 2rem;
+  border-top: 1px solid var(--np-rule-soft);
+  border-bottom: 1px solid var(--np-rule-soft);
+  padding: 0.7rem 0;
+  margin: 1.1rem 0 2rem;
 }
 
 .np-article-hero {
   width: 100%;
   max-height: 460px;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  border: 1px solid var(--np-ink);
+  border-radius: 2px;
   margin-bottom: 0.5rem;
 }
 
@@ -431,16 +447,17 @@
 }
 
 .np-article-body {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
   font-size: 1.15rem;
   line-height: 1.75;
-  text-align: justify;
+  text-align: left;
   hyphens: auto;
   overflow-wrap: anywhere;
   word-break: break-word;
   min-width: 0;
 }
 .np-article-body p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.15rem;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -449,7 +466,7 @@
 .np-article-body h3 {
   font-family: "Playfair Display", serif;
   font-weight: 700;
-  margin: 1.2rem 0 0.5rem;
+  margin: 1.4rem 0 0.6rem;
   break-after: avoid;
   text-align: left;
 }
@@ -464,22 +481,23 @@
 
 .np-article-body img {
   max-width: 100%;
-  filter: grayscale(1) contrast(1.05);
-  margin: 1rem 0;
+  border-radius: 2px;
+  margin: 1.2rem 0;
   break-inside: avoid;
 }
 
 .np-article-body blockquote {
   font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 1.5rem;
-  line-height: 1.35;
+  font-size: 1.45rem;
+  line-height: 1.4;
   text-align: center;
+  color: var(--np-ink);
 
-  border-top: 2px solid var(--np-rule);
-  border-bottom: 2px solid var(--np-rule);
-  padding: 1rem 0;
-  margin: 1.5rem 0;
+  border-top: 1px solid var(--np-rule-soft);
+  border-bottom: 1px solid var(--np-rule-soft);
+  padding: 1.2rem 0;
+  margin: 1.75rem 0;
 
   break-inside: avoid;
 }
@@ -499,37 +517,38 @@
 @media (min-width: 720px) {
   .np-article-body.np-cols-2 {
     columns: 2;
-    column-gap: 2.5rem;
-    column-rule: 1px solid rgba(0, 0, 0, 0.15);
+    column-gap: 2.75rem;
+    column-rule: 1px solid var(--np-rule-soft);
   }
 
   .np-article-body.np-cols-3 {
     columns: 3;
-    column-gap: 2rem;
-    column-rule: 1px solid rgba(0, 0, 0, 0.15);
+    column-gap: 2.25rem;
+    column-rule: 1px solid var(--np-rule-soft);
   }
 }
 
 .np-article-body::first-letter {
   font-family: "Playfair Display", serif;
   font-weight: 800;
-  font-size: 4.2em;
+  font-size: 3.6em;
   float: left;
-  line-height: 0.82;
-  padding: 0.05em 0.08em 0 0;
+  line-height: 0.85;
+  padding: 0.06em 0.09em 0 0;
+  color: var(--np-accent);
 }
 
 .np-pullquote {
   font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 1.5rem;
-  line-height: 1.35;
+  font-size: 1.45rem;
+  line-height: 1.4;
   text-align: center;
 
-  border-top: 2px solid var(--np-rule);
-  border-bottom: 2px solid var(--np-rule);
-  padding: 1rem 0;
-  margin: 1.5rem 0;
+  border-top: 1px solid var(--np-rule-soft);
+  border-bottom: 1px solid var(--np-rule-soft);
+  padding: 1.2rem 0;
+  margin: 1.75rem 0;
 
   break-inside: avoid;
 }
@@ -541,7 +560,7 @@
 
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 3px double var(--np-rule);
+  border-top: 1px solid var(--np-rule);
 }
 
 .np-nav-btn {
@@ -550,15 +569,17 @@
   font-weight: 600;
 
   background: none;
-  border: 1px solid var(--np-ink);
+  border: 1px solid var(--np-rule-soft);
+  border-radius: 999px;
   color: var(--np-ink);
-  padding: 0.6rem 1.1rem;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .np-nav-btn:hover:not(:disabled) {
   background: var(--np-ink);
+  border-color: var(--np-ink);
   color: var(--np-paper);
 }
 
@@ -567,21 +588,21 @@
   cursor: not-allowed;
 }
 
-/* article enter animation — a restrained "page turn" */
+/* article enter animation — a restrained fade/slide, no tilt */
 @keyframes npPageIn {
   from {
     opacity: 0;
-    transform: perspective(1200px) rotateY(-4deg) translateX(24px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: perspective(1200px) rotateY(0deg) translateX(0);
+    transform: translateY(0);
   }
 }
 
 .np-article {
-  transform-origin: left center;
-  animation: npPageIn 0.5s ease;
+  transform-origin: top center;
+  animation: npPageIn 0.4s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -602,17 +623,18 @@
   }
 
   .np-lead img {
-    height: 240px;
+    height: 250px;
   }
 }
 
 @media (max-width: 640px) {
   .np-shell {
-    padding: 1.25rem 1rem 4rem;
+    padding: 1.5rem 1.25rem 4rem;
   }
 
   .np-frontpage {
     grid-template-columns: 1fr;
+    gap: 2.25rem;
   }
 
   .np-toolbar {
@@ -625,7 +647,7 @@
   }
 
   .np-article-body::first-letter {
-    font-size: 3.2em;
+    font-size: 2.9em;
   }
 
   .np-reader-nav {
@@ -643,20 +665,21 @@
    inside the (dark-themed) admin console, outside #news. */
 
 .np-preview-card {
-  --np-paper: #f5f1e8;
-  --np-paper-alt: #ede7d8;
-  --np-ink: #1a1a1a;
-  --np-ink-muted: #5a5648;
-  --np-rule: #1a1a1a;
-  --np-accent: #7a1f1f;
+  --np-paper: #ffffff;
+  --np-paper-alt: #f7f6f3;
+  --np-ink: #121212;
+  --np-ink-muted: #6b6b6b;
+  --np-rule: #121212;
+  --np-rule-soft: rgba(18, 18, 18, 0.1);
+  --np-accent: #b3151a;
 
   background: var(--np-paper);
   color: var(--np-ink);
   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
 
   padding: 1.5rem;
-  border: 1px solid #000;
-  border-radius: 6px;
+  border: 1px solid var(--np-rule-soft);
+  border-radius: 8px;
 
   max-height: 640px;
   overflow-y: auto;
@@ -688,16 +711,16 @@
 }
 
 .np-loading-spinner {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  border: 3px solid rgba(26, 26, 26, 0.15);
-  border-top-color: var(--np-ink, #1a1a1a);
+  border: 2.5px solid var(--np-rule-soft, rgba(18, 18, 18, 0.1));
+  border-top-color: var(--np-ink, #121212);
   animation: npLoadingSpin 0.8s linear infinite;
 }
 
 .np-loading p {
-  color: var(--np-ink-muted, #5a5648);
+  color: var(--np-ink-muted, #6b6b6b);
   font-size: 0.85rem;
   letter-spacing: 0.02em;
 }
