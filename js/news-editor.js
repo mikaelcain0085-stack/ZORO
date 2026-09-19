@@ -279,8 +279,8 @@
     formData.append("content", fields.content);
     formData.append("status", status);
 
-    if (newsImageInput.files && newsImageInput.files[0]) {
-      formData.append("image", newsImageInput.files[0]);
+    if (currentNewsBlob) {
+      formData.append("image", currentNewsBlob, "news.jpg");
     }
 
     const editId = editingNewsId.value;

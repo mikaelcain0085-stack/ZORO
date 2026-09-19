@@ -899,22 +899,24 @@ function isRecent(iso) {
 
 function clearImageUpload() {
     currentImageData = null;
+    currentNewsBlob = null;
 
     newsImageInput.value = "";
     imagePreview.src = "";
 
     imagePreview.classList.remove("show");
 
+    imageHint.textContent = "📷 Click or drag to upload";
     imageHint.style.display = "";
 
     removeImageBtn.classList.remove("show");
 }
 
 
-function setImagePreview(dataUrl) {
-    currentImageData = dataUrl;
+function setImagePreview(url) {
+    currentImageData = url;
 
-    imagePreview.src = dataUrl;
+    imagePreview.src = url;
 
     imagePreview.classList.add("show");
 
@@ -924,26 +926,37 @@ function setImagePreview(dataUrl) {
 }
 
 
-newsImageInput.addEventListener("change", (e) => {
+let currentNewsBlob = null;
+
+newsImageInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
-    if (file.size > 1.5 * 1024 * 1024) {
-        alert("Image too large. Please use an image under 1.5 MB.");
+    if (file.size > 20 * 1024 * 1024) {
+        alert("That file is too large to process. Please choose a smaller image.");
 
         newsImageInput.value = "";
 
         return;
     }
 
-    const reader = new FileReader();
+    imageHint.textContent = "⏳ Compressing image...";
 
-    reader.onload = (event) => {
-        setImagePreview(event.target.result);
-    };
+    try {
+        const compressed = await compressImageForUpload(file);
 
-    reader.readAsDataURL(file);
+        currentNewsBlob = compressed;
+
+        setImagePreview(URL.createObjectURL(compressed));
+    } catch (err) {
+        console.error(err);
+
+        alert("Could not process that image. Please try a different photo.");
+
+        newsImageInput.value = "";
+        imageHint.textContent = "📷 Click or drag to upload";
+    }
 });
 
 
@@ -958,27 +971,98 @@ function clearPdfUpload() {
 
 
 /* =========================================
+   SHARED IMAGE COMPRESSION
+   Resizes to a max dimension and re-encodes as JPEG, stepping the
+   quality down until it fits under maxBytes (or quality bottoms
+   out). Used by News, Photo Gallery, and Leaders so admins never
+   have to manually resize a phone photo before uploading.
+========================================= */
+
+function compressImageForUpload(
+    file,
+    { maxDimension = 1600, maxBytes = 700 * 1024 } = {}
+) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+
+            img.onload = () => {
+                let { width, height } = img;
+
+                if (width > height && width > maxDimension) {
+                    height = Math.round((height * maxDimension) / width);
+                    width = maxDimension;
+                } else if (height >= width && height > maxDimension) {
+                    width = Math.round((width * maxDimension) / height);
+                    height = maxDimension;
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                let quality = 0.85;
+
+                const attempt = () => {
+                    canvas.toBlob(
+                        (blob) => {
+                            if (!blob) {
+                                reject(new Error("Could not compress image"));
+                                return;
+                            }
+
+                            if (blob.size <= maxBytes || quality <= 0.4) {
+                                resolve(blob);
+                            } else {
+                                quality -= 0.1;
+                                attempt();
+                            }
+                        },
+                        "image/jpeg",
+                        quality
+                    );
+                };
+
+                attempt();
+            };
+
+            img.onerror = () => reject(new Error("Could not read image"));
+            img.src = event.target.result;
+        };
+
+        reader.onerror = () => reject(new Error("Could not read file"));
+        reader.readAsDataURL(file);
+    });
+}
+
+
+/* =========================================
    PHOTO IMAGE UPLOAD
 ========================================= */
 
 function clearPhotoUpload() {
     currentPhotoData = null;
+    currentPhotoBlob = null;
 
     photoImageInput.value = "";
     photoPreview.src = "";
 
     photoPreview.classList.remove("show");
 
+    photoHint.textContent = "📷 Click or drag to upload";
     photoHint.style.display = "";
 
     removePhotoBtn.classList.remove("show");
 }
 
 
-function setPhotoPreview(dataUrl) {
-    currentPhotoData = dataUrl;
-
-    photoPreview.src = dataUrl;
+function setPhotoPreview(url) {
+    photoPreview.src = url;
 
     photoPreview.classList.add("show");
 
@@ -988,26 +1072,38 @@ function setPhotoPreview(dataUrl) {
 }
 
 
-photoImageInput.addEventListener("change", (e) => {
+let currentPhotoBlob = null;
+
+photoImageInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
-    if (file.size > 1.5 * 1024 * 1024) {
-        alert("Image too large. Please use an image under 1.5 MB.");
+    if (file.size > 20 * 1024 * 1024) {
+        alert("That file is too large to process. Please choose a smaller image.");
 
         photoImageInput.value = "";
 
         return;
     }
 
-    const reader = new FileReader();
+    photoHint.textContent = "⏳ Compressing image...";
 
-    reader.onload = (event) => {
-        setPhotoPreview(event.target.result);
-    };
+    try {
+        const compressed = await compressImageForUpload(file);
 
-    reader.readAsDataURL(file);
+        currentPhotoBlob = compressed;
+        currentPhotoData = URL.createObjectURL(compressed);
+
+        setPhotoPreview(currentPhotoData);
+    } catch (err) {
+        console.error(err);
+
+        alert("Could not process that image. Please try a different photo.");
+
+        photoImageInput.value = "";
+        photoHint.textContent = "📷 Click or drag to upload";
+    }
 });
 
 
@@ -1020,22 +1116,22 @@ removePhotoBtn.addEventListener("click", clearPhotoUpload);
 
 function clearLeaderUpload() {
     currentLeaderData = null;
+    currentLeaderBlob = null;
 
     leaderImageInput.value = "";
     leaderPreview.src = "";
 
     leaderPreview.classList.remove("show");
 
+    leaderHint.textContent = "📷 Click or drag to upload";
     leaderHint.style.display = "";
 
     removeLeaderBtn.classList.remove("show");
 }
 
 
-function setLeaderPreview(dataUrl) {
-    currentLeaderData = dataUrl;
-
-    leaderPreview.src = dataUrl;
+function setLeaderPreview(url) {
+    leaderPreview.src = url;
 
     leaderPreview.classList.add("show");
 
@@ -1074,26 +1170,38 @@ leaderStatusToggle
     });
 
 
-leaderImageInput.addEventListener("change", (e) => {
+let currentLeaderBlob = null;
+
+leaderImageInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
-    if (file.size > 1.5 * 1024 * 1024) {
-        alert("Image too large. Please use an image under 1.5 MB.");
+    if (file.size > 20 * 1024 * 1024) {
+        alert("That file is too large to process. Please choose a smaller image.");
 
         leaderImageInput.value = "";
 
         return;
     }
 
-    const reader = new FileReader();
+    leaderHint.textContent = "⏳ Compressing image...";
 
-    reader.onload = (event) => {
-        setLeaderPreview(event.target.result);
-    };
+    try {
+        const compressed = await compressImageForUpload(file);
 
-    reader.readAsDataURL(file);
+        currentLeaderBlob = compressed;
+        currentLeaderData = URL.createObjectURL(compressed);
+
+        setLeaderPreview(currentLeaderData);
+    } catch (err) {
+        console.error(err);
+
+        alert("Could not process that image. Please try a different photo.");
+
+        leaderImageInput.value = "";
+        leaderHint.textContent = "📷 Click or drag to upload";
+    }
 });
 
 
@@ -2748,7 +2856,7 @@ photoForm.addEventListener(
             editingPhotoId.value;
 
         if (
-            !photoImageInput.files[0] &&
+            !currentPhotoBlob &&
             !editId
         ) {
             alert(
@@ -2773,13 +2881,11 @@ photoForm.addEventListener(
         // Only append the image if a new file was chosen —
         // otherwise leave it out so the existing Cloudinary
         // image on the server is left untouched.
-        if (
-            photoImageInput.files &&
-            photoImageInput.files[0]
-        ) {
+        if (currentPhotoBlob) {
             formData.append(
                 "image",
-                photoImageInput.files[0]
+                currentPhotoBlob,
+                "photo.jpg"
             );
         }
 
@@ -2890,13 +2996,11 @@ leaderForm.addEventListener(
         // Only append the image if a new file was chosen —
         // otherwise leave it out so the existing Cloudinary
         // image on the server is left untouched.
-        if (
-            leaderImageInput.files &&
-            leaderImageInput.files[0]
-        ) {
+        if (currentLeaderBlob) {
             formData.append(
                 "image",
-                leaderImageInput.files[0]
+                currentLeaderBlob,
+                "leader.jpg"
             );
         }
 
