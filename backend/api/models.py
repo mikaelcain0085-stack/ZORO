@@ -8,13 +8,6 @@ class Member(models.Model):
     email = models.EmailField(blank=True)
     address = models.TextField(blank=True)
     zoro_id = models.CharField(max_length=50, blank=True)
-
-    image = models.ImageField(
-        upload_to="members/",
-        blank=True,
-        null=True
-    )
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -47,11 +40,10 @@ class News(models.Model):
     )
 
     image = models.ImageField(
-    upload_to="news/",
-    max_length=500,
-    blank=True,
-    null=True
-)
+        upload_to="news/",
+        blank=True,
+        null=True
+    )
     pdf = models.FileField(
         upload_to="news_pdfs/",
         storage=RawMediaCloudinaryStorage(),
