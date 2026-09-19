@@ -68,6 +68,10 @@ const memberCount = document.getElementById("memberCount");
 const enquiriesList = document.getElementById("enquiriesList");
 const enquiryCount = document.getElementById("enquiryCount");
 const successToast = document.getElementById("successToast");
+const memberImageInput = document.getElementById("memberImage");
+const memberPreview = document.getElementById("memberPreview");
+const memberHint = document.getElementById("memberHint");
+const removeMemberBtn = document.getElementById("removeMemberBtn");
 
 const newsCard = document.getElementById("newsCard");
 const backFromNews = document.getElementById("backFromNews");
@@ -222,22 +226,15 @@ async function getMembers() {
 }
 
 
-async function addMember(member) {
+async function addMember(formData) {
     const response = await fetch(`${API_BASE}/members/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            full_name: member.full_name,
-            phone: member.phone,
-            email: member.email || "",
-            address: member.address || "",
-            zoro_id: member.zoro_id || "",
-        }),
+        body: formData,
     });
 
     if (!response.ok) {
+        const errorData = await response.text();
+        console.error(errorData);
         throw new Error("Could not add member");
     }
 
@@ -1100,6 +1097,55 @@ leaderImageInput.addEventListener("change", (e) => {
 removeLeaderBtn.addEventListener("click", clearLeaderUpload);
 
 
+function clearMemberUpload() {
+    memberImageInput.value = "";
+    memberPreview.src = "";
+
+    memberPreview.classList.remove("show");
+
+    memberHint.style.display = "";
+
+    removeMemberBtn.classList.remove("show");
+}
+
+
+function setMemberPreview(dataUrl) {
+    memberPreview.src = dataUrl;
+
+    memberPreview.classList.add("show");
+
+    memberHint.style.display = "none";
+
+    removeMemberBtn.classList.add("show");
+}
+
+
+memberImageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    if (file.size > 150 * 1024) {
+        alert("Image too large. Please use a photograph under 150 KB.");
+
+        memberImageInput.value = "";
+
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+        setMemberPreview(event.target.result);
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+removeMemberBtn.addEventListener("click", clearMemberUpload);
+
+
 /* =========================================
    IMAGE LIGHTBOX
 ========================================= */
@@ -1408,6 +1454,28 @@ async function renderMembers() {
                 (member) => `
                 <div class="member-card">
 
+                    <div class="member-card-main">
+
+                    ${
+                        member.image
+                            ? `
+                            <img
+                                class="member-avatar-sm"
+                                src="${member.image}"
+                                alt="${escapeHtml(member.full_name)}"
+                            >
+                            `
+                            : `
+                            <div class="member-avatar-sm member-avatar-placeholder-sm">
+                                ${escapeHtml(
+                                    (member.full_name || "?")
+                                        .trim()
+                                        .charAt(0)
+                                )}
+                            </div>
+                            `
+                    }
+
                     <div class="member-info">
 
                         <h3>
@@ -1447,6 +1515,8 @@ async function renderMembers() {
                             `
                                 : ""
                         }
+
+                    </div>
 
                     </div>
 
@@ -2261,7 +2331,7 @@ function renderMembersTableRows() {
     if (cachedMembers.length === 0) {
         membersFeed.innerHTML = `
             <tr>
-                <td colspan="4" class="mem-empty-cell">
+                <td colspan="5" class="mem-empty-cell">
                     <div class="mem-empty">
                         <span>📋</span>
                         No members listed yet. Check back soon.
@@ -2275,7 +2345,7 @@ function renderMembersTableRows() {
     if (filtered.length === 0) {
         membersFeed.innerHTML = `
             <tr>
-                <td colspan="4" class="mem-empty-cell">
+                <td colspan="5" class="mem-empty-cell">
                     <div class="mem-empty">
                         <span>🔍</span>
                         No members found.
@@ -2290,6 +2360,27 @@ function renderMembersTableRows() {
         .map(
             (member) => `
             <tr>
+                <td data-label="Photo">
+                    ${
+                        member.image
+                            ? `
+                            <img
+                                class="mem-avatar"
+                                src="${member.image}"
+                                alt="${escapeHtml(member.full_name || "")}"
+                            >
+                            `
+                            : `
+                            <div class="mem-avatar-placeholder">
+                                ${escapeHtml(
+                                    (member.full_name || "?")
+                                        .trim()
+                                        .charAt(0)
+                                )}
+                            </div>
+                            `
+                    }
+                </td>
                 <td data-label="Full Name">${escapeHtml(member.full_name || "")}</td>
                 <td data-label="Phone Number">${escapeHtml(member.phone || "")}</td>
                 <td data-label="Address">${escapeHtml(member.address || "")}</td>
@@ -2664,38 +2755,60 @@ memberForm.addEventListener(
     async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+
+        formData.append(
+            "full_name",
+            document
+                .getElementById("memberName")
+                .value
+                .trim()
+        );
+
+        formData.append(
+            "phone",
+            document
+                .getElementById("memberPhone")
+                .value
+                .trim()
+        );
+
+        formData.append("email", "");
+
+        formData.append(
+            "address",
+            document
+                .getElementById("memberAddress")
+                .value
+                .trim()
+        );
+
+        formData.append(
+            "zoro_id",
+            document
+                .getElementById("memberZoroId")
+                .value
+                .trim()
+        );
+
+        if (
+            memberImageInput.files &&
+            memberImageInput.files[0]
+        ) {
+            formData.append(
+                "image",
+                memberImageInput.files[0]
+            );
+        }
+
         try {
-            await addMember({
-                full_name:
-                    document
-                        .getElementById("memberName")
-                        .value
-                        .trim(),
-
-                phone:
-                    document
-                        .getElementById("memberPhone")
-                        .value
-                        .trim(),
-
-                email: "",
-
-                address:
-                    document
-                        .getElementById("memberAddress")
-                        .value
-                        .trim(),
-
-                zoro_id:
-                    document
-                        .getElementById("memberZoroId")
-                        .value
-                        .trim(),
-            });
+            await addMember(formData);
 
             await renderMembers();
 
             memberForm.reset();
+
+            clearMemberUpload();
 
             successToast.classList.add("show");
 
@@ -3390,69 +3503,63 @@ if (menuToggle && navLinks) {
 
     // Scroll to an in-page section.
     //
-    // NOTE ON WHY THIS IS WRITTEN THE WAY IT IS:
-    // `html, body { height: 100%; }` (style.css) pins <html> to exactly the
-    // viewport height, so <html> never actually overflows -- all of the
-    // page's real overflow (and therefore all real scrolling) happens on
-    // <body> instead. But window.scrollY / window.scrollTo() /
-    // document.scrollingElement all read and write <html>'s scroll position,
-    // not <body>'s, so anything going through them is silently touching a
-    // box that can't move.
+    // NOTE: window.scrollTo() does NOT work on this page. Because
+    // html/body carry `height: 100%` plus `overflow-x: hidden`, the <html>
+    // element is the scrolling box rather than the viewport, so window-level
+    // scrolling is a no-op. scrollIntoView() walks up and scrolls whichever
+    // ancestor actually scrolls, so it works in every case.
     //
-    // scrollIntoView() *usually* finds <body> as the real scrolling
-    // ancestor and works -- but on iOS Safari specifically, firing a second
-    // scrollIntoView() call (the "settle" correction below used to do this
-    // with a different `behavior`) while a smooth one is still animating is
-    // a known trigger for WebKit's scroll animation to get stuck, silently
-    // dropping the *next* tap's scroll request entirely. That matches the
-    // reported symptom of Donate/Features sometimes doing nothing.
-    //
-    // Fix: scroll the confirmed real container (<body> here) directly via
-    // its own .scrollTo(), and only ever issue one corrective follow-up
-    // call, so there's never a second animation to collide with the first.
-    const scrollContainer =
-        document.scrollingElement &&
-        document.scrollingElement.scrollHeight >
-            document.scrollingElement.clientHeight
-            ? document.scrollingElement
-            : document.body;
-
+    // Clearance for the fixed navbar comes from `scroll-margin-top` in
+    // style.css, which scrollIntoView() honours.
     const scrollToSection = (target) => {
 
-        const scrollMarginTop = () => {
+        const jump = (behavior) => {
+            try {
+                target.scrollIntoView({
+                    behavior: behavior,
+                    block: "start",
+                });
+            } catch (err) {
+                target.scrollIntoView(true);
+            }
+        };
+
+        const wantedTop = () => {
             const value = parseFloat(
                 window.getComputedStyle(target).scrollMarginTop
             );
             return isNaN(value) ? 0 : value;
         };
 
-        // Target's offset measured against the container that will
-        // actually move, recomputed fresh each time this is called.
-        const computeTop = () => (
-            target.getBoundingClientRect().top +
-            scrollContainer.scrollTop -
-            scrollMarginTop()
-        );
+        jump("smooth");
 
-        scrollContainer.scrollTo({
-            top: computeTop(),
-            behavior: "smooth",
-        });
+        // On a real phone, #features is still settling when the scroll starts:
+        // the WebGL globes and decode-text animations resize after load, and
+        // mobile browsers abort an in-flight smooth scroll when layout shifts
+        // under it. Re-check the position and correct it instantly if needed.
+        let attempts = 0;
+        let lastTop = null;
 
-        // #features/#donate can still be resizing after load (the WebGL
-        // globe, decode-text animation, etc. settle a moment after paint).
-        // Re-check the position once and, if it's off, correct it with a
-        // single instant jump -- never a second smooth scroll, so there is
-        // nothing for it to collide with.
-        setTimeout(() => {
+        const settle = () => {
+
+            attempts += 1;
+
             const top = target.getBoundingClientRect().top;
-            if (Math.abs(top - scrollMarginTop()) > 4) {
-                scrollContainer.scrollTo({
-                    top: computeTop(),
-                    behavior: "auto",
-                });
-            }
-        }, 450);
+
+            // Close enough - we arrived.
+            if (Math.abs(top - wantedTop()) <= 4) return;
+
+            // Nothing moved since the last correction, so the page cannot
+            // scroll any further. Stop rather than loop.
+            if (lastTop !== null && Math.abs(top - lastTop) <= 1) return;
+
+            lastTop = top;
+            jump("auto");
+
+            if (attempts < 6) setTimeout(settle, 250);
+        };
+
+        setTimeout(settle, 350);
     };
 
     navLinks.querySelectorAll("a").forEach((link) => {
