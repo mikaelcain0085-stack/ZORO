@@ -25,6 +25,32 @@ const NEWS_KEY = "zoro_news";
 const PHOTO_KEY = "zoro_photos";
 const LEADER_KEY = "zoro_leaders";
 
+/* =========================================
+   BUTTON LOADING STATE HELPER
+   Used by the admin console buttons (Add
+   Member, Publish News, Upload Photo, Add
+   Leaders, Logout) to show a small inline
+   spinner while an action is in flight.
+   The label underneath is left untouched
+   (just visually hidden), so it plays
+   nicely with the form-reset helpers that
+   also change these buttons' text.
+========================================= */
+
+function setButtonLoading(btn, isLoading) {
+    if (!btn) return;
+
+    if (isLoading) {
+        btn.classList.add("is-loading");
+        btn.disabled = true;
+        btn.setAttribute("aria-busy", "true");
+    } else {
+        btn.classList.remove("is-loading");
+        btn.disabled = false;
+        btn.removeAttribute("aria-busy");
+    }
+}
+
 const landing = document.getElementById("landing");
 
 
@@ -63,6 +89,7 @@ const contactSuccessToast = document.getElementById("contactSuccessToast");
 
 
 const memberForm = document.getElementById("memberForm");
+const memberSubmitBtn = document.getElementById("memberSubmitBtn");
 const membersList = document.getElementById("membersList");
 const memberCount = document.getElementById("memberCount");
 const enquiriesList = document.getElementById("enquiriesList");
@@ -2752,14 +2779,18 @@ loginForm.addEventListener(
 logoutBtn.addEventListener(
     "click",
     async () => {
+        setButtonLoading(logoutBtn, true);
+
         const { error } = await supabaseClient.auth.signOut();
 
         if (error) {
             console.error("Logout error:", error);
+            setButtonLoading(logoutBtn, false);
             return;
         }
 
         showLanding();
+        setButtonLoading(logoutBtn, false);
     }
 );
 
@@ -2771,6 +2802,8 @@ memberForm.addEventListener(
     "submit",
     async (e) => {
         e.preventDefault();
+
+        setButtonLoading(memberSubmitBtn, true);
 
         try {
             await addMember({
@@ -2819,6 +2852,8 @@ memberForm.addEventListener(
             alert(
                 "Could not add member. Please make sure the Django server is running."
             );
+        } finally {
+            setButtonLoading(memberSubmitBtn, false);
         }
     }
 );
@@ -2829,6 +2864,10 @@ memberForm.addEventListener(
 ========================================= */
 
 /* newsForm submit handling moved to js/news-editor.js (Draft/Publish CMS) */
+/* Its loading-spinner wiring (Publish News / Save as Draft) is set up
+   directly there too, via the shared setButtonLoading() helper defined
+   above, in a try/finally around submitNews() — same pattern as the
+   Add Member / Upload Photo / Add Leaders forms below. */
 
 
 
@@ -2865,6 +2904,8 @@ photoForm.addEventListener(
 
             return;
         }
+
+        setButtonLoading(photoSubmitBtn, true);
 
         const description =
             document
@@ -2921,6 +2962,8 @@ photoForm.addEventListener(
             alert(
                 "Could not upload photo. Please make sure the Django server is running."
             );
+        } finally {
+            setButtonLoading(photoSubmitBtn, false);
         }
     }
 );
@@ -2945,6 +2988,8 @@ leaderForm.addEventListener(
     "submit",
     async (e) => {
         e.preventDefault();
+
+        setButtonLoading(leaderSubmitBtn, true);
 
         const editId =
             editingLeaderId.value;
@@ -3036,6 +3081,8 @@ leaderForm.addEventListener(
             alert(
                 "Could not save leader. Please make sure the Django server is running."
             );
+        } finally {
+            setButtonLoading(leaderSubmitBtn, false);
         }
     }
 );

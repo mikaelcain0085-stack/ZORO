@@ -154,7 +154,10 @@
     const sub = subheadline
       ? `<p class="np-sub">${npEscapeHtml(subheadline)}</p>`
       : `<p class="np-sub">${npEscapeHtml(
-          plainExcerpt(article.content, isLead ? 160 : 90)
+          plainExcerpt(
+            stripHtmlToText(article.content),
+            isLead ? 160 : 90
+          )
         )}</p>`;
 
     if (isLead) {

@@ -257,7 +257,7 @@
     };
   }
 
-  async function submitNews(status) {
+  async function submitNews(status, triggerBtn) {
     const fields = getFormFields();
 
     if (!fields.title) {
@@ -284,6 +284,10 @@
     }
 
     const editId = editingNewsId.value;
+
+    if (typeof setButtonLoading === "function") {
+      setButtonLoading(triggerBtn, true);
+    }
 
     try {
       if (editId) {
@@ -312,18 +316,22 @@
       alert(
         "Could not save news. Please make sure the Django server is running."
       );
+    } finally {
+      if (typeof setButtonLoading === "function") {
+        setButtonLoading(triggerBtn, false);
+      }
     }
   }
 
   document.getElementById("newsForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    submitNews("published");
+    submitNews("published", newsSubmitBtn);
   });
 
   document
     .getElementById("newsSaveDraftBtn")
     .addEventListener("click", () => {
-      submitNews("draft");
+      submitNews("draft", document.getElementById("newsSaveDraftBtn"));
     });
 
   // ---- overrides: reset / edit / admin list ----
