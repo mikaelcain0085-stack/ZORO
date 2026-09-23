@@ -1608,6 +1608,8 @@ async function renderMembers() {
                                 "Delete this member?"
                             )
                         ) {
+                            setButtonLoading(button, true);
+
                             try {
                                 await deleteMember(
                                     button.dataset.id
@@ -1620,6 +1622,8 @@ async function renderMembers() {
                                 alert(
                                     "Could not delete member."
                                 );
+
+                                setButtonLoading(button, false);
                             }
                         }
                     }
@@ -1743,9 +1747,15 @@ async function renderNewsAdmin() {
                 "click",
                 async () => {
 
-                    await startEditNews(
-                        button.dataset.id
-                    );
+                    setButtonLoading(button, true);
+
+                    try {
+                        await startEditNews(
+                            button.dataset.id
+                        );
+                    } finally {
+                        setButtonLoading(button, false);
+                    }
 
                 }
             );
@@ -1770,6 +1780,8 @@ async function renderNewsAdmin() {
                             "Delete this news?"
                         )
                     ) {
+
+                        setButtonLoading(button, true);
 
                         try {
 
@@ -1799,6 +1811,8 @@ async function renderNewsAdmin() {
                             alert(
                                 "Could not delete news. Please try again."
                             );
+
+                            setButtonLoading(button, false);
 
                         }
 
@@ -1933,7 +1947,13 @@ async function renderPhotosAdmin() {
         .querySelectorAll(".btn-edit")
         .forEach((button) => {
             button.addEventListener("click", async () => {
-                await startEditPhoto(button.dataset.id);
+                setButtonLoading(button, true);
+
+                try {
+                    await startEditPhoto(button.dataset.id);
+                } finally {
+                    setButtonLoading(button, false);
+                }
             });
         });
 
@@ -1942,6 +1962,8 @@ async function renderPhotosAdmin() {
         .forEach((button) => {
             button.addEventListener("click", async () => {
                 if (confirm("Delete this photo?")) {
+                    setButtonLoading(button, true);
+
                     try {
                         await deletePhoto(button.dataset.id);
 
@@ -1956,6 +1978,7 @@ async function renderPhotosAdmin() {
                     } catch (error) {
                         console.error("Error deleting photo:", error);
                         alert("Could not delete photo. Please try again.");
+                        setButtonLoading(button, false);
                     }
                 }
             });
@@ -2194,7 +2217,13 @@ async function renderLeadersAdmin() {
         .querySelectorAll(".btn-edit")
         .forEach((button) => {
             button.addEventListener("click", async () => {
-                await startEditLeader(button.dataset.id);
+                setButtonLoading(button, true);
+
+                try {
+                    await startEditLeader(button.dataset.id);
+                } finally {
+                    setButtonLoading(button, false);
+                }
             });
         });
 
@@ -2203,6 +2232,8 @@ async function renderLeadersAdmin() {
         .forEach((button) => {
             button.addEventListener("click", async () => {
                 if (confirm("Delete this leader?")) {
+                    setButtonLoading(button, true);
+
                     try {
                         await deleteLeader(button.dataset.id);
 
@@ -2217,6 +2248,7 @@ async function renderLeadersAdmin() {
                     } catch (error) {
                         console.error("Error deleting leader:", error);
                         alert("Could not delete leader. Please try again.");
+                        setButtonLoading(button, false);
                     }
                 }
             });

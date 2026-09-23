@@ -500,16 +500,40 @@
       .join("");
 
     newsList.querySelectorAll(".btn-edit").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        startEditNews(Number(btn.dataset.id));
+      btn.addEventListener("click", async () => {
+        if (typeof setButtonLoading === "function") {
+          setButtonLoading(btn, true);
+        }
+
+        try {
+          await startEditNews(Number(btn.dataset.id));
+        } finally {
+          if (typeof setButtonLoading === "function") {
+            setButtonLoading(btn, false);
+          }
+        }
       });
     });
 
     newsList.querySelectorAll(".btn-delete").forEach((btn) => {
       btn.addEventListener("click", async () => {
         if (!confirm("Delete this news article?")) return;
-        await deleteNews(Number(btn.dataset.id));
-        await renderNewsAdmin();
+
+        if (typeof setButtonLoading === "function") {
+          setButtonLoading(btn, true);
+        }
+
+        try {
+          await deleteNews(Number(btn.dataset.id));
+          await renderNewsAdmin();
+        } catch (error) {
+          console.error("Error deleting news:", error);
+          alert("Could not delete news. Please try again.");
+
+          if (typeof setButtonLoading === "function") {
+            setButtonLoading(btn, false);
+          }
+        }
       });
     });
   };

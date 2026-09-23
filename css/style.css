@@ -2514,6 +2514,49 @@ footer {
   background: rgba(239, 68, 68, 0.08);
 }
 
+/* ---- loading state (Edit / Delete buttons in admin lists) ---- */
+
+.btn-edit.is-loading,
+.btn-delete.is-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.85;
+}
+
+.btn-edit.is-loading *,
+.btn-delete.is-loading * {
+  visibility: hidden;
+}
+
+.btn-edit.is-loading::after,
+.btn-delete.is-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  border: 2px solid rgba(99, 102, 241, 0.25);
+  border-top-color: var(--accent);
+  animation: premiumSpin 0.7s linear infinite;
+}
+
+.btn-delete.is-loading::after {
+  border-color: rgba(239, 68, 68, 0.25);
+  border-top-color: var(--danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-edit.is-loading::after,
+  .btn-delete.is-loading::after {
+    animation: none;
+  }
+}
+
 .empty-state {
   text-align: center;
 
