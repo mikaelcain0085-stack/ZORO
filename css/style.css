@@ -2557,6 +2557,73 @@ footer {
   }
 }
 
+/* ================= PAGINATION CONTROLS =================
+   Shared between the public News page and admin list views
+   (News now, Photos/Leaders/Members to follow). Uses the same
+   --accent/--border/--text-muted tokens as the rest of the site
+   so it matches both the dark admin console and the public
+   Herald front page. */
+
+.np-pagination,
+.admin-pagination,
+.mem-pagination,
+.pg-pagination,
+.ldr-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 2rem 0 1rem;
+}
+
+.pg-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pg-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.pg-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.pg-btn.pg-page.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.pg-ellipsis {
+  color: var(--text-muted);
+  padding: 0 0.3rem;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+@media (max-width: 480px) {
+  .pg-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
+
 .empty-state {
   text-align: center;
 

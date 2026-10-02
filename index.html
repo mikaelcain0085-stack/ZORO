@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/style.css?v=18">
+  <link rel="stylesheet" href="css/style.css?v=22">
   <link rel="stylesheet" href="css/newspaper.css?v=2">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
 
@@ -1721,6 +1721,8 @@
       <!-- FRONT PAGE (list/grid view) -->
       <main class="np-frontpage" id="npFrontpage"></main>
 
+      <div class="np-pagination" id="npPagination"></div>
+
       <!-- ARTICLE READER (single article view) -->
       <main class="np-reader" id="npReader" hidden>
 
@@ -1791,6 +1793,8 @@
       </div>
 
       <div class="pg-masonry" id="galleryFeed"></div>
+
+      <div class="pg-pagination" id="galleryFeedPagination"></div>
 
     </main>
 
@@ -1866,6 +1870,8 @@
 
       <div class="ldr-grid" id="leadersFeed"></div>
 
+      <div class="ldr-pagination" id="leadersFeedPagination"></div>
+
     </main>
 
   </div>
@@ -1929,6 +1935,8 @@
           <tbody id="membersFeed"></tbody>
         </table>
       </div>
+
+      <div class="mem-pagination" id="membersFeedPagination"></div>
 
     </main>
 
@@ -2310,6 +2318,8 @@
 
         </div>
 
+        <div class="admin-pagination" id="membersAdminPagination"></div>
+
       </div>
       </div>
 
@@ -2531,6 +2541,8 @@
 
     </div>
 
+    <div class="admin-pagination" id="newsAdminPagination"></div>
+
   </div>
   </div>
 
@@ -2697,6 +2709,8 @@
           </div>
 
         </div>
+
+        <div class="admin-pagination" id="photosAdminPagination"></div>
 
       </div>
       </div>
@@ -2954,6 +2968,8 @@
           </div>
 
         </div>
+
+        <div class="admin-pagination" id="leadersAdminPagination"></div>
 
       </div>
       </div>
@@ -3232,13 +3248,13 @@
 <!-- JAVASCRIPT -->
 <!-- JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/app.js?v=15"></script>
 <script type="module" src="js/globe.js"></script>
 <script src="js/donate-video.js" defer></script>
 <script src="js/mizo-decode.js" defer></script>
-<script src="js/newspaper.js?v=2" defer></script>
+<script src="js/newspaper.js?v=3" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js" defer></script>
-<script src="js/news-editor.js?v=4" defer></script>
+<script src="js/news-editor.js?v=5" defer></script>
 
 </body>
 </html>

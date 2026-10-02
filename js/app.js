@@ -51,6 +51,105 @@ function setButtonLoading(btn, isLoading) {
     }
 }
 
+/* =========================================
+   PAGINATION CONTROLS HELPER
+   Shared, reusable pager for any list that's split into fixed-size
+   pages — Public News, Admin News today; Photos / Leaders / Members
+   will reuse this too. Caller owns the data/slicing; this just
+   renders Prev/Page-numbers/Next into `container` and reports page
+   changes back via `onPageChange(page)`.
+========================================= */
+
+function buildPageNumbers(current, total) {
+    const delta = 1;
+    const range = [];
+    const withDots = [];
+    let last;
+
+    for (let i = 1; i <= total; i++) {
+        if (
+            i === 1 ||
+            i === total ||
+            (i >= current - delta && i <= current + delta)
+        ) {
+            range.push(i);
+        }
+    }
+
+    range.forEach((i) => {
+        if (last) {
+            if (i - last === 2) {
+                withDots.push(last + 1);
+            } else if (i - last > 2) {
+                withDots.push("…");
+            }
+        }
+        withDots.push(i);
+        last = i;
+    });
+
+    return withDots;
+}
+
+function renderPaginationControls(
+    container,
+    currentPage,
+    totalPages,
+    onPageChange
+) {
+    if (!container) return;
+
+    if (totalPages <= 1) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const pages = buildPageNumbers(currentPage, totalPages);
+
+    container.innerHTML =
+        `<button type="button" class="pg-btn pg-prev"${
+            currentPage === 1 ? " disabled" : ""
+        } aria-label="Previous page">‹</button>` +
+        pages
+            .map((p) =>
+                p === "…"
+                    ? `<span class="pg-ellipsis">…</span>`
+                    : `<button type="button" class="pg-btn pg-page${
+                          p === currentPage ? " active" : ""
+                      }" data-page="${p}" aria-label="Page ${p}"${
+                          p === currentPage ? ' aria-current="page"' : ""
+                      }>${p}</button>`
+            )
+            .join("") +
+        `<button type="button" class="pg-btn pg-next"${
+            currentPage === totalPages ? " disabled" : ""
+        } aria-label="Next page">›</button>`;
+
+    const prevBtn = container.querySelector(".pg-prev");
+    const nextBtn = container.querySelector(".pg-next");
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) onPageChange(currentPage - 1);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) onPageChange(currentPage + 1);
+        });
+    }
+
+    container.querySelectorAll(".pg-page").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const page = Number(btn.dataset.page);
+            if (page !== currentPage) onPageChange(page);
+        });
+    });
+}
+
+window.renderPaginationControls = renderPaginationControls;
+
 const landing = document.getElementById("landing");
 
 
@@ -1521,114 +1620,30 @@ cancelLeaderEditBtn.addEventListener(
    RENDER ADMIN MEMBERS
 ========================================= */
 
+let allMembersAdmin = [];
+let membersAdminCurrentPage = 1;
+let membersAdminSearchTerm = "";
+const MEMBERS_ADMIN_PAGE_SIZE = 12;
+
+function memberAdminMatchesSearch(member, term) {
+    if (!term) return true;
+
+    const haystack = [
+        member.full_name || "",
+        member.phone || "",
+        member.address || "",
+        member.zoro_id || "",
+    ]
+        .join(" ")
+        .toLowerCase();
+
+    return haystack.includes(term.toLowerCase());
+}
+
 async function renderMembers() {
     try {
-        const members = await getMembers();
-
-        memberCount.textContent = members.length;
-
-        if (members.length === 0) {
-            membersList.innerHTML = `
-                <div class="empty-state">
-                    <span>📋</span>
-                    No members yet. Add the first one!
-                </div>
-            `;
-
-            return;
-        }
-
-        membersList.innerHTML = members
-            .map(
-                (member) => `
-                <div class="member-card">
-
-                    <div class="member-info">
-
-                        <h3>
-                            ${escapeHtml(member.full_name)}
-                        </h3>
-
-                        <p>
-                            📞 ${escapeHtml(member.phone)}
-                        </p>
-
-                        ${
-                            member.email
-                                ? `
-                                <p>
-                                    ✉️ ${escapeHtml(member.email)}
-                                </p>
-                            `
-                                : ""
-                        }
-
-                        ${
-                            member.address
-                                ? `
-                                <p>
-                                    📍 ${escapeHtml(member.address)}
-                                </p>
-                            `
-                                : ""
-                        }
-
-                        ${
-                            member.zoro_id
-                                ? `
-                                <p>
-                                    🪪 ${escapeHtml(member.zoro_id)}
-                                </p>
-                            `
-                                : ""
-                        }
-
-                    </div>
-
-                    <button
-                        class="btn-delete"
-                        data-id="${member.id}"
-                    >
-                        Delete
-                    </button>
-
-                </div>
-            `
-            )
-            .join("");
-
-        membersList
-            .querySelectorAll(".btn-delete")
-            .forEach((button) => {
-                button.addEventListener(
-                    "click",
-                    async () => {
-                        if (
-                            confirm(
-                                "Delete this member?"
-                            )
-                        ) {
-                            setButtonLoading(button, true);
-
-                            try {
-                                await deleteMember(
-                                    button.dataset.id
-                                );
-
-                                await renderMembers();
-                            } catch (error) {
-                                console.error(error);
-
-                                alert(
-                                    "Could not delete member."
-                                );
-
-                                setButtonLoading(button, false);
-                            }
-                        }
-                    }
-                );
-            });
+        allMembersAdmin = await getMembers();
+        renderMembersAdminList();
     } catch (error) {
         console.error(error);
 
@@ -1638,7 +1653,172 @@ async function renderMembers() {
                 Could not load members. Please make sure the Django server is running.
             </div>
         `;
+
+        const paginationEl = document.getElementById(
+            "membersAdminPagination"
+        );
+        if (paginationEl) paginationEl.innerHTML = "";
     }
+}
+
+function renderMembersAdminList() {
+    const members = allMembersAdmin.filter((m) =>
+        memberAdminMatchesSearch(m, membersAdminSearchTerm)
+    );
+
+    memberCount.textContent = members.length;
+
+    const paginationEl = document.getElementById("membersAdminPagination");
+
+    if (members.length === 0) {
+        membersList.innerHTML = `
+            <div class="empty-state">
+                <span>📋</span>
+                ${
+                    membersAdminSearchTerm
+                        ? "No members match your search."
+                        : "No members yet. Add the first one!"
+                }
+            </div>
+        `;
+
+        if (paginationEl) paginationEl.innerHTML = "";
+
+        return;
+    }
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(members.length / MEMBERS_ADMIN_PAGE_SIZE)
+    );
+
+    if (membersAdminCurrentPage > totalPages) {
+        membersAdminCurrentPage = totalPages;
+    }
+    if (membersAdminCurrentPage < 1) {
+        membersAdminCurrentPage = 1;
+    }
+
+    const start = (membersAdminCurrentPage - 1) * MEMBERS_ADMIN_PAGE_SIZE;
+    const pageItems = members.slice(start, start + MEMBERS_ADMIN_PAGE_SIZE);
+
+    membersList.innerHTML = pageItems
+        .map(
+            (member) => `
+            <div class="member-card">
+
+                <div class="member-info">
+
+                    <h3>
+                        ${escapeHtml(member.full_name)}
+                    </h3>
+
+                    <p>
+                        📞 ${escapeHtml(member.phone)}
+                    </p>
+
+                    ${
+                        member.email
+                            ? `
+                            <p>
+                                ✉️ ${escapeHtml(member.email)}
+                            </p>
+                        `
+                            : ""
+                    }
+
+                    ${
+                        member.address
+                            ? `
+                            <p>
+                                📍 ${escapeHtml(member.address)}
+                            </p>
+                        `
+                            : ""
+                    }
+
+                    ${
+                        member.zoro_id
+                            ? `
+                            <p>
+                                🪪 ${escapeHtml(member.zoro_id)}
+                            </p>
+                        `
+                            : ""
+                    }
+
+                </div>
+
+                <button
+                    class="btn-delete"
+                    data-id="${member.id}"
+                >
+                    Delete
+                </button>
+
+            </div>
+        `
+        )
+        .join("");
+
+    membersList
+        .querySelectorAll(".btn-delete")
+        .forEach((button) => {
+            button.addEventListener(
+                "click",
+                async () => {
+                    if (
+                        confirm(
+                            "Delete this member?"
+                        )
+                    ) {
+                        setButtonLoading(button, true);
+
+                        try {
+                            await deleteMember(
+                                button.dataset.id
+                            );
+
+                            await renderMembers();
+                        } catch (error) {
+                            console.error(error);
+
+                            alert(
+                                "Could not delete member."
+                            );
+
+                            setButtonLoading(button, false);
+                        }
+                    }
+                }
+            );
+        });
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            membersAdminCurrentPage,
+            totalPages,
+            (page) => {
+                membersAdminCurrentPage = page;
+                renderMembersAdminList();
+                membersList.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        );
+    }
+}
+
+const memberSearchInputEl = document.getElementById("memberSearchInput");
+
+if (memberSearchInputEl) {
+    memberSearchInputEl.addEventListener("input", () => {
+        membersAdminSearchTerm = memberSearchInputEl.value.trim();
+        membersAdminCurrentPage = 1;
+        renderMembersAdminList();
+    });
 }
 
 
@@ -1858,23 +2038,58 @@ async function renderNewsAdmin() {
    RENDER PHOTOS ADMIN
 ========================================= */
 
+let allPhotosAdmin = [];
+let photosAdminCurrentPage = 1;
+let photosAdminSearchTerm = "";
+const PHOTOS_ADMIN_PAGE_SIZE = 12;
+
 async function renderPhotosAdmin() {
-    const photos = await getPhotos();
+    allPhotosAdmin = await getPhotos();
+    renderPhotosAdminList();
+}
+
+function renderPhotosAdminList() {
+    const photos = allPhotosAdmin.filter((p) =>
+        photoMatchesSearch(p, photosAdminSearchTerm)
+    );
 
     photoCount.textContent = photos.length;
+
+    const paginationEl = document.getElementById("photosAdminPagination");
 
     if (photos.length === 0) {
         photoList.innerHTML = `
             <div class="empty-state">
                 <span>📷</span>
-                No photos yet. Upload the first one!
+                ${
+                    photosAdminSearchTerm
+                        ? "No photos match your search."
+                        : "No photos yet. Upload the first one!"
+                }
             </div>
         `;
+
+        if (paginationEl) paginationEl.innerHTML = "";
 
         return;
     }
 
-    photoList.innerHTML = photos
+    const totalPages = Math.max(
+        1,
+        Math.ceil(photos.length / PHOTOS_ADMIN_PAGE_SIZE)
+    );
+
+    if (photosAdminCurrentPage > totalPages) {
+        photosAdminCurrentPage = totalPages;
+    }
+    if (photosAdminCurrentPage < 1) {
+        photosAdminCurrentPage = 1;
+    }
+
+    const start = (photosAdminCurrentPage - 1) * PHOTOS_ADMIN_PAGE_SIZE;
+    const pageItems = photos.slice(start, start + PHOTOS_ADMIN_PAGE_SIZE);
+
+    photoList.innerHTML = pageItems
         .map(
             (photo) => `
             <div class="news-card">
@@ -1991,6 +2206,32 @@ async function renderPhotosAdmin() {
                 openLightbox(image.src);
             });
         });
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            photosAdminCurrentPage,
+            totalPages,
+            (page) => {
+                photosAdminCurrentPage = page;
+                renderPhotosAdminList();
+                photoList.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        );
+    }
+}
+
+const photoSearchInputEl = document.getElementById("photoSearchInput");
+
+if (photoSearchInputEl) {
+    photoSearchInputEl.addEventListener("input", () => {
+        photosAdminSearchTerm = photoSearchInputEl.value.trim();
+        photosAdminCurrentPage = 1;
+        renderPhotosAdminList();
+    });
 }
 
 
@@ -2000,6 +2241,8 @@ async function renderPhotosAdmin() {
 
 let cachedPhotos = [];
 let gallerySearchTerm = "";
+let galleryFeedCurrentPage = 1;
+const GALLERY_FEED_PAGE_SIZE = 12;
 
 function photoMatchesSearch(photo, term) {
     if (!term) return true;
@@ -2018,6 +2261,8 @@ function renderGalleryItems() {
             ? "1 photo"
             : `${filtered.length} photos`;
 
+    const paginationEl = document.getElementById("galleryFeedPagination");
+
     if (cachedPhotos.length === 0) {
         galleryFeed.innerHTML = `
             <div class="pg-empty">
@@ -2026,6 +2271,7 @@ function renderGalleryItems() {
                 <p>Check back soon for photos from ZORO.</p>
             </div>
         `;
+        if (paginationEl) paginationEl.innerHTML = "";
         return;
     }
 
@@ -2037,10 +2283,26 @@ function renderGalleryItems() {
                 <p>Try a different search term.</p>
             </div>
         `;
+        if (paginationEl) paginationEl.innerHTML = "";
         return;
     }
 
-    galleryFeed.innerHTML = filtered
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filtered.length / GALLERY_FEED_PAGE_SIZE)
+    );
+
+    if (galleryFeedCurrentPage > totalPages) {
+        galleryFeedCurrentPage = totalPages;
+    }
+    if (galleryFeedCurrentPage < 1) {
+        galleryFeedCurrentPage = 1;
+    }
+
+    const start = (galleryFeedCurrentPage - 1) * GALLERY_FEED_PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + GALLERY_FEED_PAGE_SIZE);
+
+    galleryFeed.innerHTML = pageItems
         .map(
             (photo) => `
             <figure class="pg-item">
@@ -2069,6 +2331,22 @@ function renderGalleryItems() {
             openLightbox(image.dataset.full || image.src);
         });
     });
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            galleryFeedCurrentPage,
+            totalPages,
+            (page) => {
+                galleryFeedCurrentPage = page;
+                renderGalleryItems();
+                galleryFeed.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        );
+    }
 }
 
 async function renderGalleryFeed() {
@@ -2082,6 +2360,7 @@ async function renderGalleryFeed() {
     cachedPhotos = await getPhotos();
     gallerySearchTerm = "";
     galleryFeedSearchInput.value = "";
+    galleryFeedCurrentPage = 1;
 
     renderGalleryItems();
 }
@@ -2093,6 +2372,7 @@ const galleryFeedSearchInput = document.getElementById(
 
 galleryFeedSearchInput.addEventListener("input", () => {
     gallerySearchTerm = galleryFeedSearchInput.value.trim();
+    galleryFeedCurrentPage = 1;
     renderGalleryItems();
 });
 
@@ -2102,23 +2382,73 @@ galleryFeedSearchInput.addEventListener("input", () => {
    RENDER LEADERS ADMIN
 ========================================= */
 
+let allLeadersAdmin = [];
+let leadersAdminCurrentPage = 1;
+let leadersAdminSearchTerm = "";
+const LEADERS_ADMIN_PAGE_SIZE = 12;
+
+function leaderAdminMatchesSearch(leader, term) {
+    if (!term) return true;
+
+    const haystack = [
+        leader.name || "",
+        leader.designation || "",
+        leader.phone || "",
+        leader.address || "",
+    ]
+        .join(" ")
+        .toLowerCase();
+
+    return haystack.includes(term.toLowerCase());
+}
+
 async function renderLeadersAdmin() {
-    const leaders = await getLeaders();
+    allLeadersAdmin = await getLeaders();
+    renderLeadersAdminList();
+}
+
+function renderLeadersAdminList() {
+    const leaders = allLeadersAdmin.filter((l) =>
+        leaderAdminMatchesSearch(l, leadersAdminSearchTerm)
+    );
 
     leaderCount.textContent = leaders.length;
+
+    const paginationEl = document.getElementById("leadersAdminPagination");
 
     if (leaders.length === 0) {
         leaderList.innerHTML = `
             <div class="empty-state">
                 <span>👥</span>
-                No leaders yet. Add the first one!
+                ${
+                    leadersAdminSearchTerm
+                        ? "No leaders match your search."
+                        : "No leaders yet. Add the first one!"
+                }
             </div>
         `;
+
+        if (paginationEl) paginationEl.innerHTML = "";
 
         return;
     }
 
-    leaderList.innerHTML = leaders
+    const totalPages = Math.max(
+        1,
+        Math.ceil(leaders.length / LEADERS_ADMIN_PAGE_SIZE)
+    );
+
+    if (leadersAdminCurrentPage > totalPages) {
+        leadersAdminCurrentPage = totalPages;
+    }
+    if (leadersAdminCurrentPage < 1) {
+        leadersAdminCurrentPage = 1;
+    }
+
+    const start = (leadersAdminCurrentPage - 1) * LEADERS_ADMIN_PAGE_SIZE;
+    const pageItems = leaders.slice(start, start + LEADERS_ADMIN_PAGE_SIZE);
+
+    leaderList.innerHTML = pageItems
         .map(
             (leader) => `
             <div class="news-card">
@@ -2261,6 +2591,32 @@ async function renderLeadersAdmin() {
                 openLightbox(image.src);
             });
         });
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            leadersAdminCurrentPage,
+            totalPages,
+            (page) => {
+                leadersAdminCurrentPage = page;
+                renderLeadersAdminList();
+                leaderList.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        );
+    }
+}
+
+const leaderSearchInputEl = document.getElementById("leaderSearchInput");
+
+if (leaderSearchInputEl) {
+    leaderSearchInputEl.addEventListener("input", () => {
+        leadersAdminSearchTerm = leaderSearchInputEl.value.trim();
+        leadersAdminCurrentPage = 1;
+        renderLeadersAdminList();
+    });
 }
 
 
@@ -2268,20 +2624,31 @@ async function renderLeadersAdmin() {
    RENDER LEADERS PUBLIC
 ========================================= */
 
-async function renderLeadersFeed() {
-    leadersFeed.innerHTML = `
-        <div class="ldr-empty">
-            <div class="premium-spinner" style="border-color:rgba(67,56,202,0.15); border-top-color:#4338ca;"></div>
-            Loading leaders...
-        </div>
-    `;
+let cachedLeaders = [];
+let leadersSearchTerm = "";
+let leadersFeedCurrentPage = 1;
+const LEADERS_FEED_PAGE_SIZE = 12;
 
-    const allLeaders = await getLeaders();
+function leaderMatchesSearch(leader, term) {
+    if (!term) return true;
 
-    const leaders = allLeaders.filter(
+    const haystack = [
+        leader.name || "",
+        leader.designation || "",
+        leader.phone || "",
+        leader.address || "",
+    ]
+        .join(" ")
+        .toLowerCase();
+
+    return haystack.includes(term.toLowerCase());
+}
+
+function renderLeadersFeedList() {
+    const leaders = cachedLeaders.filter(
         (leader) =>
-            (leader.status || "current") ===
-            leadersFeedStatusFilter
+            (leader.status || "current") === leadersFeedStatusFilter &&
+            leaderMatchesSearch(leader, leadersSearchTerm)
     );
 
     const count = leaders.length;
@@ -2293,16 +2660,22 @@ async function renderLeadersFeed() {
             ? "1 leader"
             : `${count} leaders`;
 
+    const paginationEl = document.getElementById("leadersFeedPagination");
+
     if (count === 0) {
         leadersFeed.innerHTML = `
             <div class="ldr-empty">
                 <span>👥</span>
                 <h3>
-                    No ${
-                        leadersFeedStatusFilter === "previous"
-                            ? "previous"
-                            : "current"
-                    } leaders listed yet
+                    ${
+                        leadersSearchTerm
+                            ? "No leaders match your search"
+                            : `No ${
+                                  leadersFeedStatusFilter === "previous"
+                                      ? "previous"
+                                      : "current"
+                              } leaders listed yet`
+                    }
                 </h3>
                 <p>
                     Check back soon for Hruaitute from ZORO.
@@ -2310,10 +2683,27 @@ async function renderLeadersFeed() {
             </div>
         `;
 
+        if (paginationEl) paginationEl.innerHTML = "";
+
         return;
     }
 
-    leadersFeed.innerHTML = leaders
+    const totalPages = Math.max(
+        1,
+        Math.ceil(count / LEADERS_FEED_PAGE_SIZE)
+    );
+
+    if (leadersFeedCurrentPage > totalPages) {
+        leadersFeedCurrentPage = totalPages;
+    }
+    if (leadersFeedCurrentPage < 1) {
+        leadersFeedCurrentPage = 1;
+    }
+
+    const start = (leadersFeedCurrentPage - 1) * LEADERS_FEED_PAGE_SIZE;
+    const pageItems = leaders.slice(start, start + LEADERS_FEED_PAGE_SIZE);
+
+    leadersFeed.innerHTML = pageItems
         .map((leader) => {
             const photo = leader.image
                 ? `
@@ -2379,6 +2769,53 @@ async function renderLeadersFeed() {
                 );
             });
         });
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            leadersFeedCurrentPage,
+            totalPages,
+            (page) => {
+                leadersFeedCurrentPage = page;
+                renderLeadersFeedList();
+                leadersFeed.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        );
+    }
+}
+
+async function renderLeadersFeed() {
+    leadersFeed.innerHTML = `
+        <div class="ldr-empty">
+            <div class="premium-spinner" style="border-color:rgba(67,56,202,0.15); border-top-color:#4338ca;"></div>
+            Loading leaders...
+        </div>
+    `;
+
+    cachedLeaders = await getLeaders();
+    leadersSearchTerm = "";
+    const leadersFeedSearchInputEl = document.getElementById(
+        "leadersFeedSearchInput"
+    );
+    if (leadersFeedSearchInputEl) leadersFeedSearchInputEl.value = "";
+    leadersFeedCurrentPage = 1;
+
+    renderLeadersFeedList();
+}
+
+const leadersFeedSearchInputEl = document.getElementById(
+    "leadersFeedSearchInput"
+);
+
+if (leadersFeedSearchInputEl) {
+    leadersFeedSearchInputEl.addEventListener("input", () => {
+        leadersSearchTerm = leadersFeedSearchInputEl.value.trim();
+        leadersFeedCurrentPage = 1;
+        renderLeadersFeedList();
+    });
 }
 
 
@@ -2389,6 +2826,8 @@ async function renderLeadersFeed() {
 
 let cachedMembers = [];
 let membersSearchTerm = "";
+let membersFeedCurrentPage = 1;
+const MEMBERS_FEED_PAGE_SIZE = 12;
 
 function zoroIdFor(member) {
     if (member.zoro_id && member.zoro_id.trim()) {
@@ -2425,6 +2864,8 @@ function renderMembersTableRows() {
             ? "1 member"
             : `${filtered.length} members`;
 
+    const paginationEl = document.getElementById("membersFeedPagination");
+
     if (cachedMembers.length === 0) {
         membersFeed.innerHTML = `
             <tr>
@@ -2436,6 +2877,7 @@ function renderMembersTableRows() {
                 </td>
             </tr>
         `;
+        if (paginationEl) paginationEl.innerHTML = "";
         return;
     }
 
@@ -2450,10 +2892,26 @@ function renderMembersTableRows() {
                 </td>
             </tr>
         `;
+        if (paginationEl) paginationEl.innerHTML = "";
         return;
     }
 
-    membersFeed.innerHTML = filtered
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filtered.length / MEMBERS_FEED_PAGE_SIZE)
+    );
+
+    if (membersFeedCurrentPage > totalPages) {
+        membersFeedCurrentPage = totalPages;
+    }
+    if (membersFeedCurrentPage < 1) {
+        membersFeedCurrentPage = 1;
+    }
+
+    const start = (membersFeedCurrentPage - 1) * MEMBERS_FEED_PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + MEMBERS_FEED_PAGE_SIZE);
+
+    membersFeed.innerHTML = pageItems
         .map(
             (member) => `
             <tr>
@@ -2465,6 +2923,21 @@ function renderMembersTableRows() {
         `
         )
         .join("");
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+        window.renderPaginationControls(
+            paginationEl,
+            membersFeedCurrentPage,
+            totalPages,
+            (page) => {
+                membersFeedCurrentPage = page;
+                renderMembersTableRows();
+                document
+                    .querySelector(".mem-table-wrap")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        );
+    }
 }
 
 async function renderMembersFeed() {
@@ -2483,6 +2956,7 @@ async function renderMembersFeed() {
         cachedMembers = await getMembers();
         membersSearchTerm = "";
         membersFeedSearchInput.value = "";
+        membersFeedCurrentPage = 1;
 
         renderMembersTableRows();
     } catch (error) {
@@ -2508,6 +2982,7 @@ const membersFeedSearchInput = document.getElementById(
 
 membersFeedSearchInput.addEventListener("input", () => {
     membersSearchTerm = membersFeedSearchInput.value.trim();
+    membersFeedCurrentPage = 1;
     renderMembersTableRows();
 });
 
@@ -3158,7 +3633,8 @@ leadersFilterToggle
                 btn.dataset.status === "previous"
             );
 
-            renderLeadersFeed();
+            leadersFeedCurrentPage = 1;
+            renderLeadersFeedList();
         });
     });
 
@@ -3471,35 +3947,31 @@ function wireAdminSearch(inputEl, listEl) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    wireAdminSearch(
-        document.getElementById("memberSearchInput"),
-        membersList
-    );
+    // Members (admin) search is now handled inside renderMembers() itself —
+    // filtering the full dataset directly rather than hiding already-
+    // rendered DOM cards, since Members is now paginated (12 per page).
 
-    wireAdminSearch(
-        document.getElementById("newsSearchInput"),
-        newsList
-    );
+    // News search is now handled inside js/news-editor.js (newsSearchInput),
+    // the same way Public News handles its own search — filtering the full
+    // dataset directly rather than hiding already-rendered DOM cards, since
+    // News is now paginated (12 per page) and only 12 cards exist in the
+    // DOM at any one time.
 
-    wireAdminSearch(
-        document.getElementById("photoSearchInput"),
-        photoList
-    );
+    // Photos (admin) search is now handled inside renderPhotosAdmin() itself
+    // — filtering the full dataset directly rather than hiding already-
+    // rendered DOM cards, since Photos is now paginated (12 per page).
 
-    wireAdminSearch(
-        document.getElementById("leaderSearchInput"),
-        leaderList
-    );
+    // Leaders (admin) search is now handled inside renderLeadersAdmin() itself
+    // — filtering the full dataset directly rather than hiding already-
+    // rendered DOM cards, since Leaders is now paginated (12 per page).
 
     // Public-facing feed pages
     // News search is now handled inside js/newspaper.js (npSearchInput)
     // Gallery search is now handled inside renderGalleryFeed() itself
     // (rebuilds masonry items on input, like the Members table).
 
-    wireAdminSearch(
-        document.getElementById("leadersFeedSearchInput"),
-        leadersFeed
-    );
+    // Leaders (public) search is now handled inside renderLeadersFeedList()
+    // itself, same reason as the admin one above.
 
     // Members search is handled inside renderMembersFeed() itself now
     // (rebuilds table rows on input, rather than hiding DOM elements).

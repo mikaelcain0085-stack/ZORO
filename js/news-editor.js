@@ -8,6 +8,12 @@
 (function () {
   let quill = null;
 
+  // ---- admin News list: pagination + search state ----
+  let allNewsItems = [];
+  let newsAdminCurrentPage = 1;
+  let newsAdminSearchTerm = "";
+  const NEWS_ADMIN_PAGE_SIZE = 12;
+
   // ---- category select (with "Other/custom" support) ----
 
   const categorySelectEl = document.getElementById("newsCategory");
@@ -433,7 +439,26 @@
   }
 
   window.renderNewsAdmin = async function renderNewsAdmin() {
-    const news = await getNews();
+    allNewsItems = await getNews();
+    renderNewsAdminList();
+  };
+
+  function getFilteredNewsItems() {
+    if (!newsAdminSearchTerm) return allNewsItems;
+
+    const term = newsAdminSearchTerm.toLowerCase();
+
+    return allNewsItems.filter((item) => {
+      const haystack = `${item.title || ""} ${
+        item.subheadline || ""
+      } ${stripHtml(item.content || "")}`.toLowerCase();
+
+      return haystack.includes(term);
+    });
+  }
+
+  function renderNewsAdminList() {
+    const news = getFilteredNewsItems();
 
     newsCount.textContent = news.length;
 
@@ -441,13 +466,36 @@
       newsList.innerHTML = `
         <div class="empty-state">
           <span>📰</span>
-          No news yet. Publish the first one!
+          ${
+            newsAdminSearchTerm
+              ? "No news matches your search."
+              : "No news yet. Publish the first one!"
+          }
         </div>
       `;
+
+      const paginationEl = document.getElementById("newsAdminPagination");
+      if (paginationEl) paginationEl.innerHTML = "";
+
       return;
     }
 
-    newsList.innerHTML = news
+    const totalPages = Math.max(
+      1,
+      Math.ceil(news.length / NEWS_ADMIN_PAGE_SIZE)
+    );
+
+    if (newsAdminCurrentPage > totalPages) {
+      newsAdminCurrentPage = totalPages;
+    }
+    if (newsAdminCurrentPage < 1) {
+      newsAdminCurrentPage = 1;
+    }
+
+    const start = (newsAdminCurrentPage - 1) * NEWS_ADMIN_PAGE_SIZE;
+    const pageItems = news.slice(start, start + NEWS_ADMIN_PAGE_SIZE);
+
+    newsList.innerHTML = pageItems
       .map((item) => {
         const excerpt = stripHtml(item.content).trim().slice(0, 100);
         return `
@@ -536,7 +584,35 @@
         }
       });
     });
-  };
+
+    const paginationEl = document.getElementById("newsAdminPagination");
+
+    if (paginationEl && typeof window.renderPaginationControls === "function") {
+      window.renderPaginationControls(
+        paginationEl,
+        newsAdminCurrentPage,
+        totalPages,
+        (page) => {
+          newsAdminCurrentPage = page;
+          renderNewsAdminList();
+          newsList.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      );
+    }
+  }
+
+  const newsSearchInputEl = document.getElementById("newsSearchInput");
+
+  if (newsSearchInputEl) {
+    newsSearchInputEl.addEventListener("input", () => {
+      newsAdminSearchTerm = newsSearchInputEl.value.trim();
+      newsAdminCurrentPage = 1;
+      renderNewsAdminList();
+    });
+  }
 
   function init() {
     initQuill();

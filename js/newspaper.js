@@ -9,8 +9,11 @@
   let activeCategory = "all";
   let searchTerm = "";
   let readerIndex = -1; // index into `filtered`, -1 = front page view
+  let currentPage = 1;
+  const PAGE_SIZE = 12;
 
   const frontpageEl = document.getElementById("npFrontpage");
+  const paginationEl = document.getElementById("npPagination");
   const readerEl = document.getElementById("npReader");
   const articleContentEl = document.getElementById("npArticleContent");
   const tabsEl = document.getElementById("npCategoryTabs");
@@ -135,6 +138,7 @@
     tabsEl.querySelectorAll(".np-tab").forEach((btn) => {
       btn.addEventListener("click", () => {
         activeCategory = btn.dataset.category;
+        currentPage = 1;
         applyFilters();
         renderCategoryTabs();
         renderFrontPage();
@@ -217,19 +221,40 @@
           searchTerm ? ` for "${npEscapeHtml(searchTerm)}"` : ""
         }.</p>
       `;
+      paginationEl.innerHTML = "";
       return;
     }
 
     frontpageEl.className = "np-frontpage";
 
-    // Lead article: prefer front-page-flagged, else most recent
-    const frontPageFlagged = filtered.filter((a) => a.is_front_page);
-    const lead = frontPageFlagged[0] || filtered[0];
-    const rest = filtered.filter((a) => a.id !== lead.id);
+    const totalPages = Math.max(
+      1,
+      Math.ceil(filtered.length / PAGE_SIZE)
+    );
 
-    frontpageEl.innerHTML =
-      articleCard(lead, true) +
-      rest.map((a) => articleCard(a, false)).join("");
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+    // Lead article: prefer front-page-flagged, else most recent —
+    // but only on page 1. Later pages are plain grids of cards.
+    let bodyHtml;
+
+    if (currentPage === 1) {
+      const frontPageFlagged = pageItems.filter((a) => a.is_front_page);
+      const lead = frontPageFlagged[0] || pageItems[0];
+      const rest = pageItems.filter((a) => a.id !== lead.id);
+
+      bodyHtml =
+        articleCard(lead, true) +
+        rest.map((a) => articleCard(a, false)).join("");
+    } else {
+      bodyHtml = pageItems.map((a) => articleCard(a, false)).join("");
+    }
+
+    frontpageEl.innerHTML = bodyHtml;
 
     frontpageEl.querySelectorAll("[data-id]").forEach((el) => {
       el.addEventListener("click", () => {
@@ -238,6 +263,20 @@
         if (idx !== -1) openReader(idx);
       });
     });
+
+    window.renderPaginationControls(
+      paginationEl,
+      currentPage,
+      totalPages,
+      (page) => {
+        currentPage = page;
+        renderFrontPage();
+        frontpageEl.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    );
   }
 
   // ---- reader view ----
@@ -384,6 +423,7 @@
 
   searchInputEl.addEventListener("input", () => {
     searchTerm = searchInputEl.value.trim();
+    currentPage = 1;
     applyFilters();
     renderFrontPage();
   });
@@ -392,6 +432,7 @@
   window.renderNewspaperFrontPage = async function renderNewspaperFrontPage() {
     applyEinkPreference();
     closeReader();
+    currentPage = 1;
 
     frontpageEl.hidden = false;
     frontpageEl.className = "np-frontpage np-empty";
